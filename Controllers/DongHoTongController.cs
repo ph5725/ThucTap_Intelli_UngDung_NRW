@@ -7,7 +7,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DongHoTongController
+    public class DongHoTongController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -39,6 +39,38 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = dongHoTong.NguoiCapNhat,
                         };
             return query.ToList();
+        }
+
+        /// API Get
+        [HttpGet("{id}")]
+        public ActionResult<DongHoTong_ResponeModel> GetById(int id)
+        {
+            var dongHoTong = _context.DongHoTongs.FirstOrDefault(e => e.Id == id);
+
+            if (dongHoTong == null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new DongHoTong_ResponeModel()
+            {
+                Id = dongHoTong.Id,
+                Ma = dongHoTong.Ma,
+                Ten = dongHoTong.Ten,
+                SanLuong = dongHoTong.SanLuong,
+                NgayGhi = dongHoTong.NgayGhi,
+                NgayChinhSua = dongHoTong.NgayChinhSua,
+                NguoiChinhSua = dongHoTong.NguoiChinhSua,
+                DanhDauLoi = dongHoTong.DanhDauLoi,
+                GhiChu = dongHoTong.GhiChu,
+                NgayTao = dongHoTong.NgayTao,
+                NguoiTao = dongHoTong.NguoiTao,
+                NgayCapNhat = dongHoTong.NgayCapNhat,
+                NguoiCapNhat = dongHoTong.NguoiCapNhat,
+            };
+
+            return response;
         }
 
         /// API Add

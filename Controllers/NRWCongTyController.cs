@@ -7,7 +7,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NRWCongTyController
+    public class NRWCongTyController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -49,6 +49,48 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = nrwCongTy.NguoiCapNhat,
                         } ;
             return query.ToList();
+        }
+
+        /// API Get by id
+        [HttpGet("{id}")]
+        public ActionResult<NRWCongTy_ResponeModel> Get(int id)
+        {
+            var nrwCongTy = _context.NrwcongTies.FirstOrDefault(e => e.Id == id);
+
+            if(nrwCongTy == null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new NRWCongTy_ResponeModel()
+            {
+                Id = nrwCongTy.Id,
+                Ma = nrwCongTy.Ma,
+                Ky = nrwCongTy.Ky,
+                Nam = nrwCongTy.Nam,
+
+                SanLuongDauVao = nrwCongTy.SanLuongDauVao,
+                SanLuongTieuThu = nrwCongTy.SanLuongTieuThu,
+                LuongNuocThatThoat = nrwCongTy.LuongNuocThatThoat,
+                TyLeThatThoatChuan1 = nrwCongTy.TyLeThatThoatChuan1,
+                TyLeThatThoatChuan2 = nrwCongTy.TyLeThatThoatChuan2,
+
+                TuNgay = nrwCongTy.TuNgay,
+                DenNgay = nrwCongTy.DenNgay,
+                SoNgayDocSoDht = nrwCongTy.SoNgayDocSoDht,
+                SoNgayDocSoBilling = nrwCongTy.SoNgayDocSoBilling,
+
+                NguyenNhan = nrwCongTy.NguyenNhan,
+                GhiChu = nrwCongTy.GhiChu,
+
+                NgayTao = nrwCongTy.NgayTao,
+                NguoiTao = nrwCongTy.NguoiTao,
+                NgayCapNhat = nrwCongTy.NgayCapNhat,
+                NguoiCapNhat = nrwCongTy.NguoiCapNhat,
+            };
+
+            return response;
         }
 
         /// API Add

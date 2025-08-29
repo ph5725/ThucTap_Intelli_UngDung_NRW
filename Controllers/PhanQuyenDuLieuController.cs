@@ -7,7 +7,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PhanQuyenDuLieuController
+    public class PhanQuyenDuLieuController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -30,6 +30,29 @@ namespace WebAPI_NRW.Controllers
                             DuLieuNrwdma = phanQuyenDuLieu.DuLieuNrwdma,
                         };
             return query.ToList();
+        }
+
+        /// API Get by id
+        [HttpGet("{id}")]
+        public ActionResult<PhanQuyenDuLieu_ResponeModel> GetById(int id)
+        {
+            var phanQuyenDuLieu = _context.PhanQuyenDuLieus.FirstOrDefault(e => e.Id == id);
+
+            if(phanQuyenDuLieu == null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new PhanQuyenDuLieu_ResponeModel()
+            {
+                Id = phanQuyenDuLieu.Id,
+                NhomNguoiDung = phanQuyenDuLieu.NhomNguoiDung,
+                DuLieuNrwcongTy = phanQuyenDuLieu.DuLieuNrwcongTy,
+                DuLieuNrwdma = phanQuyenDuLieu.DuLieuNrwdma,
+            };
+
+            return response;
         }
 
         /// API Add

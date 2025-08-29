@@ -8,7 +8,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DSDMAController
+    public class DSDMAController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -39,6 +39,37 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = dsDma.NguoiCapNhat,
                         };
             return query.ToList();
+        }
+
+        /// API Get by id
+        [HttpGet("{id}")]
+        public ActionResult<DSDMA_ResponeModel> GetById(int id)
+        {
+            var dsDma = _context.Dsdmas.FirstOrDefault(e => e.Id == id);
+            
+            if(dsDma ==  null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new DSDMA_ResponeModel()
+            {
+                Id = dsDma.Id,
+                MaDma = dsDma.MaDma,
+                TenDma = dsDma.TenDma,
+                SoLuongKhachHang = dsDma.SoLuongKhachHang,
+                TinhTrang = dsDma.TinhTrang,
+                NgayVanHanh = dsDma.NgayVanHanh,
+                TyLeNrwbanDau = dsDma.TyLeNrwbanDau,
+                GhiChu = dsDma.GhiChu,
+                NgayTao = dsDma.NgayTao,
+                NguoiTao = dsDma.NguoiTao,
+                NgayCapNhat = dsDma.NgayCapNhat,
+                NguoiCapNhat = dsDma.NguoiCapNhat,
+            };
+
+            return response;
         }
 
         /// API Add

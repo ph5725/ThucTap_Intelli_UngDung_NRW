@@ -7,7 +7,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PhanQuyenTinhNangController
+    public class PhanQuyenTinhNangController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -46,6 +46,45 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = phanQuyenTinhNang.NguoiCapNhat,
                         };
             return query.ToList();
+        }
+
+        // API Get by Id
+        [HttpGet("{id}")]
+        public ActionResult<PhanQuyenTinhNang_ResponeModel> GetById(int id)
+        {
+            var phanQuyenTinhNang = _context.PhanQuyenTinhNangs.FirstOrDefault(e => e.Id == id);
+
+            if (phanQuyenTinhNang == null)
+            {
+                return NotFound(); // trả về 404 nếu không tìm thấy
+            }
+
+            // Map sang ResponseModel để trả về
+            var response = new PhanQuyenTinhNang_ResponeModel
+            {
+                Id = phanQuyenTinhNang.Id,
+                NhomNguoiDung = phanQuyenTinhNang.NhomNguoiDung,
+
+                DongHoTong = phanQuyenTinhNang.DongHoTong,
+                CauHinhDht = phanQuyenTinhNang.CauHinhDht,
+
+                Dsdma = phanQuyenTinhNang.Dsdma,
+                NrwcongTy = phanQuyenTinhNang.NrwcongTy,
+                Nrwdma = phanQuyenTinhNang.Nrwdma,
+                DsngayDocSoBilling = phanQuyenTinhNang.DsngayDocSoBilling,
+
+                NguoiDung = phanQuyenTinhNang.NguoiDung,
+                NhomNguoiDungTinhNang = phanQuyenTinhNang.NhomNguoiDungTinhNang,
+                NhatKySuDung = phanQuyenTinhNang.NhatKySuDung,
+                PhanQuyen = phanQuyenTinhNang.PhanQuyen,
+
+                NgayTao = phanQuyenTinhNang.NgayTao,
+                NguoiTao = phanQuyenTinhNang.NguoiTao,
+                NgayCapNhat = phanQuyenTinhNang.NgayCapNhat,
+                NguoiCapNhat = phanQuyenTinhNang.NguoiCapNhat,
+            };
+
+            return Ok(response);
         }
 
         /// API Add

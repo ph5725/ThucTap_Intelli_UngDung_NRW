@@ -7,9 +7,9 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NRWDMAController
+    public class NRWDMAController : ControllerBase
     {
-        private readonly DbNrwContext _context;
+        private readonly DbNrwContext _context; 
 
         public NRWDMAController(DbNrwContext dbcontext)
         {
@@ -46,6 +46,45 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = nrwDma.NguoiCapNhat,
                         };
             return query.ToList();
+        }
+
+        /// API Get by id
+        [HttpGet("{id}")]
+        public ActionResult<NRWDMA_ResponeModel> Get(int id)
+        {
+            var nrwDma = _context.Nrwdmas.FirstOrDefault(e => e.Id == id);
+
+            if (nrwDma == null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new NRWDMA_ResponeModel()
+            {
+                Id = nrwDma.Id,
+                MaDma = nrwDma.MaDma,
+                Ky = nrwDma.Ky,
+                Nam = nrwDma.Nam,
+
+                LuongNuocVao = nrwDma.LuongNuocVao,
+                LuongNuocTieuThu = nrwDma.LuongNuocTieuThu,
+                LuongNuocSucXa = nrwDma.LuongNuocSucXa,
+                LuongNuocThatThoat = nrwDma.LuongNuocThatThoat,
+
+                TyLeThatThoatKyTruoc = nrwDma.TyLeThatThoatKyTruoc,
+                TyLeThatThoat = nrwDma.TyLeThatThoat,
+
+                NguyenNhan = nrwDma.NguyenNhan,
+                GhiChu = nrwDma.GhiChu,
+
+                NgayTao = nrwDma.NgayTao,
+                NguoiTao = nrwDma.NguoiTao,
+                NgayCapNhat = nrwDma.NgayCapNhat,
+                NguoiCapNhat = nrwDma.NguoiCapNhat,
+            };
+
+            return response;
         }
 
         /// API Add

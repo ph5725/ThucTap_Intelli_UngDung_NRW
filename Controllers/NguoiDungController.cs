@@ -7,7 +7,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NguoiDungController
+    public class NguoiDungController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -39,6 +39,38 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = nguoiDung.NguoiCapNhat,
                         };
             return query.ToList();
+        }
+
+        /// API Get
+        [HttpGet("{id}")]
+        public ActionResult<NguoiDung_ResponeModel> GetById(int id)
+        {
+            var nguoiDung = _context.NguoiDungs.FirstOrDefault(e => e.Id == id);
+
+            if (nguoiDung == null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new NguoiDung_ResponeModel()
+            {
+                Id = nguoiDung.Id,
+                Ma = nguoiDung.Ma,
+                Ten = nguoiDung.Ten,
+                TenNguoiDung = nguoiDung.TenNguoiDung,
+                MatKhau = nguoiDung.MatKhau,
+                Email = nguoiDung.Email,
+                VaiTro = nguoiDung.VaiTro,
+                CapPhep = nguoiDung.CapPhep,
+                AnhDaiDien = nguoiDung.AnhDaiDien,
+                NgayTao = nguoiDung.NgayTao,
+                NguoiTao = nguoiDung.NguoiTao,
+                NgayCapNhat = nguoiDung.NgayCapNhat,
+                NguoiCapNhat = nguoiDung.NguoiCapNhat,
+            };
+
+            return response;
         }
 
         /// API Add

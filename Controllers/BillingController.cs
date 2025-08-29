@@ -2,6 +2,7 @@
 using WebAPI_NRW.Models;
 using WebAPI_NRW.RequestModel.HeThongBilling;
 using WebAPI_NRW.ResponeModel.HeThongBilling;
+using WebAPI_NRW.ResponeModel.PhanQuyen;
 //using static Grpc.Core.Metadata;
 
 namespace WebAPI_NRW.Controllers
@@ -42,6 +43,38 @@ namespace WebAPI_NRW.Controllers
                     NguoiCapNhat = billing.NguoiCapNhat,
                 };
             return query.ToList();
+        }
+
+        // API Get by Id
+        [HttpGet("{id}")]
+        public ActionResult<Billing_ResponeModel> GetById(int id)
+        {
+            var billing = _context.Billings.FirstOrDefault(e => e.Id == id);
+
+            if (billing == null)
+            {
+                return NotFound(); // trả về 404 nếu không tìm thấy
+            }
+
+            // Map sang ResponseModel để trả về
+            var response = new Billing_ResponeModel()
+            {
+                Id = billing.Id,
+                SanLuongTieuThu = billing.SanLuongTieuThu,
+                MaDoiTuong = billing.MaDoiTuong,
+                Ky = billing.Ky,
+                Nam = billing.Nam,
+                Dot = billing.Dot,
+                TuNgay = billing.TuNgay,
+                DenNgay = billing.DenNgay,
+                GhiChu = billing.GhiChu,
+                NgayTao = billing.NgayTao,
+                NguoiTao = billing.NguoiTao,
+                NgayCapNhat = billing.NgayCapNhat,
+                NguoiCapNhat = billing.NguoiCapNhat,
+            };
+
+            return Ok(response);
         }
 
         /// API Add
@@ -88,6 +121,8 @@ namespace WebAPI_NRW.Controllers
 
             return response;
         }
+
+
 
         /// API Update
         [HttpPut]

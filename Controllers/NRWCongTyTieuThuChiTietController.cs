@@ -7,7 +7,7 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class NRWCongTyTieuThuChiTietController
+    public class NRWCongTyTieuThuChiTietController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
@@ -40,6 +40,39 @@ namespace WebAPI_NRW.Controllers
                             NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
                         };
             return query.ToList();
+        }
+
+        /// API Get by id
+        [HttpGet("{id}")]
+        public ActionResult<NRWCongTyTieuThuChiTiet_ResponeModel> GetById(int id)
+        {
+            var nrwCongTyTieuThuChiTiet = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+
+            if (nrwCongTyTieuThuChiTiet == null)
+            {
+                return NotFound();
+            }
+
+            //Map Entity -> ResponseModel để trả về
+            var response = new NRWCongTyTieuThuChiTiet_ResponeModel()
+            {
+                Id = nrwCongTyTieuThuChiTiet.Id,
+                MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
+                Ky = nrwCongTyTieuThuChiTiet.Ky,
+                Nam = nrwCongTyTieuThuChiTiet.Nam,
+
+                Nguon = nrwCongTyTieuThuChiTiet.Nguon,
+                ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
+                ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
+
+                GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
+                NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
+                NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
+                NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
+                NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
+            };
+
+            return response;
         }
 
         /// API Add
