@@ -2,8 +2,6 @@
 {
     public class Update_DSNgayDocSoBillingChiTiet
     {
-        public int Id { get; set; }
-
         public int MaNgayDocSo { get; set; }
 
         public int Nam { get; set; }

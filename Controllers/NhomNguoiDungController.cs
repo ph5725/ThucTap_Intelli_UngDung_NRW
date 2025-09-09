@@ -16,7 +16,7 @@ namespace WebAPI_NRW.Controllers
             _context = dbcontext;
         }
 
-        /// API Get
+        /// API  GET
         [HttpGet]
         public IEnumerable<NhomNguoiDung_ResponeModel> Get()
         {
