@@ -79,8 +79,7 @@ export const TextForms = {
     tab: {
         tinhNrwCapCongTy: "Tính NRW cấp công ty",
         tinhNrwCapDma: "Tính NRW cấp DMA",
-        vaiTro: "Vai trò",
-        quyen: "Quyền",
+        
         thongTinTaiKhoan: "Thông tin tài khoản",
         thongTinNguoiDung: "Thông tin người dùng",
         nhomNguoiDung: "Nhóm người dùng",
@@ -88,5 +87,9 @@ export const TextForms = {
 
         phanQuyenDuLieu: "Phân quyền dữ liệu",
         phanQuyenTinhNang: "Phân quyền tính năng",
+
+        //Xem lại
+        vaiTro: "Vai trò",
+        quyen: "Quyền",
     }
 };
