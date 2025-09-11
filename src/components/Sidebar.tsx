@@ -10,7 +10,7 @@ import {
   FaBook,            
   FaClipboardList    
 } from "react-icons/fa";
-import "./Sidebar.css";
+import "../styles/Sidebar.css";
 
 const Sidebar: React.FC = () => {
   return (
