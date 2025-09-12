@@ -129,7 +129,7 @@ align-items: center;
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.2s ease;
-  color: #ffffff;
+  color: #000;
 }
 .pagination button:hover:not(:disabled) { background: #f1f5f9; }
 .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
