@@ -1,0 +1,36 @@
+/* Button Áp Dụng */
+.apply-btn-wrapper {
+  margin: 15px 0;
+}
+
+/* Table ma trận phân quyền */
+.permission-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.permission-matrix-table th {
+  background: #1d4ed8;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  font-style: italic;
+}
+
+.permission-matrix-table td {
+  background: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #1e3a8a;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+.permission-matrix-table tr:hover td {
+  background: #f7f7f7;
+}
+
+.permission-name {
+  text-align: left; /* tên dữ liệu căn trái */
+}
