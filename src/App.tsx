@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-route
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 
-import AccountManagement from "./pages/QuanLyTaiKhoan/AccountManagement"; // trang quản lý tài khoản
-import AddAccount from "./pages/QuanLyTaiKhoan/AddAccount";
+import AccountManagement from "./pages/qltk/AccountManagement"; // trang quản lý tài khoản
+import AddAccount from "./pages/qltk/AddAccount";
 
 import UserInfoPage from "./pages/qlttnd/UserInfo"; // trang quản lý người dùng
 import AddUserInfoModal from "./pages/qlttnd/AddUserInfoModal"; 
