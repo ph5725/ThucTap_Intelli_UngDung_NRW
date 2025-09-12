@@ -1,59 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FaBell, FaUserCircle, FaCog, FaInfoCircle, FaSignOutAlt } from "react-icons/fa";
+import React from "react";
 import "../styles/Header.css";
-import { useNavigate } from "react-router-dom";
 
 const Header: React.FC = () => {
-  const navigate = useNavigate(); 
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // Đóng menu khi click ra ngoài
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   return (
     <header className="header">
-      {/* Thanh tìm kiếm bên trái */}
-      <div className="search-bar">
-        <input type="text" placeholder="Tìm kiếm..." />
+      <div className="header-left">
+        <input type="text" placeholder="Tìm kiếm" className="search-box" />
       </div>
 
-      {/* Phần bên phải */}
-      <div className="header-right" ref={menuRef}>
-        <FaBell className="icon" />
+      <div className="header-right">
+        <svg width="20" height="20" fill="black" viewBox="0 0 24 24">
+          <path d="M12 24c1.1 0 2-.9 2-2H10a2 
+          2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 
+          1.5 0 10-3 0v.68C7.64 5.36 6 7.92 
+          6 11v7l-2 2v1h16v-1l-2-2z" />
+        </svg>
 
-        {/* Icon user */}
-        <div className="user-menu">
-          <FaUserCircle
-            className="icon user-icon"
-            onClick={() => setOpen(!open)}
-          />
-          {open && (
-            <div className="dropdown-menu">
-              <div className="dropdown-item">
-                <FaCog /> <span>Cài đặt</span>
-              </div>
-              <div className="dropdown-item">
-                <FaInfoCircle /> <span>Thông tin tài khoản</span>
-              </div>
-              <div className="dropdown-item logout" onClick={() => navigate("/")}>
-                <FaSignOutAlt /> <span>Đăng xuất</span>
-              </div>
-            </div>
-          )}
-        </div>
+        <svg width="20" height="20" fill="black" viewBox="0 0 24 24">
+          <path d="M12 12c2.21 0 4-1.79 
+          4-4s-1.79-4-4-4-4 1.79-4 
+          4 1.79 4 4 4zm0 2c-2.67 
+          0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+        </svg>
 
-        <span className="greeting">Xin chào, Admin</span>
+        <span className="welcome-text">Xin chào, Admin</span>
       </div>
     </header>
   );

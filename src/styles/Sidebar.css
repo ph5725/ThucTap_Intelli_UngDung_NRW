@@ -1,64 +1,52 @@
 .sidebar {
-  width: 240px;
+  width: 220px;
+  background-color: #1976D2;
+  color: #fff;
   height: 100vh;
-  background: linear-gradient(180deg, #1e40af, #2563eb); /* xanh gradient */
-  color: white;
-  display: flex;
-  flex-direction: column;
-  transition: width 0.3s ease;
-  overflow: hidden;
+  padding: 20px 0;
 }
 
-.sidebar.collapsed {
-  width: 70px; /* thu gọn */
+.sidebar-logo {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px;
-  font-size: 14px;
-  font-weight: bold;
+.sidebar-logo-img {
+  width: 50px;
+  height: 50px;
 }
 
-.toggle-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.menu ul {
+.sidebar-menu {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.menu li {
-  margin: 5px 0;
+.sidebar-menu li {
+  margin: 10px 0;
 }
 
-.menu-link {
+.sidebar-menu a {
   display: flex;
   align-items: center;
-  gap: 10px;
   padding: 12px 20px;
-  color: white;
   text-decoration: none;
+  color: white;
+  font-size: 14px;
+  border-radius: 10px;
   transition: background 0.3s;
 }
 
-.menu-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.menu-link.active {
-  background-color: #38bdf8;
-}
-
-
-.icon {
+.sidebar-menu a .icon {
+  margin-right: 12px;
   font-size: 18px;
+}
+
+.sidebar-menu a:hover {
+  background-color: #1565c0;
+}
+
+.sidebar-menu a.active {
+  background-color: #3084D7;
+  font-weight: bold;
 }
