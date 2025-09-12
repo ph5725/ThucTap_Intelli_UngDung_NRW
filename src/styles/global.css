@@ -1,0 +1,400 @@
+/* Tiêu đề */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #1e3a8a;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.page-icon { font-size: 20px; color: #2563eb; }
+
+/* Bo góc */
+.boder {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Button */
+.btn {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn.filter { 
+  display: flex;
+  background: #22c55e; 
+  color: #fff;
+  height: 34px;
+  border-radius: 0; /* ép về vuông */
+border-top-right-radius: 6px;
+border-bottom-right-radius: 6px;
+align-items: center;
+
+
+}
+
+.btn.add {
+  background: #fff;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+  border-radius: 100px;
+  width: 120px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.btn.add:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn.apply {
+  background: #22c55e;
+  color: #fff;
+  height: 40px;
+}
+.btn.apply:hover { background: #16a34a; }
+
+.btn.save {
+  background: #2563eb;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+   height: 40px;
+   display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.btn.save:hover {
+  background: #1e40af;
+}
+
+.btn.close {
+  background: #ef4444;
+  color: #fff;
+  height: 40px;
+
+}
+
+.btn.close:hover { background: #dc2626; }
+
+/* Icon hành động trong table */
+.actions {
+  display: flex;
+  gap: 10px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #1e3a8a;
+}
+
+/* KPI Card */
+.card {
+  flex: 1;
+  padding: 15px;
+  border-radius: 8px;
+  color: #fff;
+  text-align: center;
+  font-style: italic;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.card.purple { background: #9333ea; }
+.card.green  { background: #16a34a; }
+.card.red    { background: #dc2626; }
+
+
+/* Pagination (thanh chuyển trang table ) */
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: #000;
+}
+.pagination button:hover:not(:disabled) { background: #f1f5f9; }
+.pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+.pagination .current-page {
+  font-weight: bold;
+  color: #2563eb;
+  min-width: 30px;
+  text-align: center;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.toolbar-left{
+  align-items: center;
+}
+
+.toolbar-right{
+  align-items: center;
+
+}
+
+.toolbar input {
+  width: 300px;
+  height: 16px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+  outline: none;
+  box-shadow: none;
+
+border-top-left-radius: 6px;
+border-bottom-left-radius: 6px;
+}
+
+/* Table */
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+.account-table th {
+  background: #1d4ed8;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+  font-style: italic;
+}
+.account-table td {
+  background: #fff;
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  color: #1e3a8a;
+}
+
+
+/* Form thêm mới*/
+.account-form {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  max-width: 500px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #1e3a8a;
+  
+}
+
+.form-group input{
+padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color:#ffffff;
+  color: #000;
+
+}
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #1d4ed8;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Modal (Chức năng lọc của Fillter) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  overflow-y: auto; 
+
+}
+
+.modal {
+  background: linear-gradient(145deg, #fff, #f9fafb);
+  padding: 24px;
+  border-radius: 16px;
+  width: 420px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal h3 {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  border-left: 4px solid #2563eb;
+  padding-left: 10px;
+}
+
+
+.modal label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.modal input,
+.modal select {
+  width: 400px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.modal select {
+  width: 150px;
+  padding: 10px 12px;
+  margin-top: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #1d4ed8;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  margin-left: 0px;
+  color: #ffffff;
+}
+
+.modal select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px; /* Khoảng cách giữa label và value */
+  color: #1d4ed8;
+}
+
+.modal-field .label {
+  font-weight: bold;
+  min-width: 120px; /* Chiều rộng cố định cho label để thẳng hàng */
+}
+
+.modal-field .value {
+  color: #333;
+}
+.locked-row {
+  background-color: #ffe5e5 !important; /* nền đỏ nhạt */
+  color: #d8000c !important;            /* chữ đỏ */
+  font-weight: bold;
+}
+.locked-row:hover {
+  background-color: #ffcccc !important; /* đỏ đậm hơn khi hover */
+}
+
+/* Tab Chuyển Trang */
+
+.tabs {
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.tab {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  padding: 8px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.tab:hover {
+  color: #4f46e5;
+}
+
+.tab.active {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 3px;
+  background-color: #4f46e5;
+  border-radius: 2px;
+}
+
+.tab-content {
+  margin-top: 15px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.tab-content:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}

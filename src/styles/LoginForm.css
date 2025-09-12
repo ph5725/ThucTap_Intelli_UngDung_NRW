@@ -1,0 +1,140 @@
+/* Container với background */
+.login-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url("../img/login.jpg") no-repeat center center;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Login box */
+.login-box {
+  width: 350px;
+  padding: 40px;
+  background-color: #ffffff;
+  color: #0078d4;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  z-index: 1;
+
+  /* Vị trí tuyệt đối */
+  position: absolute;
+  top: 100px;   /* điều chỉnh cao thấp */
+  right: 150px;  /* cách cạnh phải */
+}
+
+/* Icon khóa */
+.lock-icon {
+  font-size: 60px;
+  color: #0091ff;
+
+}
+
+/* Tiêu đề */
+.login-box h2 {
+  font-weight: bold;
+  font-size: 40px;
+}
+
+/* Input */
+.login-box input[type="text"]{
+  width: 85%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+}
+.login-box input[type="password"] {
+  width: 85%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+/* Remember me */
+.remember-me {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.remember-me input {
+  margin-right: 8px;
+}
+
+/* Button */
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  background: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.login-box button:hover {
+  background: #005fa3;
+}
+
+/* Signup text */
+.signup-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #0091ff;
+  font-style: italic;
+}
+
+/* Welcome text */
+.welcome-text {
+  font-size: 38px;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding:100px 0;
+  border-radius: 12px;
+  text-align: left;
+  color: #0078d4;
+  padding: 80px;
+  padding-left: 200px;
+  font-style: italic;
+
+  width: 100%;
+  position: absolute; /* hoặc fixed nếu muốn luôn nhìn thấy khi scroll */
+  top: 500px;         /* điều chỉnh lên/xuống */
+  left: 0;
+  box-sizing: border-box;
+}
+
+.password-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-container input {
+  width: 92%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 18px;
+}

@@ -1,0 +1,27 @@
+/* Style riêng cho select vai trò */
+.modal.role-select {
+  width: 200px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f9fafb; /* nền nhạt hơn input */
+  font-size: 14px;
+  margin-bottom: 12px;
+  transition: border 0.2s, box-shadow 0.2s;
+
+
+}
+
+.role-select:focus {
+  border-color: #2563eb; /* xanh dương khi focus */
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.3);
+  outline: none;
+}
+
+.edit-user{
+    margin-top: 400px;
+}
+
+.text-user h3{
+    font-style: italic;
+    color: #2563eb;
+}

@@ -1,0 +1,14 @@
+.add-account-page {
+background: #f3f6fb; /* nền sáng hơn */
+  min-height: 100vh; /* chiếm full màn hình */
+  justify-content: center;
+  align-items: center; /* đưa form ra giữa */
+  padding: 20px;
+}
+
+
+.textform{
+  font-style: italic;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
