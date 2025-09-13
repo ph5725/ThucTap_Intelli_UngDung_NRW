@@ -1,4 +1,4 @@
-//Lỗi CROSS-ORIGIN khi fetch API
+//Lỗi CROSS-ORIGIN khi fetch API ở đây
 
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
