@@ -1,3 +1,5 @@
+//Lỗi CROSS-ORIGIN khi fetch API
+
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import Tabs from "../../components/tabQLTK/Tabs";
