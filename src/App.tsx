@@ -14,8 +14,10 @@ import UserGroupPage from "./pages/qlnnd/UserGroup"; // trang quản lý nhóm n
 import AddUserGroupPage from "./pages/qlnnd/AddUserGroupPage"; 
 
 import LoginForm from "./pages/LoginForm"; // trang đăng nhập
-import "./App.css";
 
+import PermissionPage from "./pages/role/PermissionPage"; // trang quản lý phân quyền
+import PermissionDataPage from "./pages/role/PermissionDataPage";
+import "./App.css";
 const App: React.FC = () => {
   return (
     <Router>
@@ -52,6 +54,9 @@ const MainLayout: React.FC = () => {
 
             <Route path="user-group" element={<UserGroupPage />} />
             <Route path="add-group" element={<AddUserGroupPage />} />
+
+            <Route path="permissions" element={<PermissionPage />} />
+            <Route path="permissionsdatapage" element={<PermissionDataPage />} />
 
           </Routes>
         </div>

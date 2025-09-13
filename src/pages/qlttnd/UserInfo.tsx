@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+//Lỗi CROSS-ORIGIN khi fetch API ở đây
+
+import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import Tabs from "../../components/tabQLTK/Tabs";
-import EditUserInfoModal from "./EditUserInfoModal";
-import DetailUserInfoModal from "./DetailUserInfoModal";
 import "../../styles/global.css";
 import "../../styles/qltk/AccountManagement.css";
 import { useNavigate } from "react-router-dom";
+import { userService } from "../../config/userService";
 
 // Kiểu dữ liệu rút gọn hiển thị ở bảng
 interface UserInfoList {
@@ -16,34 +17,10 @@ interface UserInfoList {
   email: string;
 }
 
-// Kiểu dữ liệu chi tiết (dùng cho modal)
-interface UserInfoDetail extends UserInfoList {
-  password: string;
-  role: string;
-  permissions: string[];
-  avatar?: string;
-  createdAt: string;
-  updatedAt: string;
-  createdBy: string;
-  updatedBy: string;
-}
-
 const UserInfoPage: React.FC = () => {
   const navigate = useNavigate();
 
-  // dữ liệu mẫu
-  const [users, _setUsers] = useState<UserInfoList[]>([
-    { id: 1, code: "NV001", username: "admin", fullname: "Nguyễn Văn A", email: "a@gmail.com" },
-    { id: 2, code: "NV002", username: "user1", fullname: "Trần Thị B", email: "b@gmail.com" },
-    { id: 3, code: "NV003", username: "user2", fullname: "Lê Văn C", email: "c@gmail.com" },
-    { id: 4, code: "NV004", username: "user3", fullname: "Phạm Thị D", email: "d@gmail.com" },
-    { id: 5, code: "NV005", username: "user4", fullname: "Nguyễn Văn E", email: "e@gmail.com" },
-    { id: 6, code: "NV006", username: "user5", fullname: "Lê Thị F", email: "f@gmail.com" },
-    { id: 7, code: "NV007", username: "user6", fullname: "Trần Văn G", email: "g@gmail.com" },
-  ]);
-
-  const [selectedUser, setSelectedUser] = useState<UserInfoDetail | null>(null);
-  const [selectedUserDetail, setSelectedUserDetail] = useState<UserInfoDetail | null>(null);
+  const [users, setUsers] = useState<UserInfoList[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [showFilter, setShowFilter] = useState(false);
 
@@ -56,48 +33,47 @@ const UserInfoPage: React.FC = () => {
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
-  // Hàm tạo chi tiết user
-  const makeDetail = (user: UserInfoList): UserInfoDetail => ({
-    ...user,
-    password: "123456",
-    role: "Người dùng",
-    permissions: ["View", "Edit"],
-    avatar: "",
-    createdAt: "2025-01-01",
-    updatedAt: "2025-02-01",
-    createdBy: "system",
-    updatedBy: "admin",
-  });
+  // Fetch danh sách user từ API
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-  // Modal chỉnh sửa
-  const handleEdit = (user: UserInfoList) => setSelectedUser(makeDetail(user));
-
-  // Modal chi tiết
-  const handleView = (user: UserInfoList) => setSelectedUserDetail(makeDetail(user));
-
-  // Lưu chỉnh sửa
-  const handleSave = (updated: UserInfoDetail) => {
-    _setUsers((prev) =>
-      prev.map((u) =>
-        u.id === updated.id
-          ? { id: updated.id, code: updated.code, username: updated.username, fullname: updated.fullname, email: updated.email }
-          : u
-      )
-    );
-    setSelectedUser(null);
-    setMessage("Cập nhật thành công!");
-    setTimeout(() => setMessage(null), 3000);
+  const fetchUsers = async () => {
+    try {
+      const res = await userService.getAll();
+      setUsers(res.data);
+    } catch (error) {
+      console.error("Lỗi tải dữ liệu:", error);
+      setMessage("Không thể tải dữ liệu!");
+      setTimeout(() => setMessage(null), 3000);
+    }
   };
 
-  // Xóa user
-  const handleDelete = (id: number) => {
+  // Xóa user theo id
+  const handleDelete = async (id: number) => {
     const u = users.find((x) => x.id === id);
     if (!u) return;
     if (window.confirm(`Bạn có chắc muốn xóa "${u.username}" không?`)) {
-      _setUsers((prev) => prev.filter((x) => x.id !== id));
-      setMessage("Xóa thành công!");
+      try {
+        await userService.delete(id);
+        setUsers((prev) => prev.filter((x) => x.id !== id));
+        setMessage("Xóa thành công!");
+      } catch (error) {
+        console.error("Lỗi khi xóa:", error);
+        setMessage("Xóa thất bại!");
+      }
       setTimeout(() => setMessage(null), 3000);
     }
+  };
+
+  // Chuyển sang trang edit-user/:id
+  const handleEdit = (id: number) => {
+    navigate(`/edit-user/${id}`);
+  };
+
+  // Chuyển sang trang detail-user/:id
+  const handleView = (id: number) => {
+    navigate(`/detail-user/${id}`);
   };
 
   return (
@@ -146,9 +122,9 @@ const UserInfoPage: React.FC = () => {
                 <td>{u.fullname}</td>
                 <td>{u.email}</td>
                 <td className="actions">
-                  <FaEdit title="Sửa" onClick={() => handleEdit(u)} />
+                  <FaEdit title="Sửa" onClick={() => handleEdit(u.id)} />
                   <FaTrash title="Xóa" onClick={() => handleDelete(u.id)} />
-                  <FaEye title="Chi tiết" onClick={() => handleView(u)} />
+                  <FaEye title="Chi tiết" onClick={() => handleView(u.id)} />
                 </td>
               </tr>
             ))}
@@ -185,23 +161,6 @@ const UserInfoPage: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Modal chỉnh sửa */}
-      {selectedUser && (
-        <EditUserInfoModal
-          user={selectedUser}
-          onClose={() => setSelectedUser(null)}
-          onSave={handleSave}
-        />
-      )}
-
-      {/* Modal chi tiết */}
-      {selectedUserDetail && (
-        <DetailUserInfoModal
-          user={selectedUserDetail}
-          onClose={() => setSelectedUserDetail(null)}
-        />
       )}
     </div>
   );
