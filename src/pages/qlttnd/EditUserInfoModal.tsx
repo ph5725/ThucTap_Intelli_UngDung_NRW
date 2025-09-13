@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../styles/global.css";
 import "../../styles/qltk/EditAccountModal.css"; // dùng lại css modal
 import "../../styles/qlttnd/EditUserInfoModal.css"; 
+import { userService } from "../../config/userService";
 
 interface UserInfo {
   id: number;
@@ -28,10 +29,6 @@ interface EditUserInfoModalProps {
 const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, onSave }) => {
   const [formData, setFormData] = useState<UserInfo>(user);
 
-  useEffect(() => {
-    setFormData(user);
-  }, [user]);
-
   const handleChange = <K extends keyof UserInfo>(field: K, value: UserInfo[K]) => {
     setFormData({ ...formData, [field]: value });
   };
@@ -42,12 +39,22 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, on
     }
   };
 
+  const handleSave = async () => {
+    try {
+      await userService.update(formData.id, formData);
+      onSave(formData); // callback cho parent cập nhật state
+    } catch (error) {
+      console.error("Lỗi cập nhật:", error);
+      alert("Cập nhật thất bại!");
+    }
+  };
+
   return (
     <div className="modal-overlay">
       <div className="modal edit-user">
 
         <div className="text-user">
-            <h3>Chỉnh sửa thông tin người dùng</h3>
+          <h3>Chỉnh sửa thông tin người dùng</h3>
         </div>
         
         {/* container cuộn */}
@@ -72,10 +79,12 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, on
           <input type="email" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} />
 
           <label>Vai trò</label>
-          <select className="role-select" 
+          <select
+            className="role-select" 
             style={{ width: "426px"}}   
             value={formData.role} 
-            onChange={(e) => handleChange("role", e.target.value)}>
+            onChange={(e) => handleChange("role", e.target.value)}
+          >
             <option value="admin">Quản trị viên</option>
             <option value="user">Người dùng</option>
             <option value="guest">Khách</option>
@@ -116,7 +125,7 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, on
 
         {/* nút cố định dưới cùng */}
         <div className="modal-actions">
-          <button className="btn save" onClick={() => onSave(formData)}>Lưu</button>
+          <button className="btn save" onClick={handleSave}>Lưu</button>
           <button className="btn close" onClick={onClose}>Hủy</button>
         </div>
       </div>
