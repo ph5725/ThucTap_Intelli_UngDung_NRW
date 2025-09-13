@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
 
       <ul className="sidebar-menu">
         <li>
-          <NavLink to="/" className={({ isActive }) => (isActive ? "active" : "")}>
+          <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
             <FaTachometerAlt className="icon" /> Dashboard
           </NavLink>
         </li>

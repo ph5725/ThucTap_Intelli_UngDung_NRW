@@ -12,7 +12,7 @@ import AddUserInfoModal from "./pages/qlttnd/AddUserInfoModal";
 
 import UserGroupPage from "./pages/qlnnd/UserGroup"; // trang quản lý nhóm người dùng
 import AddUserGroupPage from "./pages/qlnnd/AddUserGroupPage"; 
-
+import DashboardPage from "./pages/Dashboard/DashboardPage"; // trang dashboard
 import LoginForm from "./pages/LoginForm"; // trang đăng nhập
 import "./App.css";
 
@@ -44,6 +44,7 @@ const MainLayout: React.FC = () => {
         <Header />
         <div className="content-area">
           <Routes>
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="accounts" element={<AccountManagement />} />
             <Route path="add-account" element={<AddAccount />} />
 
