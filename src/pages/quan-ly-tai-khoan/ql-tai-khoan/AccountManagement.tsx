@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaUser, FaEdit, FaTrash, FaEye, FaLock, FaPlus, FaFilter } from "react-icons/fa";
-import "../../styles/qltk/AccountManagement.css";
-import EditAccountModal from "../qltk/EditAccountModal";
-import DetailAccountModal from "../qltk/DetailAccountModal";
-import "../../styles/global.css";
-import Tabs from "../../components/tabQLTK/Tabs";
+import "../../../styles/qltk/AccountManagement.css";
+import EditAccountModal from "./EditAccountModal";
+import DetailAccountModal from "./DetailAccountModal";
+import "../../../styles/global.css";
+import Tabs from "../../../components/tabQLTK/Tabs";
 
 interface Account {
   id: number;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import "../styles/LoginForm.css";
+import "../../styles/LoginForm.css";
 
 interface LoginFormProps {
   onLogin: (username: string, password: string) => void;

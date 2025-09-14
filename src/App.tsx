@@ -4,19 +4,19 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-route
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 
-import AccountManagement from "./pages/qltk/AccountManagement"; // trang quản lý tài khoản
-import AddAccount from "./pages/qltk/AddAccount";
+import AccountManagement from "./pages/quan-ly-tai-khoan/ql-tai-khoan/AccountManagement"; // trang quản lý tài khoản
+import AddAccount from "./pages//quan-ly-tai-khoan/ql-tai-khoan/AddAccount";
 
-import UserInfoPage from "./pages/qlttnd/UserInfo"; // trang quản lý người dùng
-import AddUserInfoModal from "./pages/qlttnd/AddUserInfoModal"; 
+import UserInfoPage from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/UserInfo"; // trang quản lý người dùng
+import AddUserInfoModal from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoModal"; 
 
-import UserGroupPage from "./pages/qlnnd/UserGroup"; // trang quản lý nhóm người dùng
-import AddUserGroupPage from "./pages/qlnnd/AddUserGroupPage"; 
+import UserGroupPage from "./pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/UserGroup"; // trang quản lý nhóm người dùng
+import AddUserGroupPage from "./pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/AddUserGroupPage"; 
 
-import LoginForm from "./pages/LoginForm"; // trang đăng nhập
+import LoginForm from "./pages/dang-nhap-dang-xuat/LoginForm"; // trang đăng nhập
 
-import PermissionPage from "./pages/role/PermissionPage"; // trang quản lý phân quyền
-import PermissionDataPage from "./pages/role/PermissionDataPage";
+import PermissionPage from "./pages/quan-ly-phan-quyen/PermissionPage"; // trang quản lý phân quyền
+import PermissionDataPage from "./pages/quan-ly-phan-quyen/PermissionDataPage";
 import "./App.css";
 const App: React.FC = () => {
   return (

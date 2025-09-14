@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
-import Tabs from "../../components/tabQLTK/Tabs";
-import "../../styles/global.css";
-import "../../styles/qltk/AccountManagement.css";
+import Tabs from "../../../components/tabQLTK/Tabs";
+import "../../../styles/global.css";
+import "../../../styles/qltk/AccountManagement.css";
 import { useNavigate } from "react-router-dom";
-import { userService } from "../../config/userService";
+import { userService } from "../../../config/userService";
 
 // Kiểu dữ liệu rút gọn hiển thị ở bảng
 interface UserInfoList {

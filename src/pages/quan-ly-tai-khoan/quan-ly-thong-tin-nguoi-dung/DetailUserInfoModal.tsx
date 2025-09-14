@@ -1,7 +1,7 @@
 import React from "react";
-import "../../styles/global.css";
-import "../../styles/qltk/EditAccountModal.css"; 
-import "../../styles/qlttnd/EditUserInfoModal.css"; 
+import "../../../styles/global.css";
+import "../../../styles/qltk/EditAccountModal.css"; 
+import "../../../styles/qlttnd/EditUserInfoModal.css"; 
 
 interface UserInfo {
   id: number;

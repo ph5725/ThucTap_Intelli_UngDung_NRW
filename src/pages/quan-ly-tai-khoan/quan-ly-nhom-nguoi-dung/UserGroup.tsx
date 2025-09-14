@@ -2,11 +2,11 @@
 import React, { useState, useMemo } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Tabs from "../../components/tabQLTK/Tabs";
+import Tabs from "../../../components/tabQLTK/Tabs";
 import EditUserGroupModal from "./EditUserGroupModal";
 import DetailUserGroupModal from "./DetailUserGroupModal";
-import "../../styles/global.css";
-import "../../styles/qltk/AccountManagement.css";
+import "../../../styles/global.css";
+import "../../../styles/qltk/AccountManagement.css";
 
 interface UserGroup {
   id: number;

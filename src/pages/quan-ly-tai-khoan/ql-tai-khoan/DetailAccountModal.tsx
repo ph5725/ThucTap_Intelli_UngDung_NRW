@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/qltk/AccountManagement.css";
+import "../../../styles/qltk/AccountManagement.css";
 
 interface Account {
   id: number;

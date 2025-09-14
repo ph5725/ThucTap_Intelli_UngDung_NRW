@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../../styles/global.css";
-import "../../styles/qltk/EditAccountModal.css"; // dùng lại css modal
-import "../../styles/qlttnd/EditUserInfoModal.css"; 
-import { userService } from "../../config/userService";
+import "../../../styles/global.css";
+import "../../../styles/qltk/EditAccountModal.css"; // dùng lại css modal
+import "../../../styles/qlttnd/EditUserInfoModal.css"; 
+import { userService } from "../../../config/userService";
 
 interface UserInfo {
   id: number;

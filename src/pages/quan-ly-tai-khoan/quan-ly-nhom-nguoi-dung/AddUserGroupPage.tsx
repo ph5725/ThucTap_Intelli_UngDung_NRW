@@ -1,9 +1,9 @@
 // AddUserGroupPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/global.css";
-import "../../styles/qltk/AccountManagement.css";
-import Tabs from "../../components/tabQLTK/Tabs";
+import "../../../styles/global.css";
+import "../../../styles/qltk/AccountManagement.css";
+import Tabs from "../../../components/tabQLTK/Tabs";
 import { FaUser } from "react-icons/fa";
 
 interface UserGroup {

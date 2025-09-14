@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../styles/global.css";
-import "../../styles/qltk/EditAccountModal.css"; // dùng cho form
-import "../../styles/qlttnd/EditUserInfoModal.css";
+import "../../../styles/global.css";
+import "../../../styles/qltk/EditAccountModal.css"; // dùng cho form
+import "../../../styles/qlttnd/EditUserInfoModal.css";
 import { FaUser } from "react-icons/fa";
-import Tabs from "../../components/tabQLTK/Tabs";
+import Tabs from "../../../components/tabQLTK/Tabs";
 
 interface UserInfo {
   id: string;

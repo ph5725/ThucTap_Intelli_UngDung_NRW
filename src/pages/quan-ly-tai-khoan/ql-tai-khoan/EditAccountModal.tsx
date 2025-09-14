@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/qltk/EditAccountModal.css";
-import "../../styles/global.css";
+import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/global.css";
 
 interface Account {
   id: number;
