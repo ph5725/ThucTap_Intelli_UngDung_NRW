@@ -1,9 +1,9 @@
-// EditUserGroupModal.tsx
+// src/pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/EditUserGroupModal.tsx
 import React, { useState } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 
-interface UserGroup {
+export interface UserGroup {
   id: number;
   groupName: string;
   members: string;
@@ -32,7 +32,11 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
+
+        <div className="text-user">
+              <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
+             </div>
+
 
         <label>Nhóm Người Dùng</label>
         <input

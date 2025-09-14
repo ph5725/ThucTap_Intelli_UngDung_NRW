@@ -20,7 +20,10 @@ const DetailUserGroupModal: React.FC<DetailUserGroupModalProps> = ({ group, onCl
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Chi Tiết Nhóm Người Dùng</h3>
+
+        <div className="text-user">
+              <h3>Chi Tiết Nhóm Người Dùng</h3>
+             </div>
 
         <label>Nhóm Người Dùng</label>
         <input type="text" value={group.groupName} readOnly />

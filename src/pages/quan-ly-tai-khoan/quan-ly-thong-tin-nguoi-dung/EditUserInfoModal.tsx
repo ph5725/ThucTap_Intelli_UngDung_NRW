@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css"; // dùng lại css modal
-import "../../../styles/qlttnd/EditUserInfoModal.css"; 
-import { userService } from "../../../config/userService";
+import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/qlttnd/EditUserInfoModal.css";
+import api from "../../../config/api";
 
 interface UserInfo {
   id: number;
@@ -28,6 +28,7 @@ interface EditUserInfoModalProps {
 
 const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, onSave }) => {
   const [formData, setFormData] = useState<UserInfo>(user);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleChange = <K extends keyof UserInfo>(field: K, value: UserInfo[K]) => {
     setFormData({ ...formData, [field]: value });
@@ -35,56 +36,77 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, on
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
       handleChange("avatar", URL.createObjectURL(e.target.files[0]));
     }
   };
 
   const handleSave = async () => {
     try {
-      await userService.update(formData.id, formData);
-      onSave(formData); // callback cho parent cập nhật state
-    } catch (error) {
-      console.error("Lỗi cập nhật:", error);
-      alert("Cập nhật thất bại!");
-    }
+      const payload = new FormData();
+      payload.append("code", formData.code);
+      payload.append("username", formData.username);
+      payload.append("fullname", formData.fullname);
+      payload.append("password", formData.password);
+      payload.append("email", formData.email);
+      payload.append("role", formData.role);
+      formData.permissions.forEach(p => payload.append("permissions[]", p));
+
+      if (selectedFile) {
+        payload.append("avatar", selectedFile);
+      }
+
+      const res = await api.put(`/nguoiDung/${formData.id}`, payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      onSave({
+        ...formData,
+        updatedAt: new Date().toISOString(), // cập nhật thời gian mới
+        avatar: res.data.avatar || formData.avatar,
+      });
+      onClose();
+    } catch (error: unknown) {
+  if (error instanceof Error) {
+    console.error("Lỗi cập nhật:", error.message);
+    alert("Cập nhật thất bại: " + error.message);
+  } else if (typeof error === "object" && error !== null && "response" in error) {
+    // nếu axios trả về object có response
+    const e = error as { response?: { data?: { message?: string } } };
+    console.error("Lỗi cập nhật:", e.response?.data);
+    alert("Cập nhật thất bại: " + (e.response?.data?.message || "Không xác định"));
+  } else {
+    console.error("Lỗi không xác định:", error);
+    alert("Cập nhật thất bại: Không xác định");
+  }
+}
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal edit-user">
-
         <div className="text-user">
           <h3>Chỉnh sửa thông tin người dùng</h3>
         </div>
-        
-        {/* container cuộn */}
+
         <div className="modal-content-scroll">
           <label>Mã</label>
-          <input value={formData.code} onChange={(e) => handleChange("code", e.target.value)} />
+          <input value={formData.code} onChange={e => handleChange("code", e.target.value)} />
 
           <label>Tên tài khoản</label>
-          <input value={formData.username} onChange={(e) => handleChange("username", e.target.value)} />
+          <input value={formData.username} onChange={e => handleChange("username", e.target.value)} />
 
           <label>Tên người dùng</label>
-          <input value={formData.fullname} onChange={(e) => handleChange("fullname", e.target.value)} />
+          <input value={formData.fullname} onChange={e => handleChange("fullname", e.target.value)} />
 
           <label>Mật khẩu</label>
-          <input
-            type="text" // luôn hiển thị mật khẩu
-            value={formData.password}
-            onChange={(e) => handleChange("password", e.target.value)}
-          />
+          <input type="text" value={formData.password} onChange={e => handleChange("password", e.target.value)} />
 
           <label>Email</label>
-          <input type="email" value={formData.email} onChange={(e) => handleChange("email", e.target.value)} />
+          <input type="email" value={formData.email} onChange={e => handleChange("email", e.target.value)} />
 
           <label>Vai trò</label>
-          <select
-            className="role-select" 
-            style={{ width: "426px"}}   
-            value={formData.role} 
-            onChange={(e) => handleChange("role", e.target.value)}
-          >
+          <select value={formData.role} onChange={e => handleChange("role", e.target.value)} style={{ width: "426px" }}>
             <option value="admin">Quản trị viên</option>
             <option value="user">Người dùng</option>
             <option value="guest">Khách</option>
@@ -93,37 +115,25 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, on
           <label>Cấp phép</label>
           <input
             type="text"
-            value={formData.permissions.join(", ")} // chuyển mảng thành chuỗi
-            onChange={(e) =>
-              handleChange("permissions", e.target.value.split(",").map((p) => p.trim()))
-            }
+            value={formData.permissions.join(", ")}
+            onChange={e => handleChange("permissions", e.target.value.split(",").map(p => p.trim()))}
             placeholder="Nhập các quyền, cách nhau bằng dấu phẩy"
           />
 
           <label>Ảnh đại diện</label>
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
-          {formData.avatar && (
-            <img
-              src={formData.avatar}
-              alt="Avatar Preview"
-              style={{ width: "80px", marginTop: "10px", borderRadius: "8px" }}
-            />
-          )}
+          {formData.avatar && <img src={formData.avatar} alt="Avatar Preview" style={{ width: "80px", marginTop: "10px", borderRadius: "8px" }} />}
 
           <label>Ngày tạo</label>
-          <input type="text" value={formData.createdAt} readOnly />
-
+          <input value={formData.createdAt} readOnly />
           <label>Ngày cập nhật</label>
-          <input type="text" value={formData.updatedAt} readOnly />
-
+          <input value={formData.updatedAt} readOnly />
           <label>Người tạo</label>
-          <input type="text" value={formData.createdBy} readOnly />
-
+          <input value={formData.createdBy} readOnly />
           <label>Người cập nhật</label>
-          <input type="text" value={formData.updatedBy} readOnly />
+          <input value={formData.updatedBy} readOnly />
         </div>
 
-        {/* nút cố định dưới cùng */}
         <div className="modal-actions">
           <button className="btn save" onClick={handleSave}>Lưu</button>
           <button className="btn close" onClick={onClose}>Hủy</button>

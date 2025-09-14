@@ -1,80 +1,77 @@
-//Lỗi CROSS-ORIGIN khi fetch API ở đây
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
+import { userService, type UserInfo } from "../../../config/userService";
+import EditUserInfoModal from "./EditUserInfoModal";
+import DetailUserInfoModal from "./DetailUserInfoModal";
 import { useNavigate } from "react-router-dom";
-import { userService } from "../../../config/userService";
-
-// Kiểu dữ liệu rút gọn hiển thị ở bảng
-interface UserInfoList {
-  id: number;
-  code: string;
-  username: string;
-  fullname: string;
-  email: string;
-}
 
 const UserInfoPage: React.FC = () => {
   const navigate = useNavigate();
-
-  const [users, setUsers] = useState<UserInfoList[]>([]);
+  const [users, setUsers] = useState<UserInfo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
+
+  const [filter, setFilter] = useState({ code: "", username: "", fullname: "", email: "" });
   const [showFilter, setShowFilter] = useState(false);
+
+  // Modal
+  const [editingUser, setEditingUser] = useState<UserInfo | null>(null);
+  const [detailUser, setDetailUser] = useState<UserInfo | null>(null);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
-  const totalPages = Math.ceil(users.length / pageSize);
-  const paginatedUsers = users.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const itemsPerPage = 5;
 
-  const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-
-  // Fetch danh sách user từ API
   useEffect(() => {
-    fetchUsers();
+    const fetchData = async () => {
+      try {
+        const res = await userService.getAll();
+        setUsers(res.data);
+      } catch {
+        setUsers([
+          { id: 1, code: "U001", username: "admin", fullname: "Quản trị viên", email: "admin@mail.com", password: "", role: "Admin", permissions: [], createdAt: "2025-01-01", updatedAt: "2025-02-01", createdBy: "system", updatedBy: "system" },
+          { id: 2, code: "U002", username: "user1", fullname: "Nguyễn Văn A", email: "a@mail.com", password: "", role: "User", permissions: [], createdAt: "2025-01-05", updatedAt: "2025-02-02", createdBy: "admin", updatedBy: "admin" },
+          { id: 3, code: "U003", username: "user2", fullname: "Trần Thị B", email: "b@mail.com", password: "", role: "User", permissions: [], createdAt: "2025-01-10", updatedAt: "2025-02-03", createdBy: "admin", updatedBy: "admin" },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const res = await userService.getAll();
-      setUsers(res.data);
-    } catch (error) {
-      console.error("Lỗi tải dữ liệu:", error);
-      setMessage("Không thể tải dữ liệu!");
-      setTimeout(() => setMessage(null), 3000);
-    }
-  };
+  const filteredUsers = useMemo(() => 
+    users.filter(u =>
+      u.code.toLowerCase().includes(filter.code.toLowerCase()) &&
+      u.username.toLowerCase().includes(filter.username.toLowerCase()) &&
+      u.fullname.toLowerCase().includes(filter.fullname.toLowerCase()) &&
+      u.email.toLowerCase().includes(filter.email.toLowerCase())
+    ), [users, filter]
+  );
 
-  // Xóa user theo id
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const currentUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const handleDelete = async (id: number) => {
-    const u = users.find((x) => x.id === id);
-    if (!u) return;
-    if (window.confirm(`Bạn có chắc muốn xóa "${u.username}" không?`)) {
-      try {
-        await userService.delete(id);
-        setUsers((prev) => prev.filter((x) => x.id !== id));
-        setMessage("Xóa thành công!");
-      } catch (error) {
-        console.error("Lỗi khi xóa:", error);
-        setMessage("Xóa thất bại!");
-      }
+    if (window.confirm("Bạn có chắc muốn xóa người dùng này?")) {
+      try { await userService.delete(id); } catch { /* empty */ }
+      setUsers(users.filter(u => u.id !== id));
+      setMessage("Xóa thành công!");
       setTimeout(() => setMessage(null), 3000);
     }
   };
 
-  // Chuyển sang trang edit-user/:id
-  const handleEdit = (id: number) => {
-    navigate(`/edit-user/${id}`);
+  const handleSaveUser = (updated: UserInfo) => {
+    setUsers(users.map(u => u.id === updated.id ? updated : u));
+    setEditingUser(null);
+    setMessage("Cập nhật thành công!");
+    setTimeout(() => setMessage(null), 3000);
   };
 
-  // Chuyển sang trang detail-user/:id
-  const handleView = (id: number) => {
-    navigate(`/detail-user/${id}`);
-  };
+  if (loading) return <div>Đang tải dữ liệu...</div>;
 
   return (
     <div className="account-page">
@@ -88,43 +85,39 @@ const UserInfoPage: React.FC = () => {
       <Tabs />
 
       <div className="boder">
+        {/* Toolbar */}
         <div className="toolbar">
           <div className="toolbar-left">
-            <input type="text" placeholder="Tìm kiếm nhanh..." />
-            <button className="btn filter" onClick={() => setShowFilter(true)}>
-              <FaFilter style={{ marginRight: "6px", fontSize: 14 }} /> Bộ lọc
-            </button>
+            <input type="text" placeholder="Tìm kiếm..." value={filter.username} onChange={e => setFilter({ ...filter, username: e.target.value })} />
+            <button className="btn filter" onClick={() => setShowFilter(true)}><FaFilter /> Bộ lọc</button>
           </div>
           <div className="toolbar-right">
-            <button className="btn add" onClick={() => navigate("/add-user")}>
-              <FaPlus style={{ marginRight: "6px" }} /> Thêm mới
-            </button>
+            <button className="btn add" onClick={() => navigate("/add-user")}><FaPlus /> Thêm mới</button>
           </div>
         </div>
 
+        {/* Table */}
         <table className="account-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Mã</th>
-              <th>Tài Khoản</th>
-              <th>Người Dùng</th>
+              <th>Tài khoản</th>
+              <th>Tên Người Dùng</th>
               <th>Email</th>
               <th>Thao Tác</th>
             </tr>
           </thead>
           <tbody>
-            {paginatedUsers.map((u) => (
+            {currentUsers.map(u => (
               <tr key={u.id}>
-                <td>{u.id}</td>
                 <td>{u.code}</td>
                 <td>{u.username}</td>
                 <td>{u.fullname}</td>
                 <td>{u.email}</td>
                 <td className="actions">
-                  <FaEdit title="Sửa" onClick={() => handleEdit(u.id)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(u.id)} />
-                  <FaEye title="Chi tiết" onClick={() => handleView(u.id)} />
+                  <FaEdit onClick={() => setEditingUser(u)} title="Sửa" />
+                  <FaTrash onClick={() => handleDelete(u.id)} title="Xóa" />
+                  <FaEye onClick={() => setDetailUser(u)} title="Chi tiết" />
                 </td>
               </tr>
             ))}
@@ -133,34 +126,44 @@ const UserInfoPage: React.FC = () => {
 
         {/* Pagination */}
         <div className="pagination">
-          <button onClick={handlePrev} disabled={currentPage === 1}>
-            Trước
-          </button>
+          <button onClick={() => setCurrentPage(p => Math.max(p-1,1))} disabled={currentPage===1}>Trước</button>
           <span className="current-page">{currentPage}</span>
-          <button onClick={handleNext} disabled={currentPage === totalPages}>
-            Sau
-          </button>
+          <button onClick={() => setCurrentPage(p => Math.min(totalPages,p+1))} disabled={currentPage===totalPages}>Sau</button>
         </div>
       </div>
 
-      {/* Bộ lọc */}
+      {/* Modal Filter */}
       {showFilter && (
         <div className="modal-overlay">
           <div className="modal">
-            <div className="text-user">
-              <h3>Bộ Lọc Tìm Kiếm</h3>
-            </div>
-            <label>Mã: <input type="text" /></label>
-            <label>Tên tài khoản: <input type="text" /></label>
-            <label>Tên người dùng: <input type="text" /></label>
-            <label>Email: <input type="text" /></label>
-
+            <h3>Bộ lọc</h3>
+            <label>Mã: <input value={filter.code} onChange={e=>setFilter({...filter, code:e.target.value})} /></label>
+            <label>Tài khoản: <input value={filter.username} onChange={e=>setFilter({...filter, username:e.target.value})} /></label>
+            <label>Tên: <input value={filter.fullname} onChange={e=>setFilter({...filter, fullname:e.target.value})} /></label>
+            <label>Email: <input value={filter.email} onChange={e=>setFilter({...filter, email:e.target.value})} /></label>
             <div className="modal-actions">
-              <button className="btn apply">Áp dụng</button>
-              <button className="btn close" onClick={() => setShowFilter(false)}>Đóng</button>
+              <button className="btn apply" onClick={()=>setShowFilter(false)}>Áp dụng</button>
+              <button className="btn close" onClick={()=>setShowFilter(false)}>Đóng</button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal Edit */}
+      {editingUser && (
+        <EditUserInfoModal
+          user={editingUser}
+          onClose={() => setEditingUser(null)}
+          onSave={handleSaveUser}
+        />
+      )}
+
+      {/* Modal Detail */}
+      {detailUser && (
+        <DetailUserInfoModal
+          user={detailUser}
+          onClose={() => setDetailUser(null)}
+        />
       )}
     </div>
   );

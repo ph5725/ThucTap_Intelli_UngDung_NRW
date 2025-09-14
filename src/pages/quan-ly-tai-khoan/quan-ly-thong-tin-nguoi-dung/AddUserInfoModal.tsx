@@ -5,9 +5,10 @@ import "../../../styles/qltk/EditAccountModal.css"; // dùng cho form
 import "../../../styles/qlttnd/EditUserInfoModal.css";
 import { FaUser } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
+import { userService } from "../../../config/userService";
 
 interface UserInfo {
-  id: string;
+  id?: string;
   code: string;
   username: string;
   fullname: string;
@@ -16,16 +17,11 @@ interface UserInfo {
   role: string;
   permissions: string[];
   avatar?: string;
-  createdAt: string;
-  updatedAt: string;
-  createdBy: string;
-  updatedBy: string;
 }
 
 const AddUserInfoPage: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<UserInfo>({
-    id: Date.now().toString(),
     code: "",
     username: "",
     fullname: "",
@@ -34,28 +30,44 @@ const AddUserInfoPage: React.FC = () => {
     role: "user",
     permissions: [],
     avatar: "",
-    createdAt: new Date().toISOString().slice(0, 10),
-    updatedAt: new Date().toISOString().slice(0, 10),
-    createdBy: "admin",
-    updatedBy: "admin",
   });
 
+  // handle input text + select
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // handle file upload
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFormData({ ...formData, avatar: URL.createObjectURL(e.target.files[0]) });
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // submit form -> gọi API
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Dữ liệu thêm mới:", formData);
-    alert("Người dùng đã được thêm thành công!");
-    navigate(-1); // quay về trang trước
+    try {
+      const res = await userService.create({
+        code: formData.code,
+        username: formData.username,
+        fullname: formData.fullname,
+        password: formData.password,
+        email: formData.email,
+        role: formData.role,
+        permissions: formData.permissions,
+        avatar: formData.avatar,
+      });
+
+      alert("Người dùng đã được thêm thành công!");
+      console.log("API response:", res.data);
+
+      navigate(-1); // quay về trang trước
+    } catch (error) {
+      console.error("Lỗi khi thêm người dùng:", error);
+      alert("Thêm người dùng thất bại!");
+    }
   };
 
   return (
@@ -75,9 +87,6 @@ const AddUserInfoPage: React.FC = () => {
           <div className="textform">
             <label>Thêm Mới Người Dùng</label>
           </div>
-
-          <label>ID</label>
-          <input type="text" name="id" value={formData.id} disabled />
 
           <label>Mã</label>
           <input type="text" name="code" value={formData.code} onChange={handleChange} required />
@@ -106,7 +115,9 @@ const AddUserInfoPage: React.FC = () => {
             type="text"
             name="permissions"
             value={formData.permissions.join(", ")}
-            onChange={(e) => setFormData({ ...formData, permissions: e.target.value.split(",").map(p => p.trim()) })}
+            onChange={(e) =>
+              setFormData({ ...formData, permissions: e.target.value.split(",").map((p) => p.trim()) })
+            }
             placeholder="Nhập các quyền, cách nhau bằng dấu phẩy"
           />
 
@@ -119,18 +130,6 @@ const AddUserInfoPage: React.FC = () => {
               style={{ width: 80, marginTop: 10, borderRadius: 8 }}
             />
           )}
-
-          <label>Ngày Tạo</label>
-          <input type="date" name="createdAt" value={formData.createdAt} onChange={handleChange} />
-
-          <label>Ngày Cập Nhật</label>
-          <input type="date" name="updatedAt" value={formData.updatedAt} onChange={handleChange} />
-
-          <label>Người Tạo</label>
-          <input type="text" name="createdBy" value={formData.createdBy} onChange={handleChange} />
-
-          <label>Người Cập Nhật</label>
-          <input type="text" name="updatedBy" value={formData.updatedBy} onChange={handleChange} />
         </div>
 
         {/* Buttons */}
