@@ -17,6 +17,13 @@ import LoginForm from "./pages/dang-nhap-dang-xuat/LoginForm"; // trang đăng n
 
 import PermissionPage from "./pages/quan-ly-phan-quyen/PermissionPage"; // trang quản lý phân quyền
 import PermissionDataPage from "./pages/quan-ly-phan-quyen/PermissionDataPage";
+
+import MeterManagementPage from "./pages/quan-ly-dht/qldh/MeterManagementPage"; // trang quản lý đồng hồ
+import AddMeterPage from "./pages/quan-ly-dht/qldh/AddMeterPage";
+
+import MeterConfigPage from "./pages/quan-ly-dht/qlchdht/MeterConfigPage";
+import AddMeterConfigPage from "./pages/quan-ly-dht/qlchdht/AddMeterConfigPage";
+
 import "./App.css";
 const App: React.FC = () => {
   return (
@@ -57,6 +64,12 @@ const MainLayout: React.FC = () => {
 
             <Route path="permissions" element={<PermissionPage />} />
             <Route path="permissionsdatapage" element={<PermissionDataPage />} />
+
+            <Route path="meters" element={<MeterManagementPage />} />
+            <Route path="add-meter" element={<AddMeterPage />} />
+
+            <Route path="meter-config" element={<MeterConfigPage />} />
+            <Route path="add-meter-config" element={<AddMeterConfigPage />} />
 
           </Routes>
         </div>

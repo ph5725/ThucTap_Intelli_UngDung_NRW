@@ -1,17 +1,15 @@
-// src/pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/AddUserGroupPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import { FaUser } from "react-icons/fa";
-import type { UserGroup } from "./EditUserGroupModal"; // dùng chung interface
- // dùng chung interface
+import { userGroupService } from "../../../config/userGroupService";
 
 const AddUserGroupPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<Omit<UserGroup, "id">>({
+  const [formData, setFormData] = useState({
     groupName: "",
     members: "",
     createdAt: new Date().toISOString().split("T")[0],
@@ -26,30 +24,24 @@ const AddUserGroupPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // 🔹 Sau này sẽ thay bằng API call
-      // await userGroupService.create(formData);
-      console.log("Dữ liệu thêm mới:", formData);
-
-      alert("Nhóm người dùng đã được thêm thành công!");
-      navigate(-1); // quay lại trang trước
+      await userGroupService.create(formData);
+      alert("✅ Nhóm người dùng đã được thêm thành công!");
+      navigate(-1);
     } catch (error) {
-      console.error("Lỗi khi thêm nhóm:", error);
+      console.error("❌ Lỗi khi thêm nhóm:", error);
       alert("Có lỗi xảy ra khi thêm nhóm!");
     }
   };
 
   return (
     <div className="add-account-container">
-      {/* Header */}
       <div className="page-header">
         <FaUser className="page-icon" />
         <h2 className="page-title">THÊM NHÓM NGƯỜI DÙNG</h2>
       </div>
 
-      {/* Tabs */}
       <Tabs />
 
-      {/* Form */}
       <form className="account-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nhóm Người Dùng</label>
@@ -88,7 +80,6 @@ const AddUserGroupPage: React.FC = () => {
             rows={3}
           />
 
-          {/* Buttons */}
           <div className="form-actions">
             <button type="submit" className="btn save">Lưu</button>
             <button type="button" className="btn close" onClick={() => navigate(-1)}>Hủy</button>

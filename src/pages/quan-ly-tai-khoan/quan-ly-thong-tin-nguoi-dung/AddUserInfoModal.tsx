@@ -1,14 +1,15 @@
+// src/pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css"; // dùng cho form
+import "../../../styles/qltk/EditAccountModal.css"; 
 import "../../../styles/qlttnd/EditUserInfoModal.css";
 import { FaUser } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import { userService } from "../../../config/userService";
 
 interface UserInfo {
-  id?: string;
+  id?: number;
   code: string;
   username: string;
   fullname: string;
@@ -31,8 +32,9 @@ const AddUserInfoPage: React.FC = () => {
     permissions: [],
     avatar: "",
   });
+  const [file, setFile] = useState<File | null>(null);
 
-  // handle input text + select
+  // handle input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -41,6 +43,7 @@ const AddUserInfoPage: React.FC = () => {
   // handle file upload
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
       setFormData({ ...formData, avatar: URL.createObjectURL(e.target.files[0]) });
     }
   };
@@ -49,21 +52,21 @@ const AddUserInfoPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await userService.create({
-        code: formData.code,
-        username: formData.username,
-        fullname: formData.fullname,
-        password: formData.password,
-        email: formData.email,
-        role: formData.role,
-        permissions: formData.permissions,
-        avatar: formData.avatar,
-      });
+      const payload = new FormData();
+      payload.append("code", formData.code);
+      payload.append("username", formData.username);
+      payload.append("fullname", formData.fullname);
+      payload.append("password", formData.password);
+      payload.append("email", formData.email);
+      payload.append("role", formData.role);
+      formData.permissions.forEach(p => payload.append("permissions[]", p));
+      if (file) payload.append("avatar", file);
+
+      const res = await userService.create(payload);
 
       alert("Người dùng đã được thêm thành công!");
       console.log("API response:", res.data);
-
-      navigate(-1); // quay về trang trước
+      navigate(-1);
     } catch (error) {
       console.error("Lỗi khi thêm người dùng:", error);
       alert("Thêm người dùng thất bại!");

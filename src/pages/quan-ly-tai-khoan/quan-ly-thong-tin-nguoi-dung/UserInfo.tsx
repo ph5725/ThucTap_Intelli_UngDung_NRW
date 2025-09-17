@@ -25,17 +25,14 @@ const UserInfoPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
+  // 📌 Lấy dữ liệu từ API thật
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await userService.getAll();
         setUsers(res.data);
-      } catch {
-        setUsers([
-          { id: 1, code: "U001", username: "admin", fullname: "Quản trị viên", email: "admin@mail.com", password: "", role: "Admin", permissions: [], createdAt: "2025-01-01", updatedAt: "2025-02-01", createdBy: "system", updatedBy: "system" },
-          { id: 2, code: "U002", username: "user1", fullname: "Nguyễn Văn A", email: "a@mail.com", password: "", role: "User", permissions: [], createdAt: "2025-01-05", updatedAt: "2025-02-02", createdBy: "admin", updatedBy: "admin" },
-          { id: 3, code: "U003", username: "user2", fullname: "Trần Thị B", email: "b@mail.com", password: "", role: "User", permissions: [], createdAt: "2025-01-10", updatedAt: "2025-02-03", createdBy: "admin", updatedBy: "admin" },
-        ]);
+      } catch (err) {
+        console.error("❌ Lỗi khi tải dữ liệu từ API:", err);
       } finally {
         setLoading(false);
       }
@@ -43,6 +40,7 @@ const UserInfoPage: React.FC = () => {
     fetchData();
   }, []);
 
+  // 📌 Lọc dữ liệu
   const filteredUsers = useMemo(() => 
     users.filter(u =>
       u.code.toLowerCase().includes(filter.code.toLowerCase()) &&
@@ -52,23 +50,39 @@ const UserInfoPage: React.FC = () => {
     ), [users, filter]
   );
 
+  // 📌 Phân trang
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const currentUsers = filteredUsers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  // 📌 Xóa người dùng
   const handleDelete = async (id: number) => {
     if (window.confirm("Bạn có chắc muốn xóa người dùng này?")) {
-      try { await userService.delete(id); } catch { /* empty */ }
-      setUsers(users.filter(u => u.id !== id));
-      setMessage("Xóa thành công!");
-      setTimeout(() => setMessage(null), 3000);
+      try { 
+        await userService.delete(id); 
+        setUsers(users.filter(u => u.id !== id));
+        setMessage("Xóa thành công!");
+      } catch (err) {
+        console.error("❌ Lỗi khi xóa:", err);
+        setMessage("Lỗi khi xóa người dùng!");
+      } finally {
+        setTimeout(() => setMessage(null), 3000);
+      }
     }
   };
 
-  const handleSaveUser = (updated: UserInfo) => {
-    setUsers(users.map(u => u.id === updated.id ? updated : u));
-    setEditingUser(null);
-    setMessage("Cập nhật thành công!");
-    setTimeout(() => setMessage(null), 3000);
+  // 📌 Lưu khi sửa
+  const handleSaveUser = async (updated: UserInfo) => {
+    try {
+      await userService.update(updated.id, updated);
+      setUsers(users.map(u => u.id === updated.id ? updated : u));
+      setMessage("Cập nhật thành công!");
+    } catch (err) {
+      console.error("❌ Lỗi khi cập nhật:", err);
+      setMessage("Lỗi khi cập nhật!");
+    } finally {
+      setEditingUser(null);
+      setTimeout(() => setMessage(null), 3000);
+    }
   };
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
@@ -88,11 +102,20 @@ const UserInfoPage: React.FC = () => {
         {/* Toolbar */}
         <div className="toolbar">
           <div className="toolbar-left">
-            <input type="text" placeholder="Tìm kiếm..." value={filter.username} onChange={e => setFilter({ ...filter, username: e.target.value })} />
-            <button className="btn filter" onClick={() => setShowFilter(true)}><FaFilter /> Bộ lọc</button>
+            <input 
+              type="text" 
+              placeholder="Tìm kiếm..." 
+              value={filter.username} 
+              onChange={e => setFilter({ ...filter, username: e.target.value })} 
+            />
+            <button className="btn filter" onClick={() => setShowFilter(true)}>
+              <FaFilter /> Bộ lọc
+            </button>
           </div>
           <div className="toolbar-right">
-            <button className="btn add" onClick={() => navigate("/add-user")}><FaPlus /> Thêm mới</button>
+            <button className="btn add" onClick={() => navigate("/add-user")}>
+              <FaPlus /> Thêm mới
+            </button>
           </div>
         </div>
 

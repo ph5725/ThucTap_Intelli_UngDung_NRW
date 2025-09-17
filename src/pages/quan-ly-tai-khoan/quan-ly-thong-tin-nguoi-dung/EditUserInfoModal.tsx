@@ -1,25 +1,9 @@
-//
+// src/pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/EditUserInfoModal.tsx
 import React, { useState } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/qlttnd/EditUserInfoModal.css";
-import api from "../../../config/api";
-
-interface UserInfo {
-  id: number;
-  code: string;
-  username: string;
-  fullname: string;
-  password: string;
-  email: string;
-  role: string;
-  permissions: string[];
-  avatar?: string;
-  createdAt: string;
-  updatedAt: string;
-  createdBy: string;
-  updatedBy: string;
-}
+import { userService, type UserInfo } from "../../../config/userService";
 
 interface EditUserInfoModalProps {
   user: UserInfo;
@@ -52,35 +36,20 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ user, onClose, on
       payload.append("email", formData.email);
       payload.append("role", formData.role);
       formData.permissions.forEach(p => payload.append("permissions[]", p));
+      if (selectedFile) payload.append("avatar", selectedFile);
 
-      if (selectedFile) {
-        payload.append("avatar", selectedFile);
-      }
-
-      const res = await api.put(`/nguoiDung/${formData.id}`, payload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await userService.update(formData.id, payload);
 
       onSave({
         ...formData,
-        updatedAt: new Date().toISOString(), // cập nhật thời gian mới
+        updatedAt: new Date().toISOString(),
         avatar: res.data.avatar || formData.avatar,
       });
       onClose();
     } catch (error: unknown) {
-  if (error instanceof Error) {
-    console.error("Lỗi cập nhật:", error.message);
-    alert("Cập nhật thất bại: " + error.message);
-  } else if (typeof error === "object" && error !== null && "response" in error) {
-    // nếu axios trả về object có response
-    const e = error as { response?: { data?: { message?: string } } };
-    console.error("Lỗi cập nhật:", e.response?.data);
-    alert("Cập nhật thất bại: " + (e.response?.data?.message || "Không xác định"));
-  } else {
-    console.error("Lỗi không xác định:", error);
-    alert("Cập nhật thất bại: Không xác định");
-  }
-}
+      console.error("Lỗi cập nhật:", error);
+      alert("Cập nhật thất bại!");
+    }
   };
 
   return (

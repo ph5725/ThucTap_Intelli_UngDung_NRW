@@ -1,4 +1,3 @@
-// src/pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/EditUserGroupModal.tsx
 import React, { useState } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
@@ -15,7 +14,7 @@ export interface UserGroup {
 interface EditUserGroupModalProps {
   group: UserGroup;
   onClose: () => void;
-  onSave: (updated: UserGroup) => void;
+  onSave: () => void; // ✅ đổi lại cho đồng bộ
 }
 
 const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose, onSave }) => {
@@ -25,18 +24,26 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSave = () => {
-    onSave(formData);
+  const handleSave = async () => {
+    try {
+      // 🔹 Bạn có thể gọi API update ở đây nếu muốn
+      // await userGroupService.update(formData.id, formData);
+
+      console.log("Cập nhật nhóm:", formData);
+      onSave(); // ✅ gọi lại props
+      onClose();
+    } catch (error) {
+      console.error("❌ Lỗi khi cập nhật nhóm:", error);
+      alert("Có lỗi xảy ra khi cập nhật nhóm!");
+    }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-
         <div className="text-user">
-              <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
-             </div>
-
+          <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
+        </div>
 
         <label>Nhóm Người Dùng</label>
         <input

@@ -1,3 +1,4 @@
+// src/pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/UserGroupPage.tsx
 import React, { useState, useEffect, useMemo } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -11,45 +12,39 @@ import "../../../styles/qltk/AccountManagement.css";
 const UserGroupPage: React.FC = () => {
   const navigate = useNavigate();
 
-  // State chính
   const [groups, setGroups] = useState<UserGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
-  // Bộ lọc
   const [showFilter, setShowFilter] = useState(false);
   const [filter, setFilter] = useState({ groupName: "", members: "" });
 
-  // Modal
   const [editingGroup, setEditingGroup] = useState<UserGroup | null>(null);
   const [showDetail, setShowDetail] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<UserGroup | null>(null);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // 📌 Gọi API hoặc fallback mock
+  // 📌 Hàm fetchData để gọi API
+  const fetchData = async () => {
+  try {
+    const res = await userGroupService.getAll();
+    setGroups(res.data);
+  } catch (err) {
+    console.error("❌ Lỗi API:", err);
+    // Không set error để block UI
+  } finally {
+    setLoading(false);
+  }
+};
+  // 📌 Gọi fetchData khi load trang
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await userGroupService.getAll();
-        setGroups(res.data);
-      } catch (error) {
-        console.warn("⚠️ Backend chưa chạy, dùng mock data thay thế.",error);
-        setGroups([
-          { id: 1, groupName: "Nhóm A", members: "Nguyễn Văn A, Trần Thị B", createdAt: "2025-01-01", updatedAt: "2025-01-05", note: "" },
-          { id: 2, groupName: "Nhóm B", members: "Lê Văn C, Phạm Thị D", createdAt: "2025-02-01", updatedAt: "2025-02-05", note: "" },
-          { id: 3, groupName: "Nhóm C", members: "Hoàng Văn E, Đặng Thị F", createdAt: "2025-03-01", updatedAt: "2025-03-05", note: "" },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
-  // Lọc danh sách
+  // 📌 Lọc danh sách
   const filteredGroups = useMemo(() => {
     return groups.filter(
       g =>
@@ -64,36 +59,26 @@ const UserGroupPage: React.FC = () => {
   const handlePrev = () => setCurrentPage((p) => Math.max(p - 1, 1));
   const handleNext = () => setCurrentPage((p) => Math.min(totalPages, p + 1));
 
-  // 📌 Delete (API hoặc mock)
+  // 📌 Xóa nhóm
   const handleDelete = async (id: number) => {
     const g = groups.find(x => x.id === id);
     if (!g) return;
     if (window.confirm(`Bạn có chắc muốn xóa "${g.groupName}" không?`)) {
       try {
         await userGroupService.delete(id);
-      } catch {
-        console.warn("⚠️ Backend chưa có, xóa mock.");
+        setGroups(groups.filter(x => x.id !== id));
+        setMessage("Xóa thành công!");
+      } catch (err) {
+        console.error("❌ Lỗi khi xóa:", err);
+        setMessage("Xóa thất bại!");
+      } finally {
+        setTimeout(() => setMessage(null), 3000);
       }
-      setGroups(groups.filter(x => x.id !== id));
-      setMessage("Xóa thành công!");
-      setTimeout(() => setMessage(null), 3000);
     }
-  };
-
-  // 📌 Update (API hoặc mock)
-  const handleSaveGroup = async (updated: UserGroup) => {
-    try {
-      await userGroupService.update(updated.id, updated);
-    } catch {
-      console.warn("⚠️ Backend chưa có, cập nhật mock.");
-    }
-    setGroups(groups.map(g => (g.id === updated.id ? updated : g)));
-    setEditingGroup(null);
-    setMessage("Cập nhật thành công!");
-    setTimeout(() => setMessage(null), 3000);
   };
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   return (
     <div className="account-page">
@@ -175,11 +160,9 @@ const UserGroupPage: React.FC = () => {
       {showFilter && (
         <div className="modal-overlay">
           <div className="modal">
-            
             <div className="text-user">
               <h3>Bộ Lọc Tìm Kiếm</h3>
              </div>
-
             <label>
               Nhóm Người Dùng:
               <input
@@ -209,7 +192,7 @@ const UserGroupPage: React.FC = () => {
         <EditUserGroupModal
           group={editingGroup}
           onClose={() => setEditingGroup(null)}
-          onSave={handleSaveGroup}
+          onSave={fetchData}  // ✅ gọi lại API để reload
         />
       )}
 
