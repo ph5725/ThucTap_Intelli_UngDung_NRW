@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen(options =>
 
 // Connection Database
 builder.Services.AddDbContext<DbNrwContext>(options =>
-options.UseSqlServer("Data Source=HP\\SQLEXPRESS;Initial Catalog=QL_NhanSu;Trust Server Certificate=True;Trusted_Connection=true;User ID=user_qlns;Password=123456"));
+options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectServer")));
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
