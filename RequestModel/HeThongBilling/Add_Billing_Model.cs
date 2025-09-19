@@ -21,6 +21,5 @@
         public DateTime NgayTao { get; set; }
 
         public string? NguoiTao { get; set; }
-
     }
 }

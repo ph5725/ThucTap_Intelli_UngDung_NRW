@@ -8,7 +8,7 @@
 
         public string? GhiChu { get; set; }
 
-        public DateTime NgayCapNhat { get; set; }
+        public DateTime? NgayCapNhat { get; set; }
 
         public string? NguoiCapNhat { get; set; }
     }

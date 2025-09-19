@@ -29,6 +29,5 @@
         public string? NguoiTao { get; set; }
 
         public string? NguoiCapNhat { get; set; }
-
     }
 }

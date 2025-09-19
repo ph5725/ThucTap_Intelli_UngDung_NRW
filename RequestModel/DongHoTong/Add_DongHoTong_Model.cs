@@ -1,4 +1,6 @@
-﻿namespace WebAPI_NRW.RequestModel.DongHoTong
+﻿using WebAPI_NRW.Models;
+
+namespace WebAPI_NRW.RequestModel.DongHoTong
 {
     public class Add_DongHoTong_Model
     {

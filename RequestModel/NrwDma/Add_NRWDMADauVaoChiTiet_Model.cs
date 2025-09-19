@@ -1,4 +1,6 @@
-﻿namespace WebAPI_NRW.RequestModel.NrwDma
+﻿using WebAPI_NRW.Models;
+
+namespace WebAPI_NRW.RequestModel.NrwDma
 {
     public class Add_NRWDMADauVaoChiTiet_Model
     {
@@ -23,6 +25,5 @@
         public DateTime? NgayTao { get; set; }
 
         public string? NguoiTao { get; set; }
-
     }
 }

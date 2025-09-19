@@ -33,5 +33,9 @@ public partial class Dsdma
 
     public virtual NguoiDung? NguoiTaoNavigation { get; set; }
 
+    public virtual ICollection<NrwdmadauVaoChiTiet> NrwdmadauVaoChiTiets { get; set; } = new List<NrwdmadauVaoChiTiet>();
+
     public virtual ICollection<Nrwdma> Nrwdmas { get; set; } = new List<Nrwdma>();
+
+    public virtual ICollection<NrwdmatieuThuChiTiet> NrwdmatieuThuChiTiets { get; set; } = new List<NrwdmatieuThuChiTiet>();
 }

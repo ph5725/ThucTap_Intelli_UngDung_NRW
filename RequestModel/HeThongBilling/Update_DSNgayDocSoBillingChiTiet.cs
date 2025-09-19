@@ -13,7 +13,9 @@
         public int SoNgayDocSoDot { get; set; }
 
         public string? GhiChu { get; set; }
+
         public DateTime? NgayCapNhat { get; set; }
+
         public string? NguoiCapNhat { get; set; }
     }
 }
