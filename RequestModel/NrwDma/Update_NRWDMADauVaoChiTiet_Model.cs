@@ -23,6 +23,5 @@
         public DateTime? NgayCapNhat { get; set; }
 
         public string? NguoiCapNhat { get; set; }
-
     }
 }

@@ -2,6 +2,8 @@
 {
     public class Update_DSDMA_Model
     {
+        public int Id { get; set; }
+
         public string MaDma { get; set; } = null!;
 
         public string TenDma { get; set; } = null!;

@@ -35,6 +35,8 @@ public partial class NrwdmadauVaoChiTiet
 
     public virtual Nrwdma MaDauVaoNavigation { get; set; } = null!;
 
+    public virtual Dsdma MaDmaNavigation { get; set; } = null!;
+
     public virtual NguoiDung? NguoiCapNhatNavigation { get; set; }
 
     public virtual NguoiDung? NguoiTaoNavigation { get; set; }
