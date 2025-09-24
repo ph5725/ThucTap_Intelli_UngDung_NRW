@@ -1,8 +1,8 @@
 ﻿namespace WebAPI_NRW.RequestModel.NrwCongTy
 {
-    public class Update_NRWCongTyDauVaoChiTiet_Model
+    public class Update_NrwCongTyDauVaoChiTiet_Model
     {
-        public int MaDauVao { get; set; }
+        public int? MaDauVao { get; set; }
 
         public int Ky { get; set; }
 
@@ -20,6 +20,6 @@
 
         public DateTime? NgayCapNhat { get; set; }
 
-        public string? NguoiCapNhat { get; set; }
+        public int? NguoiCapNhat { get; set; }
     }
 }

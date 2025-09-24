@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_NRW.Models;
+namespace WebAPI_NRW.Models.Database;
 
 public partial class CauHinhDht
 {
     public int Id { get; set; }
 
-    public string MaDoiTuong { get; set; } = null!;
+    public int? MaDoiTuong { get; set; }
 
-    public string MaDongHo { get; set; } = null!;
+    public int? MaDongHo { get; set; }
 
     public string? GhiChu { get; set; }
 
@@ -17,13 +17,13 @@ public partial class CauHinhDht
 
     public DateTime? NgayCapNhat { get; set; }
 
-    public string? NguoiTao { get; set; }
+    public int NguoiTao { get; set; }
 
-    public string? NguoiCapNhat { get; set; }
+    public int? NguoiCapNhat { get; set; }
 
-    public virtual DongHoTong MaDongHoNavigation { get; set; } = null!;
+    public virtual DongHoTong? MaDongHoNavigation { get; set; }
 
     public virtual NguoiDung? NguoiCapNhatNavigation { get; set; }
 
-    public virtual NguoiDung? NguoiTaoNavigation { get; set; }
+    public virtual NguoiDung NguoiTaoNavigation { get; set; } = null!;
 }

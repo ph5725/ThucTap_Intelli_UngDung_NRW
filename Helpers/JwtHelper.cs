@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace WebAPI_NRW
+namespace WebAPI_NRW.Helpers
 {
     public class JwtHelper
     {
@@ -21,16 +21,23 @@ namespace WebAPI_NRW
         }
 
         // Generate JWT token
-        public string GenerateToken(string username, string role)
+        public string GenerateToken(string username, string role, int id, int idGroup)
         {
+            // Kiểm tra có đọc được không
+            Console.WriteLine($"SecretKey: {_secretKey}");
+            Console.WriteLine($"Issuer: {_issuer}");
+            Console.WriteLine($"Audience: {_audience}");
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_secretKey);
 
             var claims = new[]
             {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, role)
-        };
+                new Claim(ClaimTypes.NameIdentifier, id.ToString()),
+                new Claim("groupId", idGroup.ToString()),
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, role)
+            };
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

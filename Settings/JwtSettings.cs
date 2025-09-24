@@ -1,4 +1,4 @@
-﻿namespace WebAPI_NRW
+﻿namespace WebAPI_NRW.Settings
 {
     public class JwtSettings
     {

@@ -18,6 +18,6 @@ namespace WebAPI_NRW.RequestModel.DongHoTong
 
         public DateTime NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

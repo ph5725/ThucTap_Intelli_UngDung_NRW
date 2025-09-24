@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_NRW.Models;
+namespace WebAPI_NRW.Models.Database;
 
 public partial class NguoiDung
 {
@@ -40,6 +40,8 @@ public partial class NguoiDung
     public virtual ICollection<CauHinhDht> CauHinhDhtNguoiTaoNavigations { get; set; } = new List<CauHinhDht>();
 
     public virtual ICollection<DongHoTong> DongHoTongNguoiCapNhatNavigations { get; set; } = new List<DongHoTong>();
+
+    public virtual ICollection<DongHoTong> DongHoTongNguoiChinhSuaNavigations { get; set; } = new List<DongHoTong>();
 
     public virtual ICollection<DongHoTong> DongHoTongNguoiTaoNavigations { get; set; } = new List<DongHoTong>();
 

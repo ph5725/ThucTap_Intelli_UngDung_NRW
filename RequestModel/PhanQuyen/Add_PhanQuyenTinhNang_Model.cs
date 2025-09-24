@@ -2,7 +2,7 @@
 {
     public class Add_PhanQuyenTinhNang_Model
     {
-        public string NhomNguoiDung { get; set; } = null!;
+        public int? NhomNguoiDung { get; set; }
 
         public string? DongHoTong { get; set; }
 
@@ -26,6 +26,6 @@
 
         public DateTime NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

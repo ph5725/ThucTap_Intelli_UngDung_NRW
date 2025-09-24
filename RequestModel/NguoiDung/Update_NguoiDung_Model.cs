@@ -8,7 +8,7 @@
 
         public string TenNguoiDung { get; set; } = null!;
 
-        public string MatKhau { get; set; } = null!;
+        //public string MatKhau { get; set; } = null!;
 
         public string Email { get; set; } = null!;
 

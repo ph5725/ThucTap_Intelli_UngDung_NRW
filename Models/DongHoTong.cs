@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_NRW.Models;
+namespace WebAPI_NRW.Models.Database;
 
 public partial class DongHoTong
 {
@@ -17,7 +17,7 @@ public partial class DongHoTong
 
     public DateOnly? NgayChinhSua { get; set; }
 
-    public string? NguoiChinhSua { get; set; }
+    public int? NguoiChinhSua { get; set; }
 
     public bool DanhDauLoi { get; set; }
 
@@ -27,13 +27,15 @@ public partial class DongHoTong
 
     public DateTime? NgayCapNhat { get; set; }
 
-    public string? NguoiTao { get; set; }
+    public int NguoiTao { get; set; }
 
-    public string? NguoiCapNhat { get; set; }
+    public int? NguoiCapNhat { get; set; }
 
     public virtual ICollection<CauHinhDht> CauHinhDhts { get; set; } = new List<CauHinhDht>();
 
     public virtual NguoiDung? NguoiCapNhatNavigation { get; set; }
 
-    public virtual NguoiDung? NguoiTaoNavigation { get; set; }
+    public virtual NguoiDung? NguoiChinhSuaNavigation { get; set; }
+
+    public virtual NguoiDung NguoiTaoNavigation { get; set; } = null!;
 }

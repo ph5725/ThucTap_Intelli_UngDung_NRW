@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebAPI_NRW.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebAPI_NRW.Helpers;
+using WebAPI_NRW.Models.Database;
 using WebAPI_NRW.RequestModel.TaiKhoan;
-using WebAPI_NRW.ResponeModel.TaiKhoan;
 
 namespace WebAPI_NRW.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("[controller]")]
-
-
+    [Route("api/[controller]")]
     public class DoiMatKhauController : ControllerBase
     {
         private readonly DbNrwContext _context;
@@ -19,48 +18,31 @@ namespace WebAPI_NRW.Controllers
             _context = dbcontext;
         }
 
-        /// API Get by TenNguoiDung
-        [HttpGet("{tenNguoiDung}")]
-        public ActionResult<DoiMatKhauDto> GetById(string tenNguoiDung)
+        /// <summary>
+        /// API Đổi mật khẩu
+        /// </summary>
+        [HttpPut("{tenNguoiDung}")]
+        public IActionResult ChangePassword(string tenNguoiDung, [FromBody] DoiMatKhau_RequestModel request)
         {
-            var matKhau = _context.NguoiDungs.FirstOrDefault(e => e.TenNguoiDung == tenNguoiDung);
+            // 1. Tìm user
+            var user = _context.NguoiDungs.FirstOrDefault(nguoiDung => nguoiDung.TenNguoiDung == tenNguoiDung);
+            if (user == null)
+                return NotFound(new { message = "Không tìm thấy người dùng" });
 
-            if (matKhau == null)
-            {
-                return NotFound();
-            }
+            // 2. Kiểm tra mật khẩu cũ (hash trước khi so sánh)
+            var hashedOld = PasswordHelper.HashPassword(request.MatKhauCu);
+            if (user.MatKhau != hashedOld)
+                return BadRequest(new { message = "Mật khẩu cũ không đúng" });
 
-            //Map Entity -> ResponseModel để trả về
-            var response = new DoiMatKhauDto()
-            {
-                TenNguoiDung = matKhau.TenNguoiDung,
-                MatKhau = matKhau.MatKhau,
-            };
-
-            return response;
-        }
-
-        /// API Update
-        [HttpPut]
-        public DoiMatKhauDto Update(string tenNguoiDung, DoiMatKhau_RequestModel updateMatKhau)
-        {
-            // Lấy entity từ DB
-            var matKhau = _context.NguoiDungs.FirstOrDefault(e => e.TenNguoiDung == tenNguoiDung);
-
-            if (matKhau == null) return null;
-
-            // Gán dữ liệu từ request vào entity
-            //matKhau.TenNguoiDung = updateMatKhau.TenNguoiDung;
-            matKhau.MatKhau = updateMatKhau.MatKhau;
-
+            // 3. Cập nhật mật khẩu mới (hash trước khi lưu)
+            var hashedNew = PasswordHelper.HashPassword(request.MatKhauMoi);
+            if (hashedNew == user.MatKhau)
+                return BadRequest(new { message = "Mật khẩu mới không được trùng với mật khẩu trước đó" });
+            else
+                user.MatKhau = PasswordHelper.HashPassword(request.MatKhauMoi);
             _context.SaveChanges();
 
-            // Map entity -> response model
-            return new DoiMatKhauDto
-            {
-                TenNguoiDung = matKhau.TenNguoiDung,
-                MatKhau = matKhau.MatKhau
-            };
+            return Ok(new { message = "Đổi mật khẩu thành công" });
         }
     }
 }

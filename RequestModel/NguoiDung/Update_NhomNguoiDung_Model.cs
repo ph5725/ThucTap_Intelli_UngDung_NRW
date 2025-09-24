@@ -10,6 +10,6 @@
 
         public DateTime? NgayCapNhat { get; set; }
 
-        public string? NguoiCapNhat { get; set; }
+        public int? NguoiCapNhat { get; set; }
     }
 }

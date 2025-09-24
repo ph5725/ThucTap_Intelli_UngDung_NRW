@@ -1,6 +1,6 @@
 ﻿namespace WebAPI_NRW.RequestModel.DanhSach
 {
-    public class Add_DSDMA_Model
+    public class Add_DsDma_Model
     {
         public string MaDma { get; set; } = null!;
 
@@ -18,6 +18,6 @@
 
         public DateTime NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

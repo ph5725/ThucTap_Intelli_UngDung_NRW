@@ -2,10 +2,11 @@
 {
     public class Update_PhanQuyenDuLieu_Model
     {
-        public string NhomNguoiDung { get; set; } = null!;
+        public int? NhomNguoiDung { get; set; }
 
         public string? DuLieuNrwcongTy { get; set; }
 
         public string? DuLieuNrwdma { get; set; }
+
     }
 }

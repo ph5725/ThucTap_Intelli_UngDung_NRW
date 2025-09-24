@@ -1,10 +1,10 @@
 ﻿namespace WebAPI_NRW.RequestModel.NrwDma
 {
-    public class Add_NRWDMATieuThuChiTiet_Model
+    public class Add_NrwDmaTieuThuChiTiet_Model
     {
-        public int MaTieuThu { get; set; }
+        public int? MaTieuThu { get; set; }
 
-        public string MaDma { get; set; } = null!;
+        public int? MaDma { get; set; }
 
         public int Ky { get; set; }
 
@@ -22,6 +22,6 @@
 
         public DateTime? NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

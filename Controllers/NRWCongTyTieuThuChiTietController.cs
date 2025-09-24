@@ -1,86 +1,64 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models;
+using WebAPI_NRW.Models.Database;
+using WebAPI_NRW.RequestModel.DanhSach;
 using WebAPI_NRW.RequestModel.NrwCongTy;
+using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.NrwCongTy;
 
 namespace WebAPI_NRW.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class NRWCongTyTieuThuChiTietController : ControllerBase
+    public class NrwCongTyTieuThuChiTietController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
-        public NRWCongTyTieuThuChiTietController(DbNrwContext dbcontext)
+        public NrwCongTyTieuThuChiTietController(DbNrwContext dbcontext)
         {
             _context = dbcontext;
         }
 
-        /// API Get
+        /// API Get all
         [HttpGet]
-        public IEnumerable<NRWCongTyTieuThuChiTiet_ResponeModel> Get()
+        public ActionResult<IEnumerable<NrwCongTyTieuThuChiTiet_ResponeModel>> Get()
         {
-            //Linq Query
-            var query = from nrwCongTyTieuThuChiTiet in _context.NrwcongTyTieuThuChiTiets
-                        select new NRWCongTyTieuThuChiTiet_ResponeModel
-                        {
-                            Id = nrwCongTyTieuThuChiTiet.Id,
-                            MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
-                            Ky = nrwCongTyTieuThuChiTiet.Ky,
-                            Nam = nrwCongTyTieuThuChiTiet.Nam,
+            var list = _context.NrwcongTyTieuThuChiTiets
+                .Include(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.MaTieuThuNavigation)
+                .Include(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.NguoiTaoNavigation)
+                .Include(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.NguoiCapNhatNavigation)
+                .AsNoTracking()
+                .Select(e => e.MapToResponse())
+                .ToList();
 
-                            Nguon = nrwCongTyTieuThuChiTiet.Nguon,
-                            ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
-                            ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
-
-                            GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
-                            NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
-                            NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
-                            NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
-                            NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
-                        };
-            return query.ToList();
+            return Ok(list);
         }
 
         /// API Get by id
         [HttpGet("{id}")]
-        public ActionResult<NRWCongTyTieuThuChiTiet_ResponeModel> GetById(int id)
+        public ActionResult<NrwCongTyTieuThuChiTiet_ResponeModel> GetById(int id)
         {
-            var nrwCongTyTieuThuChiTiet = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+            var entity = _context.NrwcongTyTieuThuChiTiets
+                .Include(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.MaTieuThuNavigation)
+                .Include(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.NguoiTaoNavigation)
+                .Include(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.NguoiCapNhatNavigation)
+                .AsNoTracking()
+                .FirstOrDefault(nrwCongTyTieuThuChiTiet => nrwCongTyTieuThuChiTiet.Id == id);
 
-            if (nrwCongTyTieuThuChiTiet == null)
-            {
-                return NotFound();
-            }
+            if (entity == null) return NotFound();
 
-            //Map Entity -> ResponseModel để trả về
-            var response = new NRWCongTyTieuThuChiTiet_ResponeModel()
-            {
-                Id = nrwCongTyTieuThuChiTiet.Id,
-                MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
-                Ky = nrwCongTyTieuThuChiTiet.Ky,
-                Nam = nrwCongTyTieuThuChiTiet.Nam,
-
-                Nguon = nrwCongTyTieuThuChiTiet.Nguon,
-                ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
-                ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
-
-                GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
-                NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
-                NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
-                NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
-                NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
-            };
-
-            return response;
+            return Ok(entity.MapToResponse());
         }
 
         /// API Add
         [HttpPost]
-        public NRWCongTyTieuThuChiTiet_ResponeModel Post(Add_NRWCongTyTieuThuChiTiet_Model addNrwCongTyTieuThuChiTiet)
+        public ActionResult<NrwCongTyTieuThuChiTiet_ResponeModel> Post(Add_NrwCongTyTieuThuChiTiet_Model addNrwCongTyTieuThuChiTiet)
         {
-            //Map request -> Entity
-            var nrwCongTyTieuThuChiTiet = new NrwcongTyTieuThuChiTiet()
+            var entity = new NrwcongTyTieuThuChiTiet
             {
                 MaTieuThu = addNrwCongTyTieuThuChiTiet.MaTieuThu,
                 Ky = addNrwCongTyTieuThuChiTiet.Ky,
@@ -88,6 +66,7 @@ namespace WebAPI_NRW.Controllers
 
                 Nguon = addNrwCongTyTieuThuChiTiet.Nguon,
                 ToanTu = addNrwCongTyTieuThuChiTiet.ToanTu,
+                GiaTri = addNrwCongTyTieuThuChiTiet.GiaTri,
                 ThuTuHienThi = addNrwCongTyTieuThuChiTiet.ThuTuHienThi,
 
                 GhiChu = addNrwCongTyTieuThuChiTiet.GhiChu,
@@ -95,107 +74,187 @@ namespace WebAPI_NRW.Controllers
                 NguoiTao = addNrwCongTyTieuThuChiTiet.NguoiTao,
             };
 
-            //Lưu vào DB
-            _context.NrwcongTyTieuThuChiTiets.Add(nrwCongTyTieuThuChiTiet);
+            _context.NrwcongTyTieuThuChiTiets.Add(entity);
             _context.SaveChanges();
 
-            //Map Entity -> ResponseModel để trả về
-            var response = new NRWCongTyTieuThuChiTiet_ResponeModel()
-            {
-                Id = nrwCongTyTieuThuChiTiet.Id,
-                MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
-                Ky = nrwCongTyTieuThuChiTiet.Ky,
-                Nam = nrwCongTyTieuThuChiTiet.Nam,
+            // load lại navigation properties
+            _context.Entry(entity).Reference(e => e.MaTieuThuNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiTaoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiCapNhatNavigation).Load();
 
-                Nguon = nrwCongTyTieuThuChiTiet.Nguon,
-                ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
-                ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
-
-                GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
-                NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
-                NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
-                NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
-                NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
-            };
-
-            return response;
+            return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity.MapToResponse());
         }
 
         /// API Update
-        [HttpPut]
-        public NRWCongTyTieuThuChiTiet_ResponeModel Update(int id, Update_NRWCongTyTieuThuChiTiet_Model updateNrwCongTyTieuThuChiTiet)
+        [HttpPut("{id}")]
+        public ActionResult<NrwCongTyTieuThuChiTiet_ResponeModel> Update(int id, Update_NrwCongTyTieuThuChiTiet_Model updateNrwCongTyTieuThuChiTiet)
         {
-            // Lấy entity từ DB
-            var nrwCongTyTieuThuChiTiet = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
-
-            if (nrwCongTyTieuThuChiTiet == null) return null;
+            var entity = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+            if (entity == null) return NotFound();
 
             // Gán dữ liệu từ request vào entity
-            nrwCongTyTieuThuChiTiet.MaTieuThu = updateNrwCongTyTieuThuChiTiet.MaTieuThu;
-            nrwCongTyTieuThuChiTiet.Ky = updateNrwCongTyTieuThuChiTiet.Ky;
-            nrwCongTyTieuThuChiTiet.Nam = updateNrwCongTyTieuThuChiTiet.Nam;
+            entity.MaTieuThu = updateNrwCongTyTieuThuChiTiet.MaTieuThu;
+            entity.Ky = updateNrwCongTyTieuThuChiTiet.Ky;
+            entity.Nam = updateNrwCongTyTieuThuChiTiet.Nam;
 
-            nrwCongTyTieuThuChiTiet.Nguon = updateNrwCongTyTieuThuChiTiet.Nguon;
-            nrwCongTyTieuThuChiTiet.ToanTu = updateNrwCongTyTieuThuChiTiet.ToanTu;
-            nrwCongTyTieuThuChiTiet.ThuTuHienThi = updateNrwCongTyTieuThuChiTiet.ThuTuHienThi;
+            entity.Nguon = updateNrwCongTyTieuThuChiTiet.Nguon;
+            entity.ToanTu = updateNrwCongTyTieuThuChiTiet.ToanTu;
+            entity.GiaTri = updateNrwCongTyTieuThuChiTiet.GiaTri;
+            entity.ThuTuHienThi = updateNrwCongTyTieuThuChiTiet.ThuTuHienThi;
 
-            nrwCongTyTieuThuChiTiet.GhiChu = updateNrwCongTyTieuThuChiTiet.GhiChu;
-            nrwCongTyTieuThuChiTiet.NgayCapNhat = DateTime.Now;
-            nrwCongTyTieuThuChiTiet.NguoiCapNhat = updateNrwCongTyTieuThuChiTiet.NguoiCapNhat;
+            entity.GhiChu = updateNrwCongTyTieuThuChiTiet.GhiChu;
+            entity.NgayCapNhat = DateTime.Now;
+            entity.NguoiCapNhat = updateNrwCongTyTieuThuChiTiet.NguoiCapNhat;
 
             _context.SaveChanges();
 
-            // Map entity -> response model
-            return new NRWCongTyTieuThuChiTiet_ResponeModel
-            {
-                Id = nrwCongTyTieuThuChiTiet.Id,
-                MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
-                Ky = nrwCongTyTieuThuChiTiet.Ky,
-                Nam = nrwCongTyTieuThuChiTiet.Nam,
+            // load lại navigation properties
+            _context.Entry(entity).Reference(e => e.MaTieuThuNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiTaoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiCapNhatNavigation).Load();
 
-                Nguon = nrwCongTyTieuThuChiTiet.Nguon,
-                ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
-                ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
-
-                GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
-                NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
-                NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
-                NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
-                NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
-            };
+            return Ok(entity.MapToResponse());
         }
 
         /// API Delete
-        [HttpDelete]
-        public NRWCongTyTieuThuChiTiet_ResponeModel delete(int id)
+        [HttpDelete("{id}")]
+        public ActionResult<NrwCongTyTieuThuChiTiet_ResponeModel> Delete(int id)
         {
-            // Lấy entity từ DB
-            var nrwCongTyTieuThuChiTiet = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+            var entity = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+            if (entity == null) return NotFound();
 
-            if (nrwCongTyTieuThuChiTiet == null) return null;
-
-            // Xóa
-            _context.NrwcongTyTieuThuChiTiets.Remove(nrwCongTyTieuThuChiTiet);
+            _context.NrwcongTyTieuThuChiTiets.Remove(entity);
             _context.SaveChanges();
 
-            // Map sang ResponseModel để trả về
-            return new NRWCongTyTieuThuChiTiet_ResponeModel
-            {
-                Id = nrwCongTyTieuThuChiTiet.Id,
-                MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
-                Ky = nrwCongTyTieuThuChiTiet.Ky,
-                Nam = nrwCongTyTieuThuChiTiet.Nam,
+            // load lại navigation properties
+            _context.Entry(entity).Reference(e => e.MaTieuThuNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiTaoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiCapNhatNavigation).Load();
 
-                Nguon = nrwCongTyTieuThuChiTiet.Nguon,
-                ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
-                ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
-
-                GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
-                NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
-                NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
-                NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
-                NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
-            };
+            return Ok(entity.MapToResponse());
         }
+
+        ///// API Add
+        //[HttpPost]
+        //public NrwCongTyTieuThuChiTiet_ResponeModel Post(Add_NrwCongTyTieuThuChiTiet_Model addNrwCongTyTieuThuChiTiet)
+        //{
+        //    //Map request -> Entity
+        //    var nrwCongTyTieuThuChiTiet = new NrwcongTyTieuThuChiTiet()
+        //    {
+        //        MaTieuThu = addNrwCongTyTieuThuChiTiet.MaTieuThu,
+        //        Ky = addNrwCongTyTieuThuChiTiet.Ky,
+        //        Nam = addNrwCongTyTieuThuChiTiet.Nam,
+
+        //        Nguon = addNrwCongTyTieuThuChiTiet.Nguon,
+        //        ToanTu = addNrwCongTyTieuThuChiTiet.ToanTu,
+        //        ThuTuHienThi = addNrwCongTyTieuThuChiTiet.ThuTuHienThi,
+
+        //        GhiChu = addNrwCongTyTieuThuChiTiet.GhiChu,
+        //        NgayTao = addNrwCongTyTieuThuChiTiet.NgayTao,
+        //        NguoiTao = addNrwCongTyTieuThuChiTiet.NguoiTao,
+        //    };
+
+        //    //Lưu vào DB
+        //    _context.NrwcongTyTieuThuChiTiets.Add(nrwCongTyTieuThuChiTiet);
+        //    _context.SaveChanges();
+
+        //    //Map Entity -> ResponseModel để trả về
+        //    var response = new NrwCongTyTieuThuChiTiet_ResponeModel()
+        //    {
+        //        Id = nrwCongTyTieuThuChiTiet.Id,
+        //        MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
+        //        Ky = nrwCongTyTieuThuChiTiet.Ky,
+        //        Nam = nrwCongTyTieuThuChiTiet.Nam,
+
+        //        Nguon = nrwCongTyTieuThuChiTiet.Nguon,
+        //        ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
+        //        ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
+
+        //        GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
+        //        NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
+        //        NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
+        //        NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
+        //        NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
+        //    };
+
+        //    return response;
+        //}
+
+        ///// API Update
+        //[HttpPut]
+        //public NrwCongTyTieuThuChiTiet_ResponeModel Update(int id, Update_NrwCongTyTieuThuChiTiet_Model updateNrwCongTyTieuThuChiTiet)
+        //{
+        //    // Lấy entity từ DB
+        //    var nrwCongTyTieuThuChiTiet = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+
+        //    if (nrwCongTyTieuThuChiTiet == null) return null;
+
+        //    // Gán dữ liệu từ request vào entity
+        //    nrwCongTyTieuThuChiTiet.MaTieuThu = updateNrwCongTyTieuThuChiTiet.MaTieuThu;
+        //    nrwCongTyTieuThuChiTiet.Ky = updateNrwCongTyTieuThuChiTiet.Ky;
+        //    nrwCongTyTieuThuChiTiet.Nam = updateNrwCongTyTieuThuChiTiet.Nam;
+
+        //    nrwCongTyTieuThuChiTiet.Nguon = updateNrwCongTyTieuThuChiTiet.Nguon;
+        //    nrwCongTyTieuThuChiTiet.ToanTu = updateNrwCongTyTieuThuChiTiet.ToanTu;
+        //    nrwCongTyTieuThuChiTiet.ThuTuHienThi = updateNrwCongTyTieuThuChiTiet.ThuTuHienThi;
+
+        //    nrwCongTyTieuThuChiTiet.GhiChu = updateNrwCongTyTieuThuChiTiet.GhiChu;
+        //    nrwCongTyTieuThuChiTiet.NgayCapNhat = DateTime.Now;
+        //    nrwCongTyTieuThuChiTiet.NguoiCapNhat = updateNrwCongTyTieuThuChiTiet.NguoiCapNhat;
+
+        //    _context.SaveChanges();
+
+        //    // Map entity -> response model
+        //    return new NrwCongTyTieuThuChiTiet_ResponeModel
+        //    {
+        //        Id = nrwCongTyTieuThuChiTiet.Id,
+        //        MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
+        //        Ky = nrwCongTyTieuThuChiTiet.Ky,
+        //        Nam = nrwCongTyTieuThuChiTiet.Nam,
+
+        //        Nguon = nrwCongTyTieuThuChiTiet.Nguon,
+        //        ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
+        //        ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
+
+        //        GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
+        //        NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
+        //        NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
+        //        NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
+        //        NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
+        //    };
+        //}
+
+        ///// API Delete
+        //[HttpDelete]
+        //public NrwCongTyTieuThuChiTiet_ResponeModel delete(int id)
+        //{
+        //    // Lấy entity từ DB
+        //    var nrwCongTyTieuThuChiTiet = _context.NrwcongTyTieuThuChiTiets.FirstOrDefault(e => e.Id == id);
+
+        //    if (nrwCongTyTieuThuChiTiet == null) return null;
+
+        //    // Xóa
+        //    _context.NrwcongTyTieuThuChiTiets.Remove(nrwCongTyTieuThuChiTiet);
+        //    _context.SaveChanges();
+
+        //    // Map sang ResponseModel để trả về
+        //    return new NrwCongTyTieuThuChiTiet_ResponeModel
+        //    {
+        //        Id = nrwCongTyTieuThuChiTiet.Id,
+        //        MaTieuThu = nrwCongTyTieuThuChiTiet.MaTieuThu,
+        //        Ky = nrwCongTyTieuThuChiTiet.Ky,
+        //        Nam = nrwCongTyTieuThuChiTiet.Nam,
+
+        //        Nguon = nrwCongTyTieuThuChiTiet.Nguon,
+        //        ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
+        //        ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
+
+        //        GhiChu = nrwCongTyTieuThuChiTiet.GhiChu,
+        //        NgayTao = nrwCongTyTieuThuChiTiet.NgayTao,
+        //        NguoiTao = nrwCongTyTieuThuChiTiet.NguoiTao,
+        //        NgayCapNhat = nrwCongTyTieuThuChiTiet.NgayCapNhat,
+        //        NguoiCapNhat = nrwCongTyTieuThuChiTiet.NguoiCapNhat,
+        //    };
+        //}
     }
 }

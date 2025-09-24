@@ -1,6 +1,6 @@
 ﻿namespace WebAPI_NRW.ResponeModel.DanhSach
 {
-    public class DSDMA_ResponeModel
+    public class DsDma_ResponeModel
     {
         public int Id { get; set; }
 

@@ -1,10 +1,10 @@
 ﻿namespace WebAPI_NRW.ResponeModel.NrwCongTy
 {
-    public class NRWCongTyDauVaoChiTiet_ResponeModel
+    public class NrwCongTyDauVaoChiTiet_ResponeModel
     {
         public int Id { get; set; }
 
-        public int MaDauVao { get; set; }
+        public string? MaDauVao { get; set; }
 
         public int Ky { get; set; }
 

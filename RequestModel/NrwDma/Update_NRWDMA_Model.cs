@@ -1,8 +1,8 @@
 ﻿namespace WebAPI_NRW.RequestModel.NrwDma
 {
-    public class Update_NRWDMA_Model
+    public class Update_NrwDma_Model
     {
-        public string MaDma { get; set; } = null!;
+        public int? MaDma { get; set; }
 
         public int Ky { get; set; }
 
@@ -26,6 +26,6 @@
 
         public DateTime? NgayCapNhat { get; set; }
 
-        public string? NguoiCapNhat { get; set; }
+        public int? NguoiCapNhat { get; set; }
     }
 }

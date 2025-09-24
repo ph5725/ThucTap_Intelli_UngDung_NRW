@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_NRW.Models;
+namespace WebAPI_NRW.Models.Database;
 
 public partial class PhanQuyenTinhNang
 {
     public int Id { get; set; }
 
-    public string NhomNguoiDung { get; set; } = null!;
+    public int? NhomNguoiDung { get; set; }
 
     public string? DongHoTong { get; set; }
 
@@ -33,13 +33,13 @@ public partial class PhanQuyenTinhNang
 
     public DateTime? NgayCapNhat { get; set; }
 
-    public string? NguoiTao { get; set; }
+    public int NguoiTao { get; set; }
 
-    public string? NguoiCapNhat { get; set; }
+    public int? NguoiCapNhat { get; set; }
 
     public virtual NguoiDung? NguoiCapNhatNavigation { get; set; }
 
-    public virtual NguoiDung? NguoiTaoNavigation { get; set; }
+    public virtual NguoiDung NguoiTaoNavigation { get; set; } = null!;
 
-    public virtual NhomNguoiDung NhomNguoiDungNavigation { get; set; } = null!;
+    public virtual NhomNguoiDung? NhomNguoiDungNavigation { get; set; }
 }

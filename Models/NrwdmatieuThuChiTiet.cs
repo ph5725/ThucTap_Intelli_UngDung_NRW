@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_NRW.Models;
+namespace WebAPI_NRW.Models.Database;
 
 public partial class NrwdmatieuThuChiTiet
 {
     public int Id { get; set; }
 
-    public int MaTieuThu { get; set; }
+    public int? MaTieuThu { get; set; }
 
-    public string MaDma { get; set; } = null!;
+    public int? MaDma { get; set; }
 
     public int Ky { get; set; }
 
@@ -29,15 +29,15 @@ public partial class NrwdmatieuThuChiTiet
 
     public DateTime? NgayCapNhat { get; set; }
 
-    public string? NguoiTao { get; set; }
+    public int NguoiTao { get; set; }
 
-    public string? NguoiCapNhat { get; set; }
+    public int? NguoiCapNhat { get; set; }
 
-    public virtual Dsdma MaDmaNavigation { get; set; } = null!;
+    public virtual Dsdma? MaDmaNavigation { get; set; }
 
-    public virtual Nrwdma MaTieuThuNavigation { get; set; } = null!;
+    public virtual Nrwdma? MaTieuThuNavigation { get; set; }
 
     public virtual NguoiDung? NguoiCapNhatNavigation { get; set; }
 
-    public virtual NguoiDung? NguoiTaoNavigation { get; set; }
+    public virtual NguoiDung NguoiTaoNavigation { get; set; } = null!;
 }

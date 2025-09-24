@@ -1,6 +1,6 @@
 ﻿namespace WebAPI_NRW.RequestModel.HeThongBilling
 {
-    public class Add_DSNgayDocSoBilling_Model
+    public class Add_DsNgayDocSoBilling_Model
     {
         public int Nam { get; set; }
 
@@ -12,6 +12,6 @@
 
         public DateTime NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

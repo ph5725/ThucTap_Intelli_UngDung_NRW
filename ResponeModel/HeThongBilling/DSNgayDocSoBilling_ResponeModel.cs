@@ -1,6 +1,6 @@
 ﻿namespace WebAPI_NRW.ResponeModel.HeThongBilling
 {
-    public class DSNgayDocSoBilling_ResponeModel
+    public class DsNgayDocSoBilling_ResponeModel
     {
         public int Id { get; set; }
 

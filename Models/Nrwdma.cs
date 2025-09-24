@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_NRW.Models;
+namespace WebAPI_NRW.Models.Database;
 
 public partial class Nrwdma
 {
     public int Id { get; set; }
 
-    public string MaDma { get; set; } = null!;
+    public int? MaDma { get; set; }
 
     public int Ky { get; set; }
 
@@ -33,15 +33,15 @@ public partial class Nrwdma
 
     public DateTime? NgayCapNhat { get; set; }
 
-    public string? NguoiTao { get; set; }
+    public int NguoiTao { get; set; }
 
-    public string? NguoiCapNhat { get; set; }
+    public int? NguoiCapNhat { get; set; }
 
-    public virtual Dsdma MaDmaNavigation { get; set; } = null!;
+    public virtual Dsdma? MaDmaNavigation { get; set; }
 
     public virtual NguoiDung? NguoiCapNhatNavigation { get; set; }
 
-    public virtual NguoiDung? NguoiTaoNavigation { get; set; }
+    public virtual NguoiDung NguoiTaoNavigation { get; set; } = null!;
 
     public virtual ICollection<NrwdmadauVaoChiTiet> NrwdmadauVaoChiTiets { get; set; } = new List<NrwdmadauVaoChiTiet>();
 

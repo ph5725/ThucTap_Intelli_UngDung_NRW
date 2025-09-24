@@ -10,7 +10,7 @@
 
         public DateOnly? NgayChinhSua { get; set; }
 
-        public string? NguoiChinhSua { get; set; }
+        public int? NguoiChinhSua { get; set; }
 
         public bool DanhDauLoi { get; set; }
 
@@ -18,6 +18,6 @@
 
         public DateTime? NgayCapNhat { get; set; }
 
-        public string? NguoiCapNhat { get; set; }
+        public int? NguoiCapNhat { get; set; }
     }
 }

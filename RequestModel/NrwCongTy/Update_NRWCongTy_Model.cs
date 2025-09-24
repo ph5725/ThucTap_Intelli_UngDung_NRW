@@ -1,6 +1,6 @@
 ﻿namespace WebAPI_NRW.RequestModel.NrwCongTy
 {
-    public class Update_NRWCongTy_Model
+    public class Update_NrwCongTy_Model
     {
         public string Ma { get; set; } = null!;
 
@@ -32,6 +32,6 @@
 
         public DateTime? NgayCapNhat { get; set; }
 
-        public string? NguoiCapNhat { get; set; }
+        public int? NguoiCapNhat { get; set; }
     }
 }

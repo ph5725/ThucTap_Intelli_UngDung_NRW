@@ -1,12 +1,12 @@
 ﻿namespace WebAPI_NRW.ResponeModel.NrwDma
 {
-    public class NRWDMATieuThuChiTiet_ResponeModel
+    public class NrwDmaTieuThuChiTiet_ResponeModel
     {
         public int Id { get; set; }
 
-        public int MaTieuThu { get; set; }
+        public int? MaTieuThu { get; set; }
 
-        public string MaDma { get; set; } = null!;
+        public int? MaDma { get; set; }
 
         public int Ky { get; set; }
 

@@ -1,80 +1,64 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models;
+using WebAPI_NRW.Models.Database;
+using WebAPI_NRW.RequestModel.DanhSach;
 using WebAPI_NRW.RequestModel.HeThongBilling;
+using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.HeThongBilling;
 
 namespace WebAPI_NRW.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class DSNgayDocSoBillingChiTietController : ControllerBase
+    public class DsNgayDocSoBillingChiTietController : ControllerBase
     {
         private readonly DbNrwContext _context;
 
-        public DSNgayDocSoBillingChiTietController(DbNrwContext dbcontext)
+        public DsNgayDocSoBillingChiTietController(DbNrwContext dbcontext)
         {
             _context = dbcontext;
         }
 
-        /// API Get
+        /// API Get all
         [HttpGet]
-        public IEnumerable<DSNgayDocSoBillingChiTiet_ResponeModel> Get()
+        public ActionResult<IEnumerable<DsNgayDocSoBillingChiTiet_ResponeModel>> Get()
         {
-            //Linq Query
-            var query = from dsNgayDocSoBillingChiTiet in _context.DsngayDocSoBillingChiTiets
-                        select new DSNgayDocSoBillingChiTiet_ResponeModel
-                        {
-                            Id = dsNgayDocSoBillingChiTiet.Id,
-                            MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
-                            Nam = dsNgayDocSoBillingChiTiet.Nam,
-                            Ky = dsNgayDocSoBillingChiTiet.Ky,
-                            Dot = dsNgayDocSoBillingChiTiet.Dot,
-                            SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
-                            GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
-                            NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
-                            NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
-                            NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
-                            NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
-                        };
-            return query.ToList();
+            var list = _context.DsngayDocSoBillingChiTiets
+                .Include(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.MaNgayDocSoNavigation)
+                .Include(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.NguoiTaoNavigation)
+                .Include(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.NguoiCapNhatNavigation)
+                .AsNoTracking()
+                .Select(e => e.MapToResponse())
+                .ToList();
+
+            return Ok(list);
         }
 
         /// API Get by id
         [HttpGet("{id}")]
-        public ActionResult<DSNgayDocSoBillingChiTiet_ResponeModel> GetById(int id)
+        public ActionResult<DsNgayDocSoBillingChiTiet_ResponeModel> GetById(int id)
         {
-            var dsNgayDocSoBillingChiTiet = _context.DsngayDocSoBillingChiTiets.FirstOrDefault(e => e.Id == id);
+            var entity = _context.DsngayDocSoBillingChiTiets
+                .Include(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.MaNgayDocSoNavigation)
+                .Include(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.NguoiTaoNavigation)
+                .Include(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.NguoiCapNhatNavigation)
+                .AsNoTracking()
+                .FirstOrDefault(dsNgayDocSoBillingChiTiet => dsNgayDocSoBillingChiTiet.Id == id);
 
-            if(dsNgayDocSoBillingChiTiet == null)
-            {
-                return NotFound();
-            }
+            if (entity == null) return NotFound();
 
-            //Map Entity -> ResponseModel để trả về
-            var response = new DSNgayDocSoBillingChiTiet_ResponeModel()
-            {
-                Id = dsNgayDocSoBillingChiTiet.Id,
-                MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
-                Nam = dsNgayDocSoBillingChiTiet.Nam,
-                Ky = dsNgayDocSoBillingChiTiet.Ky,
-                Dot = dsNgayDocSoBillingChiTiet.Dot,
-                SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
-                GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
-                NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
-                NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
-                NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
-                NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
-            };
-
-            return response;
+            return Ok(entity.MapToResponse());
         }
 
         /// API Add
         [HttpPost]
-        public DSNgayDocSoBillingChiTiet_ResponeModel Post(Add_DSNgayDocSoBillingChiTiet_Model addDsNgayDocSoBillingChiTiet)
+        public ActionResult<DsNgayDocSoBillingChiTiet_ResponeModel> Post(Add_DsNgayDocSoBillingChiTiet_Model addDsNgayDocSoBillingChiTiet)
         {
-            //Map request -> Entity
-            var dsNgayDocSoBillingChiTiet = new DsngayDocSoBillingChiTiet()
+            var entity = new DsngayDocSoBillingChiTiet
             {
                 MaNgayDocSo = addDsNgayDocSoBillingChiTiet.MaNgayDocSo,
                 Nam = addDsNgayDocSoBillingChiTiet.Nam,
@@ -86,95 +70,138 @@ namespace WebAPI_NRW.Controllers
                 NguoiTao = addDsNgayDocSoBillingChiTiet.NguoiTao,
             };
 
-            //Lưu vào DB
-            _context.DsngayDocSoBillingChiTiets.Add(dsNgayDocSoBillingChiTiet);
+            _context.DsngayDocSoBillingChiTiets.Add(entity);
             _context.SaveChanges();
 
-            //Map Entity -> ResponseModel để trả về
-            var response = new DSNgayDocSoBillingChiTiet_ResponeModel()
-            {
-                Id = dsNgayDocSoBillingChiTiet.Id,
-                MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
-                Nam = dsNgayDocSoBillingChiTiet.Nam,
-                Ky = dsNgayDocSoBillingChiTiet.Ky,
-                Dot = dsNgayDocSoBillingChiTiet.Dot,
-                SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
-                GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
-                NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
-                NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
-                NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
-                NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
-            };
+            // load lại navigation properties
+            _context.Entry(entity).Reference(e => e.MaNgayDocSoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiTaoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiCapNhatNavigation).Load();
 
-            return response;
+            return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity.MapToResponse());
         }
 
         /// API Update
-        [HttpPut]
-        public DSNgayDocSoBillingChiTiet_ResponeModel Update(int id, Update_DSNgayDocSoBillingChiTiet updateDsNgayDocSoBilling)
+        [HttpPut("{id}")]
+        public ActionResult<DsNgayDocSoBillingChiTiet_ResponeModel> Update(int id, Update_DsNgayDocSoBillingChiTiet_Model updateDsNgayDocSoBillingChiTiet)
         {
-            // Lấy entity từ DB
-            var dsNgayDocSoBillingChiTiet = _context.DsngayDocSoBillingChiTiets.FirstOrDefault(e => e.Id == id);
-
-            if (dsNgayDocSoBillingChiTiet == null) return null;
+            var entity = _context.DsngayDocSoBillingChiTiets.FirstOrDefault(e => e.Id == id);
+            if (entity == null) return NotFound();
 
             // Gán dữ liệu từ request vào entity
-            dsNgayDocSoBillingChiTiet.MaNgayDocSo = updateDsNgayDocSoBilling.MaNgayDocSo;
-            dsNgayDocSoBillingChiTiet.Nam = updateDsNgayDocSoBilling.Nam;
-            dsNgayDocSoBillingChiTiet.Ky = updateDsNgayDocSoBilling.Ky;
-            dsNgayDocSoBillingChiTiet.Dot = updateDsNgayDocSoBilling.Dot;
-            dsNgayDocSoBillingChiTiet.SoNgayDocSoDot = updateDsNgayDocSoBilling.SoNgayDocSoDot;
-            dsNgayDocSoBillingChiTiet.GhiChu = updateDsNgayDocSoBilling.GhiChu;
-            dsNgayDocSoBillingChiTiet.NgayCapNhat = DateTime.Now;
-            dsNgayDocSoBillingChiTiet.NguoiCapNhat = updateDsNgayDocSoBilling.NguoiCapNhat;
+            entity.MaNgayDocSo = updateDsNgayDocSoBillingChiTiet.MaNgayDocSo;
+            entity.Nam = updateDsNgayDocSoBillingChiTiet.Nam;
+            entity.Ky = updateDsNgayDocSoBillingChiTiet.Ky;
+            entity.Dot = updateDsNgayDocSoBillingChiTiet.Dot;
+            entity.SoNgayDocSoDot = updateDsNgayDocSoBillingChiTiet.SoNgayDocSoDot;
+            entity.GhiChu = updateDsNgayDocSoBillingChiTiet.GhiChu;
+            entity.NgayCapNhat = DateTime.Now;
+            entity.NguoiCapNhat = updateDsNgayDocSoBillingChiTiet.NguoiCapNhat;
 
             _context.SaveChanges();
 
-            // Map entity -> response model
-            return new DSNgayDocSoBillingChiTiet_ResponeModel
-            {
-                Id = dsNgayDocSoBillingChiTiet.Id,
-                MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
-                Nam = dsNgayDocSoBillingChiTiet.Nam,
-                Ky = dsNgayDocSoBillingChiTiet.Ky,
-                Dot = dsNgayDocSoBillingChiTiet.Dot,
-                SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
-                GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
-                NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
-                NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
-                NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
-                NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
-            };
+            // load lại navigation properties
+            _context.Entry(entity).Reference(e => e.MaNgayDocSoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiTaoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiCapNhatNavigation).Load();
+
+            return Ok(entity.MapToResponse());
         }
 
         /// API Delete
-        [HttpDelete]
-        public DSNgayDocSoBillingChiTiet_ResponeModel delete(int id)
+        [HttpDelete("{id}")]
+        public ActionResult<DsNgayDocSoBillingChiTiet_ResponeModel> Delete(int id)
         {
-            // Lấy entity từ DB
-            var dsNgayDocSoBillingChiTiet = _context.DsngayDocSoBillingChiTiets.FirstOrDefault(e => e.Id == id);
+            var entity = _context.DsngayDocSoBillingChiTiets.FirstOrDefault(e => e.Id == id);
+            if (entity == null) return NotFound();
 
-            if (dsNgayDocSoBillingChiTiet == null) return null;
-
-            // Xóa
-            _context.DsngayDocSoBillingChiTiets.Remove(dsNgayDocSoBillingChiTiet);
+            _context.DsngayDocSoBillingChiTiets.Remove(entity);
             _context.SaveChanges();
 
-            // Map sang ResponseModel để trả về
-            return new DSNgayDocSoBillingChiTiet_ResponeModel
-            {
-                Id = dsNgayDocSoBillingChiTiet.Id,
-                MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
-                Nam = dsNgayDocSoBillingChiTiet.Nam,
-                Ky = dsNgayDocSoBillingChiTiet.Ky,
-                Dot = dsNgayDocSoBillingChiTiet.Dot,
-                SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
-                GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
-                NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
-                NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
-                NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
-                NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
-            };
+            // load lại navigation properties
+            _context.Entry(entity).Reference(e => e.MaNgayDocSoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiTaoNavigation).Load();
+            _context.Entry(entity).Reference(e => e.NguoiCapNhatNavigation).Load();
+
+            return Ok(entity.MapToResponse());
         }
+
+        ///// API Add
+        //[HttpPost]
+        //public DsNgayDocSoBillingChiTiet_ResponeModel Post(Add_DsNgayDocSoBillingChiTiet_Model addDsNgayDocSoBillingChiTiet)
+        //{
+        //    //Map request -> Entity
+        //    var dsNgayDocSoBillingChiTiet = new DsngayDocSoBillingChiTiet()
+        //    {
+        //        MaNgayDocSo = addDsNgayDocSoBillingChiTiet.MaNgayDocSo,
+        //        Nam = addDsNgayDocSoBillingChiTiet.Nam,
+        //        Ky = addDsNgayDocSoBillingChiTiet.Ky,
+        //        Dot = addDsNgayDocSoBillingChiTiet.Dot,
+        //        SoNgayDocSoDot = addDsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
+        //        GhiChu = addDsNgayDocSoBillingChiTiet.GhiChu,
+        //        NgayTao = DateTime.Now,
+        //        NguoiTao = addDsNgayDocSoBillingChiTiet.NguoiTao,
+        //    };
+
+        //    //Lưu vào DB
+        //    _context.DsngayDocSoBillingChiTiets.Add(dsNgayDocSoBillingChiTiet);
+        //    _context.SaveChanges();
+
+        //    //Map Entity -> ResponseModel để trả về
+        //    var response = new DsNgayDocSoBillingChiTiet_ResponeModel()
+        //    {
+        //        Id = dsNgayDocSoBillingChiTiet.Id,
+        //        MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
+        //        Nam = dsNgayDocSoBillingChiTiet.Nam,
+        //        Ky = dsNgayDocSoBillingChiTiet.Ky,
+        //        Dot = dsNgayDocSoBillingChiTiet.Dot,
+        //        SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
+        //        GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
+        //        NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
+        //        NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
+        //        NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
+        //        NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
+        //    };
+
+        //    return response;
+        //}
+
+        ///// API Update
+        //[HttpPut]
+        //public DsNgayDocSoBillingChiTiet_ResponeModel Update(int id, Update_DsNgayDocSoBillingChiTiet_Model updateDsNgayDocSoBilling)
+        //{
+        //    // Lấy entity từ DB
+        //    var dsNgayDocSoBillingChiTiet = _context.DsngayDocSoBillingChiTiets.FirstOrDefault(e => e.Id == id);
+
+        //    if (dsNgayDocSoBillingChiTiet == null) return null;
+
+        //    // Gán dữ liệu từ request vào entity
+        //    dsNgayDocSoBillingChiTiet.MaNgayDocSo = updateDsNgayDocSoBilling.MaNgayDocSo;
+        //    dsNgayDocSoBillingChiTiet.Nam = updateDsNgayDocSoBilling.Nam;
+        //    dsNgayDocSoBillingChiTiet.Ky = updateDsNgayDocSoBilling.Ky;
+        //    dsNgayDocSoBillingChiTiet.Dot = updateDsNgayDocSoBilling.Dot;
+        //    dsNgayDocSoBillingChiTiet.SoNgayDocSoDot = updateDsNgayDocSoBilling.SoNgayDocSoDot;
+        //    dsNgayDocSoBillingChiTiet.GhiChu = updateDsNgayDocSoBilling.GhiChu;
+        //    dsNgayDocSoBillingChiTiet.NgayCapNhat = DateTime.Now;
+        //    dsNgayDocSoBillingChiTiet.NguoiCapNhat = updateDsNgayDocSoBilling.NguoiCapNhat;
+
+        //    _context.SaveChanges();
+
+        //    // Map entity -> response model
+        //    return new DsNgayDocSoBillingChiTiet_ResponeModel
+        //    {
+        //        Id = dsNgayDocSoBillingChiTiet.Id,
+        //        MaNgayDocSo = dsNgayDocSoBillingChiTiet.MaNgayDocSo,
+        //        Nam = dsNgayDocSoBillingChiTiet.Nam,
+        //        Ky = dsNgayDocSoBillingChiTiet.Ky,
+        //        Dot = dsNgayDocSoBillingChiTiet.Dot,
+        //        SoNgayDocSoDot = dsNgayDocSoBillingChiTiet.SoNgayDocSoDot,
+        //        GhiChu = dsNgayDocSoBillingChiTiet.GhiChu,
+        //        NgayTao = dsNgayDocSoBillingChiTiet.NgayTao,
+        //        NguoiTao = dsNgayDocSoBillingChiTiet.NguoiTao,
+        //        NgayCapNhat = dsNgayDocSoBillingChiTiet.NgayCapNhat,
+        //        NguoiCapNhat = dsNgayDocSoBillingChiTiet.NguoiCapNhat,
+        //    };
+        //}
     }
 }

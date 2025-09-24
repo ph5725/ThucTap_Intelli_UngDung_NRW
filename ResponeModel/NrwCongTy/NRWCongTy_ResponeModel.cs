@@ -1,6 +1,6 @@
 ﻿namespace WebAPI_NRW.ResponeModel.NrwCongTy
 {
-    public class NRWCongTy_ResponeModel
+    public class NrwCongTy_ResponeModel
     {
         public int Id { get; set; }
 

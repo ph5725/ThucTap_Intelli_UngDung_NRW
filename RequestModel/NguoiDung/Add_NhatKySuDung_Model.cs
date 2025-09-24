@@ -2,7 +2,7 @@
 {
     public class Add_NhatKySuDung_Model
     {
-        public string TenNguoiDung { get; set; } = null!;
+        public int? TenNguoiDung { get; set; }
 
         public string HanhDong { get; set; } = null!;
 
@@ -14,6 +14,6 @@
 
         public DateTime NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

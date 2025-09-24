@@ -2,8 +2,8 @@
 {
     public class DoiMatKhau_RequestModel
     {
-        //public string TenNguoiDung { get; set; } = null!;
-
-        public string MatKhau { get; set; } = null!;
+        //public string? TenNguoiDung { get; set; }
+        public string? MatKhauCu { get; set; }
+        public string? MatKhauMoi { get; set; }
     }
 }

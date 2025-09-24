@@ -1,15 +1,15 @@
 ﻿namespace WebAPI_NRW.RequestModel.DongHoTong
 {
-    public class Add_CauHinhDHT_Model
+    public class Add_CauHinhDht_Model
     {
-        public string MaDoiTuong { get; set; } = null!;
+        public int? MaDoiTuong { get; set; }
 
-        public string MaDongHo { get; set; } = null!;
+        public int? MaDongHo { get; set; }
 
         public string? GhiChu { get; set; }
 
         public DateTime NgayTao { get; set; }
 
-        public string? NguoiTao { get; set; }
+        public int NguoiTao { get; set; }
     }
 }

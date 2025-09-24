@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public string TenNguoiDung { get; set; } = null!;
+        public string? TenNguoiDung { get; set; }
 
         public string HanhDong { get; set; } = null!;
 

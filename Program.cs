@@ -1,17 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebAPI_NRW;
-using WebAPI_NRW.Models;
+using WebAPI_NRW.Helpers;
+using WebAPI_NRW.Models.Database;
+using WebAPI_NRW.Services;
+using WebAPI_NRW.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+// Đăng ký PermissionService cho DI
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -62,9 +67,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "you_issuer",
-        ValidAudience = "you_audience",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key_your_secret_key_your_secret_key_your_secret_keyyour_secret_key_your_secret_key_your_secret_key_your_secret_key"))
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
     };
 });
 
@@ -83,6 +88,11 @@ builder.Services.AddSingleton(new JwtHelper(
 ));
 
 var app = builder.Build();
+// Sau khi build app
+//using (var scope = app.Services.CreateScope())
+//{
+//    UpdateRawPasswordsToHash(scope.ServiceProvider);
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -93,8 +103,35 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+
+// ---------------------
+// Hàm cập nhật mật khẩu raw sang hash
+// ---------------------
+//void UpdateRawPasswordsToHash(IServiceProvider services)
+//{
+//    using var scope = services.CreateScope();
+//    var context = scope.ServiceProvider.GetRequiredService<DbNrwContext>();
+
+//    var users = context.NguoiDungs.ToList();
+
+//    foreach (var user in users)
+//    {
+//        // Chỉ hash nếu chưa hash (ví dụ: độ dài < 50 ký tự)
+//        if (!string.IsNullOrWhiteSpace(user.MatKhau) && user.MatKhau.Length < 50)
+//        {
+//            Console.WriteLine($"Cập nhật password cho user: {user.TenNguoiDung}");
+//            user.MatKhau = PasswordHelper.HashPassword("123456");
+//        }
+//    }
+
+//    context.SaveChanges();
+//    Console.WriteLine("Cập nhật mật khẩu xong!");
+//}
