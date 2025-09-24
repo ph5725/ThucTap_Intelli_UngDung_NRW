@@ -24,6 +24,19 @@ import AddMeterPage from "./pages/quan-ly-dht/qldh/AddMeterPage";
 import MeterConfigPage from "./pages/quan-ly-dht/qlchdht/MeterConfigPage";
 import AddMeterConfigPage from "./pages/quan-ly-dht/qlchdht/AddMeterConfigPage";
 
+import BillingPage from "./pages/he-thong-billing/qlbilling/BillingPage";
+import AddBillingPage from "./pages/he-thong-billing/qlbilling/AddBillingPage"
+
+import BillingReadingPage from "./pages/he-thong-billing/songaydocbilling/BillingReadingPage";
+import AddBillingReadingPage from "./pages/he-thong-billing/songaydocbilling/AddBillingReadingPage";
+
+import BillingReadingDetailPage from "./pages/he-thong-billing/songaydocbillingchitiet/BillingReadingDetailPage";
+import AddBillingReadingDetailPage from "./pages/he-thong-billing/songaydocbillingchitiet/AddBillingReadingDetailPage";
+
+import UserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/UserLogPage";
+import AddUserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/AddUserLogPage";
+
+
 import "./App.css";
 const App: React.FC = () => {
   return (
@@ -70,6 +83,19 @@ const MainLayout: React.FC = () => {
 
             <Route path="meter-config" element={<MeterConfigPage />} />
             <Route path="add-meter-config" element={<AddMeterConfigPage />} />
+
+             <Route path="billing" element={<BillingPage />} />
+            <Route path="add-billing" element={<AddBillingPage />} />
+
+            <Route path="billing-reading" element={<BillingReadingPage />} />
+            <Route path="add-billing-reading" element={<AddBillingReadingPage />} />
+
+            <Route path="billing-reading-detail" element={<BillingReadingDetailPage />} />
+            <Route path="add-billing-reading-detail" element={<AddBillingReadingDetailPage />} />
+
+            <Route path="user-log" element={<UserLogPage />} />
+            <Route path="add-log" element={<AddUserLogPage />} />
+
 
           </Routes>
         </div>

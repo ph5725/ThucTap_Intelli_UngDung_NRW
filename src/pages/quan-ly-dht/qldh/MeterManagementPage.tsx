@@ -15,7 +15,8 @@ import EditMeterModal from "./EditMeterModal";
 import DetailMeterModal from "./DetailMeterModal";
 import MeterStats from "../../../components/MeterStats";
 import "../../../styles/qldh/MeterManagementPage.css";
-import { meterService, type Meter } from "../../../config/meterService";
+import { meterService, type Meter } from "../../../Service/meterService";
+//import { mockMeters } from "../../../config/mockData";
 
 const MeterManagementPage: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const MeterManagementPage: React.FC = () => {
   const [selectedMeter, setSelectedMeter] = useState<Meter | null>(null);
   const [detailMeter, setDetailMeter] = useState<Meter | null>(null);
 
+
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -43,13 +45,20 @@ const MeterManagementPage: React.FC = () => {
         setMeters(res.data);
       } catch (error) {
         console.error("❌ Lỗi khi tải dữ liệu đồng hồ:", error);
+        alert("Không thể tải dữ liệu từ API!");
         setMeters([]); // show table rỗng nếu API lỗi
       } finally {
         setLoading(false);
       }
     };
     fetchMeters();
-  }, []);
+  }, []); 
+
+  // Dữ liệu giả cho MeterPage
+/* useEffect(() => {  
+  setMeters(mockMeters);       
+  setLoading(false);
+}, []); */
 
   // 📌 Lọc & tìm kiếm
   const filteredMeters = useMemo(() => {
@@ -87,19 +96,6 @@ const MeterManagementPage: React.FC = () => {
   };
 
   // 📌 Lưu chỉnh sửa
-  const handleSave = async (updated: Meter) => {
-    try {
-      await meterService.update(updated.id, updated);
-      setMeters(meters.map((m) => (m.id === updated.id ? updated : m)));
-      setMessage("Cập nhật thành công!");
-    } catch (error) {
-      console.error("❌ Lỗi khi cập nhật:", error);
-      setMessage("Cập nhật thất bại!");
-    } finally {
-      setSelectedMeter(null);
-      setTimeout(() => setMessage(null), 3000);
-    }
-  };
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
 
@@ -221,11 +217,17 @@ const MeterManagementPage: React.FC = () => {
 
       {/* Modal Edit */}
       {selectedMeter && (
-        <EditMeterModal
-          meter={selectedMeter}
-          onClose={() => setSelectedMeter(null)}
-          onSave={handleSave}
-        />
+<EditMeterModal
+    meterId={selectedMeter.id}
+    useMock={false} // hoặc true nếu muốn dùng mock
+    onClose={() => setSelectedMeter(null)}
+    onSave={(updatedMeter) => {
+      setMeters(prev =>
+        prev.map(m => (m.id === updatedMeter.id ? updatedMeter : m))
+      );
+      setSelectedMeter(null);
+    }}
+  />
       )}
 
       {/* Modal Detail */}

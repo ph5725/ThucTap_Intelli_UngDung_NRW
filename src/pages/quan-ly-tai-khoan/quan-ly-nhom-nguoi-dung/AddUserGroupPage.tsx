@@ -4,7 +4,7 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import { FaUser } from "react-icons/fa";
-import { userGroupService } from "../../../config/userGroupService";
+import { userGroupService } from "../../../Service/userGroupService";
 
 const AddUserGroupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -12,8 +12,6 @@ const AddUserGroupPage: React.FC = () => {
   const [formData, setFormData] = useState({
     groupName: "",
     members: "",
-    createdAt: new Date().toISOString().split("T")[0],
-    updatedAt: new Date().toISOString().split("T")[0],
     note: "",
   });
 
@@ -24,7 +22,18 @@ const AddUserGroupPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await userGroupService.create(formData);
+      // 🔹 Frontend tự sinh createdAt + updatedAt
+      const now = new Date().toISOString();
+      const payload = {
+        groupName: formData.groupName,
+        members: formData.members,
+        note: formData.note,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      await userGroupService.create(payload);
+
       alert("✅ Nhóm người dùng đã được thêm thành công!");
       navigate(-1);
     } catch (error) {
@@ -49,6 +58,7 @@ const AddUserGroupPage: React.FC = () => {
             type="text"
             value={formData.groupName}
             onChange={(e) => handleChange("groupName", e.target.value)}
+            required
           />
 
           <label>Thành Viên</label>
@@ -57,20 +67,6 @@ const AddUserGroupPage: React.FC = () => {
             value={formData.members}
             onChange={(e) => handleChange("members", e.target.value)}
             placeholder="Nhập danh sách thành viên, cách nhau bằng dấu phẩy"
-          />
-
-          <label>Ngày Tạo</label>
-          <input
-            type="date"
-            value={formData.createdAt}
-            onChange={(e) => handleChange("createdAt", e.target.value)}
-          />
-
-          <label>Ngày Cập Nhật</label>
-          <input
-            type="date"
-            value={formData.updatedAt}
-            onChange={(e) => handleChange("updatedAt", e.target.value)}
           />
 
           <label>Ghi Chú</label>

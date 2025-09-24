@@ -2,6 +2,7 @@ import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css"; 
 import "../../../styles/qlttnd/EditUserInfoModal.css"; 
+import "../../../styles/qlttnd/DetailUserInfoModal.css";
 
 interface UserInfo {
   id: number;
@@ -27,7 +28,7 @@ interface DetailUserInfoModalProps {
 const DetailUserInfoModal: React.FC<DetailUserInfoModalProps> = ({ user, onClose }) => {
   return (
     <div className="modal-overlay">
-      <div className="modal edit-user">
+      <div className="modal detail-user">
         <div className="text-user">
           <h3>Chi tiết người dùng</h3>
         </div>

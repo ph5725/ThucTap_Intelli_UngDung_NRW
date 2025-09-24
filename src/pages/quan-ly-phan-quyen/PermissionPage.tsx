@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+// src/pages/quan-ly-phan-quyen/PermissionFeaturePage.tsx
+import React, { useState, useEffect } from "react";
 import { FaShieldAlt } from "react-icons/fa";
 import "../../styles/role/PermissionPage.css";
-import Tabs from "../../components/tabPQ/Tabs"; // import component Tabs
+import Tabs from "../../components/tabPQ/Tabs";
+import {
+  permissionFeatureService,
+  type Role,
+  type Feature,
+  type FeaturePermissionPayload,
+} from "../../Service/permissionFeatureService";
 
-interface Role {
-  id: number;
-  name: string;
-}
+const actions = ["view", "create", "update", "delete"];
 
-const PermissionPage: React.FC = () => {
-  const [activeTab] = useState<"feature" | "data">("feature");
-
+const PermissionFeaturePage: React.FC = () => {
+  // Roles cố định
   const roles: Role[] = [
     { id: 1, name: "Quản Lý" },
     { id: 2, name: "Tổ Trưởng" },
@@ -18,51 +21,76 @@ const PermissionPage: React.FC = () => {
     { id: 4, name: "Người Dùng" },
   ];
 
-  const featurePermissions = [
-    "Xem báo cáo",
-    "Quản lý tài khoản",
-    "Phân quyền",
-    "Cấu hình hệ thống",
-    "Quản lý dự án",
-    "Xuất dữ liệu"
-  ];
+  const [features, setFeatures] = useState<Feature[]>([]);
+  const [matrix, setMatrix] = useState<boolean[][][]>([]);
 
-  const dataPermissions = [
-    "Khách hàng",
-    "Dự án",
-    "Nhân viên",
-    "Báo cáo",
-    "Hợp đồng",
-    "Sản phẩm"
-  ];
+  // Load feature từ API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const featuresRes = await permissionFeatureService.getFeatures();
+        setFeatures(featuresRes.data);
 
-  const [featureMatrix, setFeatureMatrix] = useState(
-    featurePermissions.map(() => roles.map(() => false))
-  );
-  const [dataMatrix, setDataMatrix] = useState(
-    dataPermissions.map(() => roles.map(() => false))
-  );
+        // Khởi tạo ma trận [feature][action][role] với false
+        const tempMatrix = featuresRes.data.map(() =>
+          actions.map(() => roles.map(() => false))
+        );
 
-  const toggleFeature = (row: number, col: number) => {
-    setFeatureMatrix(prev => {
-      const copy = prev.map(r => [...r]);
-      copy[row][col] = !copy[row][col];
+        // Nếu backend trả quyền hiện tại, gán vào ma trận
+        const permissionsRes = await permissionFeatureService.getPermissions();
+        permissionsRes.data.forEach((p) => {
+          const fIdx = featuresRes.data.findIndex((f) => f.name === p.feature);
+          const rIdx = roles.findIndex((r) => r.id === p.roleId);
+          if (fIdx !== -1 && rIdx !== -1) {
+            tempMatrix[fIdx][0][rIdx] = p.permissions.view;
+            tempMatrix[fIdx][1][rIdx] = p.permissions.create;
+            tempMatrix[fIdx][2][rIdx] = p.permissions.update;
+            tempMatrix[fIdx][3][rIdx] = p.permissions.delete;
+          }
+        });
+
+        setMatrix(tempMatrix);
+      } catch (error) {
+        console.error("Lỗi load features/permissions:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Toggle checkbox
+  const toggleCheck = (fIdx: number, aIdx: number, rIdx: number) => {
+    setMatrix((prev) => {
+      const copy = prev.map((f) => f.map((a) => [...a]));
+      copy[fIdx][aIdx][rIdx] = !copy[fIdx][aIdx][rIdx];
       return copy;
     });
   };
 
-  const toggleData = (row: number, col: number) => {
-    setDataMatrix(prev => {
-      const copy = prev.map(r => [...r]);
-      copy[row][col] = !copy[row][col];
-      return copy;
-    });
-  };
+  // Áp dụng quyền
+  const handleApply = async () => {
+    const payload: FeaturePermissionPayload[] = features
+      .map((feature, fIdx) =>
+        roles.map((role, rIdx) => ({
+          roleId: role.id,
+          feature: feature.name,
+          permissions: {
+            view: matrix[fIdx][0][rIdx],
+            create: matrix[fIdx][1][rIdx],
+            update: matrix[fIdx][2][rIdx],
+            delete: matrix[fIdx][3][rIdx],
+          },
+        }))
+      )
+      .flat();
 
-  const handleApply = () => {
-    console.log("Feature permissions:", featureMatrix);
-    console.log("Data permissions:", dataMatrix);
-    alert("Áp dụng quyền thành công!");
+    try {
+      await permissionFeatureService.applyPermissions(payload);
+      alert("Áp dụng quyền tính năng thành công!");
+    } catch (err) {
+      console.error(err);
+      alert("Có lỗi xảy ra khi áp dụng quyền!");
+    }
   };
 
   return (
@@ -73,47 +101,51 @@ const PermissionPage: React.FC = () => {
         <h2 className="page-title">PHÂN QUYỀN TÍNH NĂNG</h2>
       </div>
 
-      {/* Tabs component */}
-      <Tabs/>
+      {/* Tabs */}
+      <Tabs />
 
       {/* Button Áp Dụng */}
       <div className="apply-btn-wrapper">
-        <button className="btn apply" onClick={handleApply}>Áp Dụng</button>
+        <button className="btn apply" onClick={handleApply}>
+          Áp Dụng
+        </button>
       </div>
 
-      {/* Ma trận phân quyền */}
-      <div className="tab">
-        {(activeTab === "feature" ? featurePermissions : dataPermissions).length > 0 && (
-          <div className="permission-matrix">
-            <table className="permission-matrix-table">
-              <thead>
-                <tr>
-                  <th>{activeTab === "feature" ? "Tính năng / Vai trò" : "Dữ liệu / Vai trò"}</th>
-                  {roles.map(r => <th key={r.id}>{r.name}</th>)}
+      {/* Bảng ma trận */}
+      <div className="permission-matrix">
+        <table className="permission-matrix-table">
+          <thead>
+            <tr>
+              <th>Tính năng / Hành động</th>
+              {roles.map((r) => (
+                <th key={r.id}>{r.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {features.map((feature, fIdx) =>
+              actions.map((action, aIdx) => (
+                <tr key={`${fIdx}-${aIdx}`}>
+                  <td>
+                    {feature.name} - <b>{action}</b>
+                  </td>
+                  {roles.map((role, rIdx) => (
+                    <td key={role.id}>
+                      <input
+                        type="checkbox"
+                        checked={matrix[fIdx]?.[aIdx]?.[rIdx] || false}
+                        onChange={() => toggleCheck(fIdx, aIdx, rIdx)}
+                      />
+                    </td>
+                  ))}
                 </tr>
-              </thead>
-              <tbody>
-                {(activeTab === "feature" ? featurePermissions : dataPermissions).map((item, rowIdx) => (
-                  <tr key={rowIdx}>
-                    <td className="permission-name">{item}</td>
-                    {roles.map((role, colIdx) => (
-                      <td key={role.id}>
-                        <input
-                          type="checkbox"
-                          checked={activeTab === "feature" ? featureMatrix[rowIdx][colIdx] : dataMatrix[rowIdx][colIdx]}
-                          onChange={() => activeTab === "feature" ? toggleFeature(rowIdx, colIdx) : toggleData(rowIdx, colIdx)}
-                        />
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
 
-export default PermissionPage;
+export default PermissionFeaturePage;

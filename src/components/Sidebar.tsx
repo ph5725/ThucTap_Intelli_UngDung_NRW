@@ -50,13 +50,13 @@ const Sidebar: React.FC = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/reading" className="menu-link">
+            <NavLink to="/billing" className="menu-link">
               <FaFileAlt className="icon" />
               {!collapsed && <span>Sổ Đọc</span>}
             </NavLink>
           </li>
           <li>
-            <NavLink to="/logs" className="menu-link">
+            <NavLink to="/user-log" className="menu-link">
               <FaRegSquare className="icon" />
               {!collapsed && <span>Nhật Ký</span>}
             </NavLink>

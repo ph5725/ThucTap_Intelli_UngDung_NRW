@@ -2,7 +2,7 @@
 import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css"; // dùng lại CSS modal
-import "../../../styles/qldh/EditMeterModal.css";   // CSS riêng cho đồng hồ
+import "../../../styles/qldh/DetailMeterModal.css";   // CSS riêng cho đồng hồ
 
 export interface Meter {
   id: number;
@@ -32,7 +32,7 @@ const DetailMeterModal: React.FC<DetailMeterModalProps> = ({ meter, onClose }) =
 
   return (
     <div className="modal-overlay">
-      <div className="modal edit-meter">
+      <div className="modal detail-meter">
 
         <div className="text-user">
           <h3>Chi tiết đồng hồ</h3>

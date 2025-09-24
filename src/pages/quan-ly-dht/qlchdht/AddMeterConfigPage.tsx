@@ -1,48 +1,55 @@
+// src/pages/qlchdht/AddMeterConfigPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
-import { meterConfigService, type MeterConfig } from "../../../config/meterConfigService";
+import { meterConfigService } from "../../../Service/meterConfigService";
 
 const AddMeterConfigPage: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<Omit<MeterConfig, "id" | "createdAt" | "createdBy">>({
-    objectCode: "",
-    meterCode: "",
-    updatedAt: new Date().toISOString().slice(0, 10),
-    updatedByUser: "",
-    note: "",
-  });
   const [loading, setLoading] = useState(false);
 
+  // chỉ khởi tạo field cần nhập
+  const [formData, setFormData] = useState({
+    objectCode: "",
+    meterCode: "",
+    note: "",
+    locked: false,
+    errorFlag: false,
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const newConfig: MeterConfig = {
-      id: Date.now(),
-      objectCode: formData.objectCode,
-      meterCode: formData.meterCode,
-      createdAt: new Date().toISOString().slice(0, 10),
-      createdBy: "Admin",
-      updatedAt: formData.updatedAt,
-      updatedByUser: formData.updatedByUser,
-      note: formData.note,
-    };
-
     try {
-      await meterConfigService.create(newConfig);
-      alert("Thêm mới cấu hình thành công!");
-      navigate("/meter-config"); // quay lại danh sách
+      // user hiện tại (giả sử lấy từ localStorage hoặc context)
+      const currentUser = localStorage.getItem("username") || "admin";
+
+      // gắn metadata ở FE
+      const payload = {
+        ...formData,
+        createdAt: new Date().toISOString(),
+        createdBy: currentUser,
+        updatedAt: null,
+        updatedByUser: null,
+      };
+
+      await meterConfigService.create(payload);
+      alert("✅ Thêm mới cấu hình đồng hồ thành công!");
+      navigate("/meter-config");
     } catch (error) {
-      console.error("Lỗi khi thêm cấu hình:", error);
+      console.error("❌ Lỗi khi thêm mới cấu hình:", error);
       alert("Xảy ra lỗi khi thêm mới!");
     } finally {
       setLoading(false);
@@ -55,31 +62,51 @@ const AddMeterConfigPage: React.FC = () => {
         <FaTachometerAlt className="page-icon" />
         <h2 className="page-title">THÊM MỚI CẤU HÌNH ĐỒNG HỒ TỔNG</h2>
       </div>
+
       <Tabs />
 
       <form className="account-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Mã đối tượng</label>
-          <input name="objectCode" value={formData.objectCode} onChange={handleChange} required />
+          <input
+            name="objectCode"
+            value={formData.objectCode}
+            onChange={handleChange}
+            required
+          />
 
           <label>Mã đồng hồ</label>
-          <input name="meterCode" value={formData.meterCode} onChange={handleChange} required />
+          <input
+            name="meterCode"
+            value={formData.meterCode}
+            onChange={handleChange}
+            required
+          />
 
-          <label>Ngày cập nhật</label>
-          <input type="date" name="updatedAt" value={formData.updatedAt} onChange={handleChange} />
-
-          <label>Người cập nhật</label>
-          <input name="updatedByUser" value={formData.updatedByUser} onChange={handleChange} />
+          <label>Khóa</label>
+          <input
+            type="checkbox"
+            name="locked"
+            checked={formData.locked}
+            onChange={handleChange}
+          />
 
           <label>Ghi chú</label>
-          <textarea name="note" value={formData.note} onChange={handleChange} />
+          <textarea
+            name="note"
+            value={formData.note}
+            onChange={handleChange}
+            rows={3}
+          />
         </div>
 
         <div className="form-actions">
           <button type="submit" className="btn save" disabled={loading}>
             {loading ? "Đang lưu..." : "Lưu"}
           </button>
-          <button type="button" className="btn close" onClick={() => navigate(-1)}>Hủy</button>
+          <button type="button" className="btn close" onClick={() => navigate(-1)}>
+            Hủy
+          </button>
         </div>
       </form>
     </div>

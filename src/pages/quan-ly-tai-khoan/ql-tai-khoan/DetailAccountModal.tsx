@@ -1,55 +1,51 @@
 import React from "react";
-import "../../../styles/qltk/AccountManagement.css";
-
-interface Account {
-  id: number;
-  username: string;   // Tên tài khoản
-  password: string;   // Mật khẩu
-  role: string;       // Vai trò
-  locked?: boolean;   // Trạng thái khóa
-}
+import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/global.css";
+import type { UserInfo } from "../../../Service/userService";
 
 interface DetailAccountModalProps {
-  account: Account;
+  account: UserInfo;
   onClose: () => void;
 }
 
-const DetailAccountModal: React.FC<DetailAccountModalProps> = ({ account, onClose }) => {
+const DetailAccountModal: React.FC<DetailAccountModalProps> = ({
+  account,
+  onClose,
+}) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        
-          <div className="text-user">
-            <h3>Chi Tiết Tài Khoản</h3>
-          </div>
-
-        <div className="modal-field">
-          <span className="label">ID:</span>
-          <span className="value">{account.id}</span>
+        <div className="text-user">
+          <h3>Chi Tiết Tài Khoản</h3>
         </div>
 
-        <div className="modal-field">
-          <span className="label">Tên tài khoản:</span>
-          <span className="value">{account.username}</span>
-        </div>
+        {/* Tên tài khoản */}
+        <label>Tên tài khoản</label>
+        <input type="text" value={account.username} readOnly disabled />
 
-        <div className="modal-field">
-          <span className="label">Mật khẩu:</span>
-          <span className="value">{account.password}</span>
-        </div>
+        {/* Họ tên */}
+        <label>Họ tên</label>
+        <input type="text" value={account.fullname} readOnly disabled />
 
-        <div className="modal-field">
-          <span className="label">Vai trò:</span>
-          <span className="value">{account.role}</span>
-        </div>
+        {/* Email */}
+        <label>Email</label>
+        <input type="email" value={account.email} readOnly disabled />
 
-        <div className="modal-field">
-          <span className="label">Trạng thái:</span>
-          <span className="value">{account.locked ? "Bị khóa" : "Đang hoạt động"}</span>
-        </div>
+        {/* Mật khẩu */}
+        <label>Mật khẩu</label>
+        <input type="password" value={account.password} readOnly disabled />
+
+        {/* Vai trò */}
+        <label>Vai trò</label>
+        <select value={account.role} disabled>
+          <option value="admin">Quản trị viên</option>
+          <option value="user">Người dùng</option>
+        </select>
 
         <div className="modal-actions">
-          <button className="btn close" onClick={onClose}>Đóng</button>
+          <button className="btn close" onClick={onClose}>
+            Đóng
+          </button>
         </div>
       </div>
     </div>

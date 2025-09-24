@@ -5,9 +5,10 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import EditUserGroupModal from "./EditUserGroupModal";
 import DetailUserGroupModal from "./DetailUserGroupModal";
-import { userGroupService, type UserGroup } from "../../../config/userGroupService";
+import { userGroupService, type UserGroup } from "../../../Service/userGroupService";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
+//import { mockUserGroups } from "../../../config/mockData";
 
 const UserGroupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -28,12 +29,13 @@ const UserGroupPage: React.FC = () => {
   const itemsPerPage = 5;
 
   // 📌 Hàm fetchData để gọi API
-  const fetchData = async () => {
+ const fetchData = async () => {
   try {
     const res = await userGroupService.getAll();
     setGroups(res.data);
   } catch (err) {
     console.error("❌ Lỗi API:", err);
+    alert("Không thể tải dữ liệu từ API!");
     // Không set error để block UI
   } finally {
     setLoading(false);
@@ -42,7 +44,13 @@ const UserGroupPage: React.FC = () => {
   // 📌 Gọi fetchData khi load trang
   useEffect(() => {
     fetchData();
-  }, []);
+  }, []); 
+
+  // 📌 Dữ liệu giả cho phát triển giao diện
+/*  useEffect(() => {
+  setGroups(mockUserGroups);
+  setLoading(false);
+}, []); */
 
   // 📌 Lọc danh sách
   const filteredGroups = useMemo(() => {
@@ -116,10 +124,9 @@ const UserGroupPage: React.FC = () => {
         <table className="account-table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Nhóm Người Dùng</th>
               <th>Thành Viên</th>
-              <th>Ngày Tạo</th>
-              <th>Ngày Cập Nhật</th>
               <th>Ghi Chú</th>
               <th>Thao Tác</th>
             </tr>
@@ -127,10 +134,9 @@ const UserGroupPage: React.FC = () => {
           <tbody>
             {currentGroups.map(g => (
               <tr key={g.id}>
+                <td>{g.id}</td>
                 <td>{g.groupName}</td>
                 <td>{g.members}</td>
-                <td>{g.createdAt}</td>
-                <td>{g.updatedAt}</td>
                 <td>{g.note}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setEditingGroup(g)} />

@@ -1,7 +1,9 @@
 // src/pages/qlchdht/DetailMeterConfigModal.tsx
 import React from "react";
-import type { MeterConfig } from "./MeterConfigPage";
 import "../../../styles/global.css";
+import "../../../styles/qlchdht/EditMeterConfigModal.css";
+import "../../../styles/qlchdht/DetailMeterConfigModal.css";
+import type { MeterConfig } from "../../../Service/meterConfigService";
 
 interface Props {
   config: MeterConfig;
@@ -11,33 +13,31 @@ interface Props {
 const DetailMeterConfigModal: React.FC<Props> = ({ config, onClose }) => {
   return (
     <div className="modal-overlay">
-      <div className="modal">
-        <h3>Chi tiết cấu hình đồng hồ tổng</h3>
+      <div className="modal detail-config">
+        <div className="text-user">
+          <h3>Chi tiết cấu hình đồng hồ</h3>
+        </div>
 
-        <label>ID:
-          <input type="text" value={config.id} disabled />
-        </label>
-        <label>Mã đối tượng:
-          <input type="text" value={config.objectCode} disabled />
-        </label>
-        <label>Mã đồng hồ:
-          <input type="text" value={config.meterCode} disabled />
-        </label>
-        <label>Ngày tạo:
-          <input type="text" value={config.createdAt} disabled />
-        </label>
-        <label>Ngày cập nhật:
-          <input type="text" value={config.updatedAt || ""} disabled />
-        </label>
-        <label>Người tạo:
-          <input type="text" value={config.createdBy || ""} disabled />
-        </label>
-        <label>Người cập nhật:
-          <input type="text" value={config.updatedByUser || ""} disabled />
-        </label>
-        <label>Ghi chú:
-          <textarea value={config.note || ""} disabled />
-        </label>
+        <div className="modal-content-scroll">
+          <label>Mã đối tượng</label>
+          <input type="text" value={config.objectCode} readOnly />
+
+          <label>Mã đồng hồ</label>
+          <input type="text" value={config.meterCode} readOnly />
+
+          <label>Ghi chú</label>
+          <textarea value={config.note || ""} readOnly />
+
+          {/* Metadata readonly */}
+          <label>Ngày tạo</label>
+          <input type="text" value={config.createdAt} readOnly />
+          <label>Người tạo</label>
+          <input type="text" value={config.createdBy} readOnly />
+          <label>Ngày cập nhật</label>
+          <input type="text" value={config.updatedAt} readOnly />
+          <label>Người cập nhật</label>
+          <input type="text" value={config.updatedByUser} readOnly />
+        </div>
 
         <div className="modal-actions">
           <button className="btn close" onClick={onClose}>Đóng</button>

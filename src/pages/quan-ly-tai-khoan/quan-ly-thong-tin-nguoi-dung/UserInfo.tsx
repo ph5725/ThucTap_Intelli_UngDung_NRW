@@ -3,10 +3,11 @@ import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa
 import Tabs from "../../../components/tabQLTK/Tabs";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
-import { userService, type UserInfo } from "../../../config/userService";
+import { userService, type UserInfo } from "../../../Service/userService";
 import EditUserInfoModal from "./EditUserInfoModal";
 import DetailUserInfoModal from "./DetailUserInfoModal";
 import { useNavigate } from "react-router-dom";
+//import { mockUsers } from "../../../config/mockData";
 
 const UserInfoPage: React.FC = () => {
   const navigate = useNavigate();
@@ -33,15 +34,22 @@ const UserInfoPage: React.FC = () => {
         setUsers(res.data);
       } catch (err) {
         console.error("❌ Lỗi khi tải dữ liệu từ API:", err);
+        alert("Không thể tải dữ liệu từ API!");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, []); 
+
+  // 📌 Dữ liệu giả
+/*  useEffect(() => {
+    setUsers(mockUsers);
+    setLoading(false);
+  }, []); */
 
   // 📌 Lọc dữ liệu
-  const filteredUsers = useMemo(() => 
+  const filteredUsers = useMemo(() =>
     users.filter(u =>
       u.code.toLowerCase().includes(filter.code.toLowerCase()) &&
       u.username.toLowerCase().includes(filter.username.toLowerCase()) &&
@@ -57,8 +65,8 @@ const UserInfoPage: React.FC = () => {
   // 📌 Xóa người dùng
   const handleDelete = async (id: number) => {
     if (window.confirm("Bạn có chắc muốn xóa người dùng này?")) {
-      try { 
-        await userService.delete(id); 
+      try {
+        await userService.delete(id);
         setUsers(users.filter(u => u.id !== id));
         setMessage("Xóa thành công!");
       } catch (err) {
@@ -71,19 +79,6 @@ const UserInfoPage: React.FC = () => {
   };
 
   // 📌 Lưu khi sửa
-  const handleSaveUser = async (updated: UserInfo) => {
-    try {
-      await userService.update(updated.id, updated);
-      setUsers(users.map(u => u.id === updated.id ? updated : u));
-      setMessage("Cập nhật thành công!");
-    } catch (err) {
-      console.error("❌ Lỗi khi cập nhật:", err);
-      setMessage("Lỗi khi cập nhật!");
-    } finally {
-      setEditingUser(null);
-      setTimeout(() => setMessage(null), 3000);
-    }
-  };
 
   if (loading) return <div>Đang tải dữ liệu...</div>;
 
@@ -102,11 +97,11 @@ const UserInfoPage: React.FC = () => {
         {/* Toolbar */}
         <div className="toolbar">
           <div className="toolbar-left">
-            <input 
-              type="text" 
-              placeholder="Tìm kiếm..." 
-              value={filter.username} 
-              onChange={e => setFilter({ ...filter, username: e.target.value })} 
+            <input
+              type="text"
+              placeholder="Tìm kiếm..."
+              value={filter.username}
+              onChange={e => setFilter({ ...filter, username: e.target.value })}
             />
             <button className="btn filter" onClick={() => setShowFilter(true)}>
               <FaFilter /> Bộ lọc
@@ -123,6 +118,7 @@ const UserInfoPage: React.FC = () => {
         <table className="account-table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Mã</th>
               <th>Tài khoản</th>
               <th>Tên Người Dùng</th>
@@ -133,13 +129,14 @@ const UserInfoPage: React.FC = () => {
           <tbody>
             {currentUsers.map(u => (
               <tr key={u.id}>
+                <td>{u.id}</td>
                 <td>{u.code}</td>
                 <td>{u.username}</td>
                 <td>{u.fullname}</td>
                 <td>{u.email}</td>
                 <td className="actions">
-                  <FaEdit onClick={() => setEditingUser(u)} title="Sửa" />
-                  <FaTrash onClick={() => handleDelete(u.id)} title="Xóa" />
+                  <FaEdit onClick={() => u.id !== undefined && setEditingUser(u)} title="Sửa" />
+                  <FaTrash onClick={() => handleDelete(u.id!)} title="Xóa" />
                   <FaEye onClick={() => setDetailUser(u)} title="Chi tiết" />
                 </td>
               </tr>
@@ -173,18 +170,30 @@ const UserInfoPage: React.FC = () => {
       )}
 
       {/* Modal Edit */}
-      {editingUser && (
+      {editingUser?.id !== undefined && (
         <EditUserInfoModal
-          user={editingUser}
+          userId={editingUser.id}
           onClose={() => setEditingUser(null)}
-          onSave={handleSaveUser}
+          onSave={(updated) => {
+            setUsers(prev =>
+              prev.map(u => (u.id === updated.id ? { ...u, ...updated } : u))
+            );
+          }}
+          useMock={false} // bật/tắt mock
         />
       )}
 
       {/* Modal Detail */}
       {detailUser && (
         <DetailUserInfoModal
-          user={detailUser}
+          user={{
+            ...detailUser,
+            id: detailUser.id!,
+            createdAt: detailUser.metadata?.createdAt ?? new Date().toISOString(),
+            updatedAt: detailUser.metadata?.updatedAt ?? new Date().toISOString(),
+            createdBy: detailUser.metadata?.createdBy ?? "System",
+            updatedBy: detailUser.metadata?.updatedBy ?? "System"
+          }}
           onClose={() => setDetailUser(null)}
         />
       )}

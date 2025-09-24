@@ -1,0 +1,70 @@
+.log-stats-dashboard {
+  padding: 15px;
+  background-color: #f5f6fa;
+  border-radius: 10px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filter-row input {
+  flex: 1;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.btn-export {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-export:hover {
+  opacity: 0.85;
+}
+
+.kpi-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.kpi-card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  color: white;
+  font-size: 16px;
+  text-align: center;
+}
+
+.kpi-card.orange { background-color: #ff9f43; }
+.kpi-card.green { background-color: #28a745; }
+.kpi-card.red { background-color: #dc3545; }
+
+.chart-row {
+  display: flex;
+  gap: 20px;
+}
+
+.chart-box {
+  flex: 1;
+  background-color: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.chart-box h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}

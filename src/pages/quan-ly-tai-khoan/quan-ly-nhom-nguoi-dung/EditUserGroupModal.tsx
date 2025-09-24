@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
-
-export interface UserGroup {
-  id: number;
-  groupName: string;
-  members: string;
-  createdAt: string;
-  updatedAt: string;
-  note: string;
-}
+import { userGroupService, type UserGroup } from "../../../Service/userGroupService";
 
 interface EditUserGroupModalProps {
   group: UserGroup;
   onClose: () => void;
-  onSave: () => void; // ✅ đổi lại cho đồng bộ
+  onSave: () => void; // reload list
 }
 
 const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose, onSave }) => {
@@ -26,11 +18,18 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
 
   const handleSave = async () => {
     try {
-      // 🔹 Bạn có thể gọi API update ở đây nếu muốn
-      // await userGroupService.update(formData.id, formData);
+      // 🔹 Frontend tự sinh updatedAt
+      const payload = {
+        groupName: formData.groupName,
+        members: formData.members,
+        note: formData.note,
+        updatedAt: new Date().toISOString(),
+        createdAt: formData.createdAt, // giữ nguyên
+      };
 
-      console.log("Cập nhật nhóm:", formData);
-      onSave(); // ✅ gọi lại props
+      await userGroupService.update(formData.id, payload);
+
+      onSave();
       onClose();
     } catch (error) {
       console.error("❌ Lỗi khi cập nhật nhóm:", error);
@@ -61,18 +60,10 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
         />
 
         <label>Ngày Tạo</label>
-        <input
-          type="date"
-          value={formData.createdAt}
-          onChange={(e) => handleChange("createdAt", e.target.value)}
-        />
+        <input type="date" value={formData.createdAt} readOnly />
 
         <label>Ngày Cập Nhật</label>
-        <input
-          type="date"
-          value={formData.updatedAt}
-          onChange={(e) => handleChange("updatedAt", e.target.value)}
-        />
+        <input type="date" value={formData.updatedAt} readOnly />
 
         <label>Ghi Chú</label>
         <textarea
@@ -82,12 +73,8 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
         />
 
         <div className="form-actions">
-          <button className="btn save" onClick={handleSave}>
-            Lưu
-          </button>
-          <button className="btn close" onClick={onClose}>
-            Hủy
-          </button>
+          <button className="btn save" onClick={handleSave}>Lưu</button>
+          <button className="btn close" onClick={onClose}>Hủy</button>
         </div>
       </div>
     </div>

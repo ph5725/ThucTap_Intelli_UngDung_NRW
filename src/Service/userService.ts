@@ -1,8 +1,16 @@
 // src/config/userService.ts
 import api from "../config/api";
 
+export interface UserMetadata {
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+  updatedBy: string;
+}
+
 export interface UserInfo {
-  id: number;
+  locked: boolean;
+  id?: number;
   code: string;
   username: string;
   fullname: string;
@@ -11,10 +19,7 @@ export interface UserInfo {
   role: string;
   permissions: string[];
   avatar?: string;
-  createdAt: string;
-  updatedAt: string;
-  createdBy: string;
-  updatedBy: string;
+  metadata: UserMetadata;
 }
 
 export const userService = {

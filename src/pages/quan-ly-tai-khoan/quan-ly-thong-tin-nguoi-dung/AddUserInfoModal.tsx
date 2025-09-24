@@ -1,4 +1,3 @@
-// src/pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/global.css";
@@ -6,23 +5,12 @@ import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/qlttnd/EditUserInfoModal.css";
 import { FaUser } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
-import { userService } from "../../../config/userService";
-
-interface UserInfo {
-  id?: number;
-  code: string;
-  username: string;
-  fullname: string;
-  password: string;
-  email: string;
-  role: string;
-  permissions: string[];
-  avatar?: string;
-}
+import { userService, type UserInfo } from "../../../Service/userService";
 
 const AddUserInfoPage: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<UserInfo>({
+
+  const [formData, setFormData] = useState<Omit<UserInfo, "metadata"> & { metadata?: UserInfo["metadata"] }>({
     code: "",
     username: "",
     fullname: "",
@@ -31,16 +19,15 @@ const AddUserInfoPage: React.FC = () => {
     role: "user",
     permissions: [],
     avatar: "",
+    locked: false,
   });
   const [file, setFile] = useState<File | null>(null);
 
-  // handle input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // handle file upload
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -48,9 +35,17 @@ const AddUserInfoPage: React.FC = () => {
     }
   };
 
-  // submit form -> gọi API
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const now = new Date().toISOString();
+    const metadata = {
+      createdAt: now,
+      updatedAt: now,
+      createdBy: "FrontendUser",
+      updatedBy: "FrontendUser",
+    };
+
     try {
       const payload = new FormData();
       payload.append("code", formData.code);
@@ -61,6 +56,7 @@ const AddUserInfoPage: React.FC = () => {
       payload.append("role", formData.role);
       formData.permissions.forEach(p => payload.append("permissions[]", p));
       if (file) payload.append("avatar", file);
+      payload.append("metadata", JSON.stringify(metadata));
 
       const res = await userService.create(payload);
 
@@ -75,16 +71,13 @@ const AddUserInfoPage: React.FC = () => {
 
   return (
     <div className="add-account-container">
-      {/* Header */}
       <div className="page-header">
         <FaUser className="page-icon" />
         <h2 className="page-title">DANH SÁCH NGƯỜI DÙNG</h2>
       </div>
 
-      {/* Tabs */}
       <Tabs />
 
-      {/* Form */}
       <form className="account-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <div className="textform">
@@ -135,7 +128,6 @@ const AddUserInfoPage: React.FC = () => {
           )}
         </div>
 
-        {/* Buttons */}
         <div className="form-actions">
           <button type="submit" className="btn save">Lưu</button>
           <button type="button" className="btn close" onClick={() => navigate(-1)}>Hủy</button>

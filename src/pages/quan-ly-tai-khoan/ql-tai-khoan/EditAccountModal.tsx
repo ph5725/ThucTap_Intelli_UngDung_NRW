@@ -1,60 +1,81 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/global.css";
-
-interface Account {
-  id: number;
-  username: string;   // Tên tài khoản
-  password: string;   // Mật khẩu
-  role: string;       // Vai trò
-  locked?: boolean;   // Trạng thái khóa
-}
+import { userService, type UserInfo } from "../../../Service/userService";
 
 interface EditAccountModalProps {
-  account: Account;
+  account: UserInfo;
   onClose: () => void;
-  onSave: (updated: Account) => void;
+  onSave: (updated: UserInfo) => void;
+  useMock?: boolean;
 }
 
-const EditAccountModal: React.FC<EditAccountModalProps> = ({ account, onClose, onSave }) => {
-  const [formData, setFormData] = useState<Account>(account);
+const EditAccountModal: React.FC<EditAccountModalProps> = ({
+  account,
+  onClose,
+  onSave,
+  useMock = false
+}) => {
+  const [formData, setFormData] = useState<UserInfo>(account);
+  const [saving, setSaving] = useState(false);
 
-  // đồng bộ state với prop account
   useEffect(() => {
     setFormData(account);
   }, [account]);
 
-  const handleChange = (field: keyof Account, value: string) => {
+  const handleChange = (field: keyof UserInfo, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
+
+  const handleSave = async () => {
+  setSaving(true);
+  if (useMock) {
+    onSave(formData); // chỉ update local
+  } else {
+    try {
+      const res = await userService.update(formData.id!, formData);
+      onSave(res.data); // update từ backend
+    } catch (error) {
+      console.error("Lỗi cập nhật:", error);
+      alert("Cập nhật thất bại!");
+    }
+  }
+  setSaving(false);
+  onClose();
+};
+
 
   return (
     <div className="modal-overlay">
       <div className="modal">
+        <h3>Chỉnh Sửa Tài Khoản</h3>
 
-          <div className="text-user">
-            <h3>Chỉnh Sửa Tài Khoản</h3>
-          </div>
-
-        {/* Tên tài khoản */}
         <label>Tên tài khoản</label>
         <input
           value={formData.username}
           onChange={(e) => handleChange("username", e.target.value)}
         />
 
-        {/* Mật khẩu */}
-        <label>Mật khẩu</label>
+        <label>Họ tên</label>
         <input
-          type="text"
-          value={formData.password}
-          onChange={(e) => handleChange("password", e.target.value)}
-          
+          value={formData.fullname}
+          onChange={(e) => handleChange("fullname", e.target.value)}
         />
 
-       
+        <label>Email</label>
+        <input
+          type="email"
+          value={formData.email}
+          onChange={(e) => handleChange("email", e.target.value)}
+        />
 
-        {/* Vai trò */}
+        <label>Mật khẩu</label>
+        <input
+          type="password"
+          value={formData.password}
+          onChange={(e) => handleChange("password", e.target.value)}
+        />
+
         <label>Vai trò</label>
         <select
           value={formData.role}
@@ -62,16 +83,13 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({ account, onClose, o
         >
           <option value="admin">Quản trị viên</option>
           <option value="user">Người dùng</option>
-          <option value="guest">Khách</option>
         </select>
 
         <div className="modal-actions">
-          <button className="btn save" onClick={() => onSave(formData)}>
-            Lưu
+          <button className="btn save" onClick={handleSave} disabled={saving}>
+            {saving ? "Đang lưu..." : "Lưu"}
           </button>
-          <button className="btn close" onClick={onClose}>
-            Hủy
-          </button>
+          <button className="btn close" onClick={onClose}>Hủy</button>
         </div>
       </div>
     </div>
