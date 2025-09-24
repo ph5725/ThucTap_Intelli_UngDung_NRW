@@ -73,13 +73,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Dùng hardcore
-//builder.Services.AddSingleton<JwtHelper>(new JwtHelper(
-//    secretKey: "your_secret_key_your_secret_key_your_secret_key_your_secret_keyyour_secret_key_your_secret_key_your_secret_key_your_secret_key",
-//    issuer: "you_issuer",
-//    audience: "you_audience"
-//));
-
 // Đăng ký JwtHelper để tạo token
 builder.Services.AddSingleton(new JwtHelper(
     jwtSettings.SecretKey,
@@ -88,11 +81,6 @@ builder.Services.AddSingleton(new JwtHelper(
 ));
 
 var app = builder.Build();
-// Sau khi build app
-//using (var scope = app.Services.CreateScope())
-//{
-//    UpdateRawPasswordsToHash(scope.ServiceProvider);
-//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -110,28 +98,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-
-// ---------------------
-// Hàm cập nhật mật khẩu raw sang hash
-// ---------------------
-//void UpdateRawPasswordsToHash(IServiceProvider services)
-//{
-//    using var scope = services.CreateScope();
-//    var context = scope.ServiceProvider.GetRequiredService<DbNrwContext>();
-
-//    var users = context.NguoiDungs.ToList();
-
-//    foreach (var user in users)
-//    {
-//        // Chỉ hash nếu chưa hash (ví dụ: độ dài < 50 ký tự)
-//        if (!string.IsNullOrWhiteSpace(user.MatKhau) && user.MatKhau.Length < 50)
-//        {
-//            Console.WriteLine($"Cập nhật password cho user: {user.TenNguoiDung}");
-//            user.MatKhau = PasswordHelper.HashPassword("123456");
-//        }
-//    }
-
-//    context.SaveChanges();
-//    Console.WriteLine("Cập nhật mật khẩu xong!");
-//}

@@ -49,9 +49,21 @@ public partial class DbNrwContext : DbContext
 
     public virtual DbSet<PhanQuyenTinhNang> PhanQuyenTinhNangs { get; set; }
 
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Data Source=HP;Initial Catalog=DB_NRW;User ID=user_nrw;Password=123456;Trust Server Certificate=True;Trusted_Connection=true;");
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=HP;Initial Catalog=DB_NRW;User ID=user_nrw;Password=123456;Trust Server Certificate=True;Trusted_Connection=true;");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var connStr = configuration.GetConnectionString("ConnectServer");
+            optionsBuilder.UseSqlServer(connStr);
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
