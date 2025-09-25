@@ -80,6 +80,18 @@ builder.Services.AddSingleton(new JwtHelper(
     jwtSettings.Audience
 ));
 
+// Thêm CORS service
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173") // domain frontend
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
