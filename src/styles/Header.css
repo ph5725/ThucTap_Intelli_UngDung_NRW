@@ -7,13 +7,13 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.search-bar input {
+.search-box {
   width: 300px; 
   padding: 6px 10px;
   font-size: 12px;
   border: 1px solid #ccc;
   border-radius: 100px;
-  background-color: #e0f2fe;   /* nền xanh nhạt */
+  background-color: #ffffff;   /* nền xanh nhạt */
   color: #1e3a8a;              /* chữ xanh đậm */
 }
 

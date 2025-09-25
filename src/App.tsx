@@ -10,6 +10,12 @@ import AddAccount from "./pages//quan-ly-tai-khoan/ql-tai-khoan/AddAccount";
 import UserInfoPage from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/UserInfo"; // trang quản lý người dùng
 import AddUserInfoModal from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoModal"; 
 
+<<<<<<< HEAD
+import UserGroupPage from "./pages/qlnnd/UserGroup"; // trang quản lý nhóm người dùng
+import AddUserGroupPage from "./pages/qlnnd/AddUserGroupPage"; 
+import DashboardPage from "./pages/dashboard/DashboardPage"; // trang dashboard
+import LoginForm from "./pages/LoginForm"; // trang đăng nhập
+=======
 import UserGroupPage from "./pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/UserGroup"; // trang quản lý nhóm người dùng
 import AddUserGroupPage from "./pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/AddUserGroupPage"; 
 
@@ -36,6 +42,7 @@ import AddBillingReadingDetailPage from "./pages/he-thong-billing/songaydocbilli
 import UserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/UserLogPage";
 import AddUserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/AddUserLogPage";
 
+>>>>>>> ab8ce48b3aab12d5d4e035de69307e02a21c9021
 
 import "./App.css";
 const App: React.FC = () => {
@@ -66,6 +73,7 @@ const MainLayout: React.FC = () => {
         <Header />
         <div className="content-area">
           <Routes>
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="accounts" element={<AccountManagement />} />
             <Route path="add-account" element={<AddAccount />} />
 
