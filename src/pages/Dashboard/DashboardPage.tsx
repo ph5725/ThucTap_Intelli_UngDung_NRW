@@ -1,7 +1,7 @@
-/*import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
-  PieChart, Pie, Cell, Legend
+  PieChart, Pie, Cell, Legend,
 } from "recharts";
 import "../../styles/Dashboard.css";
 import { getCompanyStats, getDmaStats } from "../../config/Dashboard-api";
@@ -35,7 +35,7 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Tabs }
+      Tabs
       <div className="dashboard-tabs">
         <button
           className={activeTab === "company" ? "tab active" : "tab"}
@@ -51,7 +51,7 @@ const DashboardPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Cards }
+      Cards
       <div className="stats-cards">
         {stats.map((s, index) => (
           <div key={index} className="card">
@@ -72,7 +72,7 @@ const DashboardPage: React.FC = () => {
         ))}
       </div>
 
-      {/* Charts }
+      Charts
       <div className="charts">
         <div className="chart-box">
           <h4>Top 10 {activeTab === "company" ? "CTY" : "DMA"} thất thoát nước thấp nhất kì mới nhất</h4>
@@ -119,7 +119,7 @@ const DashboardPage: React.FC = () => {
   );
 };
 
-export default DashboardPage;*/
+export default DashboardPage;
 
 
 /*import React, { useState } from "react";

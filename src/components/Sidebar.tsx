@@ -20,7 +20,7 @@ const Sidebar: React.FC = () => {
         <h2>Giám Sát Thất Thoát Nước_QTV</h2>
       </div>
 
-<<<<<<< HEAD
+{/* <<<<<<< HEAD */}
       <ul className="sidebar-menu">
         <li>
           <NavLink to="/dashboard" className={({ isActive }) => (isActive ? "active" : "")}>
@@ -64,49 +64,49 @@ const Sidebar: React.FC = () => {
         </li>
       </ul>
     </div>
-=======
-      <nav className="menu">
-        <ul>
-          <li>
-            <NavLink to="/dashboard" className="menu-link">
-              <FaTachometerAlt className="icon" />
-              {!collapsed && <span>Dashboard</span>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/accounts" className="menu-link">
-              <FaUser className="icon" />
-              {!collapsed && <span>Quản Lý Tài Khoản</span>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/permissions" className="menu-link">
-              <FaShieldAlt className="icon" />
-              {!collapsed && <span>Phân Quyền</span>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/meters" className="menu-link">
-              <FaWater className="icon" />
-              {!collapsed && <span>Đồng Hồ Tổng</span>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/billing" className="menu-link">
-              <FaFileAlt className="icon" />
-              {!collapsed && <span>Sổ Đọc</span>}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/user-log" className="menu-link">
-              <FaRegSquare className="icon" />
-              {!collapsed && <span>Nhật Ký</span>}
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-    </aside>
->>>>>>> ab8ce48b3aab12d5d4e035de69307e02a21c9021
+// =======
+//       <nav className="menu">
+//         <ul>
+//           <li>
+//             <NavLink to="/dashboard" className="menu-link">
+//               <FaTachometerAlt className="icon" />
+//               {!collapsed && <span>Dashboard</span>}
+//             </NavLink>
+//           </li>
+//           <li>
+//             <NavLink to="/accounts" className="menu-link">
+//               <FaUser className="icon" />
+//               {!collapsed && <span>Quản Lý Tài Khoản</span>}
+//             </NavLink>
+//           </li>
+//           <li>
+//             <NavLink to="/permissions" className="menu-link">
+//               <FaShieldAlt className="icon" />
+//               {!collapsed && <span>Phân Quyền</span>}
+//             </NavLink>
+//           </li>
+//           <li>
+//             <NavLink to="/meters" className="menu-link">
+//               <FaWater className="icon" />
+//               {!collapsed && <span>Đồng Hồ Tổng</span>}
+//             </NavLink>
+//           </li>
+//           <li>
+//             <NavLink to="/billing" className="menu-link">
+//               <FaFileAlt className="icon" />
+//               {!collapsed && <span>Sổ Đọc</span>}
+//             </NavLink>
+//           </li>
+//           <li>
+//             <NavLink to="/user-log" className="menu-link">
+//               <FaRegSquare className="icon" />
+//               {!collapsed && <span>Nhật Ký</span>}
+//             </NavLink>
+//           </li>
+//         </ul>
+//       </nav>
+//     </aside>
+// >>>>>>> ab8ce48b3aab12d5d4e035de69307e02a21c9021
   );
 };
 
