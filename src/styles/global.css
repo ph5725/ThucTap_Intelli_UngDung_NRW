@@ -248,7 +248,8 @@ padding: 10px;
   justify-content: center;
   backdrop-filter: blur(4px);
   z-index: 1000;
-  overflow-y: auto; 
+  overflow-y: auto;
+  color: #ffffff;
 
 }
 
