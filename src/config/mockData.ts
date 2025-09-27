@@ -1,12 +1,12 @@
 // src/config/mockData.ts
-import type { UserInfo } from "../Service/userService";
-import type { UserGroup } from "../Service/userGroupService";
-import type { MeterConfig } from "../Service/meterConfigService";
-import type { Meter } from "../Service/meterService";
-import type { Billing } from "../Service/billingService";
-import type { BillingReading } from "../Service/billingReadingService";
-import type { BillingReadingDetail } from "../Service/billingReadingDetailService";
-import type { UserLog } from "../Service/userLogService";
+import type { UserInfo } from "../services/userService";
+import type { UserGroup } from "../services/userGroupService";
+import type { MeterConfig } from "../services/meterConfigService";
+import type { Meter } from "../services/meterService";
+import type { Billing } from "../services/billingService";
+import type { BillingReading } from "../services/billingReadingService";
+import type { BillingReadingDetail } from "../services/billingReadingDetailService";
+import type { UserLog } from "../services/userLogService";
 
 const today = new Date().toISOString().slice(0, 10);
 

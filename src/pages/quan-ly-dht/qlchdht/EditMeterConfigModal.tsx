@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qlchdht/EditMeterConfigModal.css";
-import { meterConfigService, type MeterConfig } from "../../../Service/meterConfigService";
+import { meterConfigService, type MeterConfig } from "../../../services/meterConfigService";
 import { mockMeterConfigs } from "../../../config/mockData"; // mockMeters chứa list đồng hồ
 
 interface Props {

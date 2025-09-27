@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/global.css";
-import { userService, type UserInfo } from "../../../Service/userService";
+import { userService, type UserInfo } from "../../../services/userService";
 
 interface EditAccountModalProps {
   account: UserInfo;

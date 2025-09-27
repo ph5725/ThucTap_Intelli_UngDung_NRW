@@ -4,7 +4,7 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import { FaUser } from "react-icons/fa";
-import { userGroupService } from "../../../Service/userGroupService";
+import { userGroupService } from "../../../services/userGroupService";
 
 const AddUserGroupPage: React.FC = () => {
   const navigate = useNavigate();

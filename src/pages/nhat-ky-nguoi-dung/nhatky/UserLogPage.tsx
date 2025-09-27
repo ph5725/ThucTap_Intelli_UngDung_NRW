@@ -9,7 +9,7 @@ import "../../../styles/global.css";
 import LogStats from "../../../components/LogStats";
 import EditUserLogModal from "./EditUserLogModal";
 import DetailUserLogModal from "./DetailUserLogModal";
-import { userLogService, type UserLog } from "../../../Service/userLogService";
+import { userLogService, type UserLog } from "../../../services/userLogService";
 
 const UserLogPage: React.FC = () => {
   const navigate = useNavigate();

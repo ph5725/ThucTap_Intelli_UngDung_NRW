@@ -10,7 +10,6 @@ import AddAccount from "./pages//quan-ly-tai-khoan/ql-tai-khoan/AddAccount";
 import UserInfoPage from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/UserInfo"; // trang quản lý người dùng
 import AddUserInfoModal from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoModal"; 
 
-// <<<<<<< HEAD
 // import UserGroupPage from "./pages/qlnnd/UserGroup"; // trang quản lý nhóm người dùng
 // import AddUserGroupPage from "./pages/qlnnd/AddUserGroupPage"; 
 import DashboardPage from "./pages/dashboard/DashboardPage"; // trang dashboard
@@ -41,6 +40,9 @@ import AddBillingReadingDetailPage from "./pages/he-thong-billing/songaydocbilli
 
 import UserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/UserLogPage";
 import AddUserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/AddUserLogPage";
+
+// Tính NRW
+import TinhNRW from "./pages/tinh-toan-nrw/index"
 
 // >>>>>>> ab8ce48b3aab12d5d4e035de69307e02a21c9021
 
@@ -104,6 +106,8 @@ const MainLayout: React.FC = () => {
             <Route path="user-log" element={<UserLogPage />} />
             <Route path="add-log" element={<AddUserLogPage />} />
 
+            // Tính NRW
+            <Route path="nrw" element={<TinhNRW />} />
 
           </Routes>
         </div>
@@ -114,17 +118,17 @@ const MainLayout: React.FC = () => {
 
 // Xử lý login
 const LoginWrapper: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleLogin = (username: string, password: string) => {
-    if (username === "admin" && password === "123456") {
-      navigate("/accounts"); // Sau login vào trang quản lý
-    } else {
-      alert("Sai tài khoản hoặc mật khẩu!");
-    }
-  };
-
-  return <LoginForm onLogin={handleLogin} />;
+  // const handleLogin = (username: string, password: string) => {
+  //   if (username === "admin" && password === "123456") {
+  //     navigate("/accounts"); // Sau login vào trang quản lý
+  //   } else {
+  //     alert("Sai tài khoản hoặc mật khẩu!");
+  //   }
+  // };
+  // return <LoginForm onLogin={handleLogin} />;
+  return <LoginForm onLogin={() => {}} />; 
 };
 
 export default App;

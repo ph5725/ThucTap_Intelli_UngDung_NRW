@@ -8,7 +8,7 @@ import { FaBookReader } from "react-icons/fa";
 import {
   type BillingReadingDetail,
   billingReadingDetailService,
-} from "../../../Service/billingReadingDetailService";
+} from "../../../services/billingReadingDetailService";
 
 const AddBillingReadingDetailPage: React.FC = () => {
   const navigate = useNavigate();

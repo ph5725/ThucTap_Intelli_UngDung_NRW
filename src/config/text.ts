@@ -2,6 +2,7 @@ export const TextForms = {
     tieuDe: {
         dangNhap: "Đăng nhập",
         thongBao: "Thông báo",
+        timKiem: "Tìm kiếm",
 
         tongQuanDongHoTong: "Tổng quan đồng hồ tổng",
         danhSachDongHoTong: "Danh sách đồng hồ tổng",
@@ -65,10 +66,13 @@ export const TextForms = {
         dangXuat: "Đăng xuất",
 
         themMoi: "Thêm mới",
+        xoa: "Xóa",
         apDung: "Áp dụng",
         luuLai: "Lưu",
         huyBo: "Hủy bỏ",
         loc: "Lọc",
+
+        themKyMoi: "Thêm kỳ mới",
 
         tiepTheo: "Tiếp theo",
         truocDo: "Trước đó",
@@ -91,5 +95,16 @@ export const TextForms = {
         //Xem lại
         vaiTro: "Vai trò",
         quyen: "Quyền",
+    },
+    nrw: {
+        sanLuongMuaVao: "Sản lượng mua vào (m³)",
+        sanLuongBanRa: "Sản lượng bán ra (m³)",
+        luongNuocThatThoat: "Lượng nước thất thoát (m³)",
+        tyLeThatThoat: "Tỷ lệ thất thoát (%)",
+        ky: "Kỳ",
+        nam: "Năm",
+        tuNgay: "Từ ngày",
+        denNgay: "Đến ngày",
+        soNgay: "Số ngày",
     }
 };

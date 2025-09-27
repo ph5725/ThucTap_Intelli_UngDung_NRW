@@ -1,7 +1,7 @@
 // src/pages/qlbilling/qlbilling/EditBillingModal.tsx
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
-import { billingService, type Billing, type UpdateBillingDTO } from "../../../Service/billingService";
+import { billingService, type Billing, type UpdateBillingDTO } from "../../../services/billingService";
 import { mockBillings } from "../../../config/mockData";
 
 interface EditBillingModalProps {

@@ -1,7 +1,7 @@
 // EditBillingReadingModal.tsx
 import React, { useState, useEffect } from "react";
-import type { BillingReading } from "../../../Service/billingReadingService";
-import { billingReadingService } from "../../../Service/billingReadingService";
+import type { BillingReading } from "../../../services/billingReadingService";
+import { billingReadingService } from "../../../services/billingReadingService";
 import { mockBillingReadings } from "../../../config/mockData";
 import "../../../styles/songaydocbilling/EditBillingReadingModal.css";
 

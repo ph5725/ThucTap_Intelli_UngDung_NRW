@@ -1,7 +1,7 @@
 import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
-import type { BillingReadingDetail } from "../../../Service/billingReadingDetailService";
+import type { BillingReadingDetail } from "../../../services/billingReadingDetailService";
 import "../../../styles/songaydocbillingchitiet/DetailBillingReadingDetailModal.css"; // 👈 thêm css
 
 interface Props {

@@ -5,7 +5,7 @@ import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/qlttnd/EditUserInfoModal.css";
 import { FaUser } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
-import { userService, type UserInfo } from "../../../Service/userService";
+import { userService, type UserInfo } from "../../../services/userService";
 
 const AddUserInfoPage: React.FC = () => {
   const navigate = useNavigate();

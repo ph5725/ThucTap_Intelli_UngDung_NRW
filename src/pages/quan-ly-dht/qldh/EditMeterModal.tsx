@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
-import { meterService, type Meter } from "../../../Service/meterService";
+import { meterService, type Meter } from "../../../services/meterService";
 import { mockMeters } from "../../../config/mockData";
 import "../../../styles/qldh/EditMeterModal.css";
 

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBookReader } from "react-icons/fa";
 import Tabs from "../../../components/tabBilling/Tabs";
-import { billingReadingService, type BillingReading } from "../../../Service/billingReadingService";
+import { billingReadingService, type BillingReading } from "../../../services/billingReadingService";
 
 const AddBillingReadingPage: React.FC = () => {
   const navigate = useNavigate();

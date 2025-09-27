@@ -15,7 +15,7 @@ import EditMeterModal from "./EditMeterModal";
 import DetailMeterModal from "./DetailMeterModal";
 import MeterStats from "../../../components/MeterStats";
 import "../../../styles/qldh/MeterManagementPage.css";
-import { meterService, type Meter } from "../../../Service/meterService";
+import { meterService, type Meter } from "../../../services/meterService";
 //import { mockMeters } from "../../../config/mockData";
 
 const MeterManagementPage: React.FC = () => {

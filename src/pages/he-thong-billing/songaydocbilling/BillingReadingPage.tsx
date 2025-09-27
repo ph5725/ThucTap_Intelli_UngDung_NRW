@@ -5,7 +5,7 @@ import Tabs from "../../../components/tabBilling/Tabs";
 import "../../../styles/global.css";
 //import { mockBillingReadings } from "../../../config/mockData";
 
-import { billingReadingService, type BillingReading } from "../../../Service/billingReadingService";
+import { billingReadingService, type BillingReading } from "../../../services/billingReadingService";
 import EditBillingReadingModal from "./EditBillingReadingModal";
 import DetailBillingReadingModal from "./DetailBillingReadingModal";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import "../../../styles/global.css";
-import type { BillingReading } from "../../../Service/billingReadingService";
+import type { BillingReading } from "../../../services/billingReadingService";
 
 interface DetailBillingReadingModalProps {
   reading: BillingReading;

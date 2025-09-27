@@ -5,7 +5,7 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
-import { meterConfigService } from "../../../Service/meterConfigService";
+import { meterConfigService } from "../../../services/meterConfigService";
 
 const AddMeterConfigPage: React.FC = () => {
   const navigate = useNavigate();
