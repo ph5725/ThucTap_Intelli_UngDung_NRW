@@ -5,8 +5,8 @@ export const apiUrls = {
     // XÁC THỰC, BẢO MẬT
     // 1. Tài khoản
     TaiKhoan: {
-        dangNhap: "",
-        dangXuat: "",
+        dangNhap: "/DangNhap/login", //POST
+        dangXuat: "/logout",
         doiMatKhau: (tenTaiKhoan: string) => `/doiMatKhau?tenNguoiDung=${tenTaiKhoan}`,
         layTaiKhoanHienTai: (tenTaiKhoan: string) => `/doiMatKhau/${tenTaiKhoan}`,
     },
@@ -102,11 +102,11 @@ export const apiUrls = {
     // TÍNH TOÁN THẤT THOÁT NƯỚC CẤP CÔNG TY
     // 12. NRW Công ty
     NRWCongTy: {
-        list: "/nrwCongTy",                             // GET tất cả
-        create: "/nrwCongTy",                             // POST thêm mới
-        detail: (id: number) => `/nrwCongTy/${id}`,       // GET theo id
-        update: (id: number) => `/nrwCongTy/${id}`,       // PUT theo id
-        delete: (id: number) => `/nrwCongTy/${id}`,       // DELETE theo id
+        list: "/NrwCongTy",                             // GET tất cả
+        create: "/NrwCongTy",                             // POST thêm mới
+        detail: (id: number) => `/NrwCongTy/${id}`,       // GET theo id
+        update: (id: number) => `/NrwCongTy/${id}`,       // PUT theo id
+        delete: (id: number) => `/NrwCongTy/${id}`,       // DELETE theo id
     },
     // 13. NRW Công ty đầu vào chi tiết
     NRWCongTyDauVaoChiTiet: {

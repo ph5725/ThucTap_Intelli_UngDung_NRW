@@ -3,7 +3,7 @@ import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qlbiling/EditBillingModal.css";
 import "../../../styles/qlbiling/DetailBillingModal.css";
-import { type Billing } from "../../../Service/billingService";
+import { type Billing } from "../../../services/billingService";
 
 interface DetailBillingModalProps {
   billing: Billing;

@@ -7,7 +7,7 @@ import "../../../styles/global.css";
 import BillingDashboard from "../../../components/BillingDashboard";
 import EditBillingModal from "./EditBillingModal";
 import DetailBillingModal from "./DetailBillingModal";
-import { billingService, type Billing } from "../../../Service/billingService";
+import { billingService, type Billing } from "../../../services/billingService";
 //import { mockBillings } from "../../../config/mockData";
 
 

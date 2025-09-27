@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBookReader } from "react-icons/fa";
-import { userLogService, type UserLogCreate } from "../../../Service/userLogService";
+import { userLogService, type UserLogCreate } from "../../../services/userLogService";
 
 const AddUserLogPage: React.FC = () => {
   const navigate = useNavigate();

@@ -8,11 +8,10 @@
   margin-bottom: 12px;
   transition: border 0.2s, box-shadow 0.2s;
 
-
 }
 
 .role-select:focus {
-  border-color: #2563eb; /* xanh dương khi focus */
+  border-color: #1976D2; /* xanh dương khi focus */
   box-shadow: 0 0 4px rgba(37, 99, 235, 0.3);
   outline: none;
 }
@@ -23,5 +22,5 @@
 
 .text-user h3{
     font-style: italic;
-    color: #2563eb;
+    color: #1976D2;
 }

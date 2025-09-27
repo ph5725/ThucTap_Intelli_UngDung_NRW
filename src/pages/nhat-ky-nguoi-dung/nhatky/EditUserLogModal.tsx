@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
 import "../../../styles/nhatky/EditUserLogModal.css";
-import { userLogService, type UserLog } from "../../../Service/userLogService";
+import { userLogService, type UserLog } from "../../../services/userLogService";
 import { mockUserLogs } from "../../../config/mockData";
 
 interface EditUserLogModalProps {

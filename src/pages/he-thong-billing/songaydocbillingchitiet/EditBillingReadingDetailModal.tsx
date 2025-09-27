@@ -6,7 +6,7 @@ import "../../../styles/songaydocbillingchitiet/EditBillingReadingDetailModal.cs
 import {
   type BillingReadingDetail,
   billingReadingDetailService,
-} from "../../../Service/billingReadingDetailService";
+} from "../../../services/billingReadingDetailService";
 import { mockBillingReadingDetails } from "../../../config/mockData";
 
 interface Props {

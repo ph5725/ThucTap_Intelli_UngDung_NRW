@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Tạo axios instance chung
 const api = axios.create({
-  baseURL: "https://localhost:7019", // Domain API
+  baseURL: "https://localhost:7019/api", // Domain API
   timeout: 10000,
   headers: { "Content-Type": "application/json" },
 });

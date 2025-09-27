@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterConfigModal from "./EditMeterConfigModal";
 import DetailMeterConfigModal from "./DetailMeterConfigModal";
-import { meterConfigService, type MeterConfig } from "../../../Service/meterConfigService";
+import { meterConfigService, type MeterConfig } from "../../../services/meterConfigService";
 import "../../../styles/qldh/MeterManagementPage.css";
 //import { mockMeterConfigs } from "../../../config/mockData";
 

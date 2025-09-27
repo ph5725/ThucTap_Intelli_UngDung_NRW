@@ -5,7 +5,7 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/AddAccount.css";
 import { FaUser } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
-import { userService, type UserInfo } from "../../../Service/userService";
+import { userService, type UserInfo } from "../../../services/userService";
 
 const AddAccount: React.FC = () => {
   const navigate = useNavigate();

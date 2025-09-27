@@ -2,7 +2,7 @@
 import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/nhatky/EditUserLogModal.css";
-import { type UserLog } from "../../../Service/userLogService";
+import { type UserLog } from "../../../services/userLogService";
 
 interface DetailUserLogModalProps {
   log: UserLog;

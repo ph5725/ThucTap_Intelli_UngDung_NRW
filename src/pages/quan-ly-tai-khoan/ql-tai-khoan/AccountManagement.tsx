@@ -5,7 +5,7 @@ import EditAccountModal from "./EditAccountModal";
 import DetailAccountModal from "./DetailAccountModal";
 import "../../../styles/global.css";
 import Tabs from "../../../components/tabQLTK/Tabs";
-import { userService, type UserInfo } from "../../../Service/userService";
+import { userService, type UserInfo } from "../../../services/userService";
 import { mockUsers } from "../../../config/mockData";
 
 interface AccountManagementProps {

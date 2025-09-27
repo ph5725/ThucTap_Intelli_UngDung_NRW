@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaMoneyBill } from "react-icons/fa";
 import Tabs from "../../../components/tabBilling/Tabs";
-import { billingService, type Billing } from "../../../Service/billingService";
+import { billingService, type Billing } from "../../../services/billingService";
 
 const AddBillingPage: React.FC = () => {
   const navigate = useNavigate();

@@ -5,7 +5,7 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
-import { meterService, type Meter } from "../../../Service/meterService";
+import { meterService, type Meter } from "../../../services/meterService";
 
 interface AddForm {
   code: string;

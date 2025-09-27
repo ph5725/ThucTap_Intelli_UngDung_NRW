@@ -3,7 +3,7 @@ import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qlchdht/EditMeterConfigModal.css";
 import "../../../styles/qlchdht/DetailMeterConfigModal.css";
-import type { MeterConfig } from "../../../Service/meterConfigService";
+import type { MeterConfig } from "../../../services/meterConfigService";
 
 interface Props {
   config: MeterConfig;

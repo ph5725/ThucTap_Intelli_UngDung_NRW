@@ -9,7 +9,7 @@ import "../../../styles/qltk/EditAccountModal.css";
 
 import EditBillingReadingDetailModal from "./EditBillingReadingDetailModal";
 import DetailBillingReadingDetailModal from "./DetailBillingReadingDetailModal";
-import { type BillingReadingDetail, billingReadingDetailService } from "../../../Service/billingReadingDetailService";
+import { type BillingReadingDetail, billingReadingDetailService } from "../../../services/billingReadingDetailService";
 //import { mockBillingReadingDetails } from "../../../config/mockData";
 
 const BillingReadingDetailPage: React.FC = () => {
