@@ -12,12 +12,12 @@ namespace WebAPI_NRW.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class DangNhapController : ControllerBase
     {
         private readonly DbNrwContext _context;
         private readonly JwtHelper _jwtHelper;
 
-        public AuthController(DbNrwContext context, JwtHelper jwtHelper)
+        public DangNhapController(DbNrwContext context, JwtHelper jwtHelper)
         {
             _context = context;
             _jwtHelper = jwtHelper;

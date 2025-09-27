@@ -14,7 +14,8 @@ namespace WebAPI_NRW.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+
     public class PhanQuyenTinhNangController : ControllerBase
     {
         private readonly DbNrwContext _context;

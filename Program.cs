@@ -80,10 +80,10 @@ builder.Services.AddSingleton(new JwtHelper(
     jwtSettings.Audience
 ));
 
-// Thêm CORS service
+// Đăng ký CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
+    options.AddPolicy("AllowFrontend",
         policy =>
         {
             policy.WithOrigins("http://localhost:5173") // domain frontend
@@ -100,6 +100,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Áp dụng CORS trước Authorization
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
 
