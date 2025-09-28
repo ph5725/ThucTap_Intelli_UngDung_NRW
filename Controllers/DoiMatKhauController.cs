@@ -21,25 +21,31 @@ namespace WebAPI_NRW.Controllers
         /// <summary>
         /// API Đổi mật khẩu
         /// </summary>
-        [HttpPut("{tenNguoiDung}")]
-        public IActionResult ChangePassword(string tenNguoiDung, [FromBody] DoiMatKhau_RequestModel request)
+
+        [HttpPut]
+        public IActionResult ChangePassword([FromBody] DoiMatKhau_RequestModel request)
         {
+            if (string.IsNullOrEmpty(request.TenNguoiDung))
+                return BadRequest(new { message = "Thiếu tên người dùng" });
+
             // 1. Tìm user
-            var user = _context.NguoiDungs.FirstOrDefault(nguoiDung => nguoiDung.TenNguoiDung == tenNguoiDung);
+            var user = _context.NguoiDungs
+                .FirstOrDefault(nguoiDung => nguoiDung.TenNguoiDung == request.TenNguoiDung);
+
             if (user == null)
                 return NotFound(new { message = "Không tìm thấy người dùng" });
 
-            // 2. Kiểm tra mật khẩu cũ (hash trước khi so sánh)
+            // 2. Kiểm tra mật khẩu cũ
             var hashedOld = PasswordHelper.HashPassword(request.MatKhauCu);
             if (user.MatKhau != hashedOld)
                 return BadRequest(new { message = "Mật khẩu cũ không đúng" });
 
-            // 3. Cập nhật mật khẩu mới (hash trước khi lưu)
+            // 3. Cập nhật mật khẩu mới
             var hashedNew = PasswordHelper.HashPassword(request.MatKhauMoi);
             if (hashedNew == user.MatKhau)
                 return BadRequest(new { message = "Mật khẩu mới không được trùng với mật khẩu trước đó" });
-            else
-                user.MatKhau = PasswordHelper.HashPassword(request.MatKhauMoi);
+
+            user.MatKhau = hashedNew;
             _context.SaveChanges();
 
             return Ok(new { message = "Đổi mật khẩu thành công" });

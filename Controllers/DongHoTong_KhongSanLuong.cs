@@ -4,6 +4,7 @@ using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models.Database;
 using WebAPI_NRW.RequestModel.DongHoTong;
 using WebAPI_NRW.ResponeModel.DongHoTong;
+using WebAPI_NRW.Services;
 
 namespace WebAPI_NRW.Controllers
 {
@@ -14,16 +15,24 @@ namespace WebAPI_NRW.Controllers
     public class DongHoTong_KhongSanLuong : ControllerBase
     {
         private readonly DbNrwContext _context;
+        private readonly IPermissionService _permissionService;
+        private readonly string _feature;
 
-        public DongHoTong_KhongSanLuong(DbNrwContext dbcontext)
+        public DongHoTong_KhongSanLuong(DbNrwContext dbcontext, IPermissionService permissionService)
         {
             _context = dbcontext;
+            _permissionService = permissionService;
+            _feature = "donghotong";
         }
                
         /// API Update
         [HttpPut("{id}")]
-        public ActionResult<DongHoTong_ResponeModel> Update(int id, Update_DongHoTong_KhongSanLuong_Model updateDongHoTong)
+        public async Task<ActionResult<DongHoTong_ResponeModel>> Update(int id, Update_DongHoTong_KhongSanLuong_Model updateDongHoTong)
         {
+            // Kiểm tra quyền tính năng
+            if (!await PermissionHelper.HasFeaturePermission(User, _feature, "edit", _permissionService))
+                return StatusCode(403, new { message = "Bạn không có quyền truy cập tính năng này." }); // 403
+
             var entity = _context.DongHoTongs.FirstOrDefault(e => e.Id == id);
             if (entity == null) return NotFound();
 
