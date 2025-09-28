@@ -134,7 +134,7 @@ dotnet restore
 1. Clone code với lệnh sau:
 
 ```bash
-git clone -b phunghong --single-branch https://github.com/ph5725/ThucTap_Intelli_UngDung_NRW.git frontend
+git clone -b frontend --single-branch https://github.com/ph5725/ThucTap_Intelli_UngDung_NRW.git frontend
 ```
 
 2. Vào thư mục chứa code:
