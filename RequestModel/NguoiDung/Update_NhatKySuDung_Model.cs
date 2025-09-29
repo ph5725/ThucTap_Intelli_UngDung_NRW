@@ -2,8 +2,6 @@
 {
     public class Update_NhatKySuDung_Model
     {
-        public int Id { get; set; }
-
         public int? TenNguoiDung { get; set; }
 
         public string HanhDong { get; set; } = null!;
