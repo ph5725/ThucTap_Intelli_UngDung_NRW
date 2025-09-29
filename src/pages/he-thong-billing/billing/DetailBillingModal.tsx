@@ -3,10 +3,20 @@ import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qlbiling/EditBillingModal.css";
 import "../../../styles/qlbiling/DetailBillingModal.css";
-import { type Billing } from "../../../services/he-thong-billing/billingService";
+// import { type Billing } from "../../../services/he-thong-billing/billingService";
+
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+
+// text
+import { TextForms } from "src/constants/text";
 
 interface DetailBillingModalProps {
-  billing: Billing;
+  billing: BillingResponse;
   onClose: () => void;
 }
 
@@ -32,26 +42,26 @@ const DetailBillingModal: React.FC<DetailBillingModalProps> = ({ billing, onClos
 
         <div className="modal-content-scroll">
           <form>
-            <ReadonlyField label="Sản lượng tiêu thụ" value={billing.consumption} type="number" />
-            <ReadonlyField label="Mã đối tượng" value={billing.objectCode} />
-            <ReadonlyField label="Kỳ" value={billing.period} />
-            <ReadonlyField label="Năm" value={billing.year} type="number" />
-            <ReadonlyField label="Đợt" value={billing.batch} />
-            <ReadonlyField label="Từ ngày" value={billing.fromDate} type="date" />
-            <ReadonlyField label="Đến ngày" value={billing.toDate} type="date" />
-            <ReadonlyField label="Ngày tạo" value={billing.createdAt} />
-            <ReadonlyField label="Ngày cập nhật" value={billing.updatedAt} />
-            <ReadonlyField label="Người tạo" value={billing.createdBy} />
-            <ReadonlyField label="Người cập nhật" value={billing.updatedByUser} />
+            <ReadonlyField label="Sản lượng tiêu thụ" value={billing.SanLuongTieuThu} type="number" />
+            <ReadonlyField label="Mã đối tượng" value={billing.MaDoiTuong} />
+            <ReadonlyField label="Kỳ" value={billing.Ky} />
+            <ReadonlyField label="Năm" value={billing.Nam} type="number" />
+            <ReadonlyField label="Đợt" value={billing.Dot} />
+            <ReadonlyField label="Từ ngày" value={billing.TuNgay} type="date" />
+            <ReadonlyField label="Đến ngày" value={billing.DenNgay} type="date" />
+            <ReadonlyField label="Ngày tạo" value={billing.NgayTao} />
+            <ReadonlyField label="Ngày cập nhật" value={billing.NgayCapNhat} />
+            <ReadonlyField label="Người tạo" value={billing.NguoiTao} />
+            <ReadonlyField label="Người cập nhật" value={billing.NguoiCapNhat} />
             
             <label>
               Ghi chú:
-              <textarea value={billing.note || ""} disabled />
+              <textarea value={billing.GhiChu || ""} disabled />
             </label>
 
             <div className="modal-actions">
               <button type="button" className="btn close" onClick={onClose}>
-                Đóng
+                {TextForms.nut.dong}
               </button>
             </div>
           </form>
