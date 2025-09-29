@@ -21,8 +21,7 @@ const AddBillingPage: React.FC = () => {
   // Dữ liệu người dùng nhập
   const [formData, setFormData] = useState<Omit<
     AddBillingRequest,
-    | "NgayTao"
-    | "NguoiTao"
+    | "NgayTao" | "NguoiTao"
   >>({
     SanLuongTieuThu: 0,
     MaDoiTuong: "",

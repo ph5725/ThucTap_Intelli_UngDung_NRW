@@ -79,7 +79,7 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
     const { name, value } = e.target;
     setForm(prev => ({
       ...prev!,
-      [name]: name === "year" || name === "consumption" ? Number(value) : value,
+      [name]: name === "Nam" || name === "SanLuongTieuThu" || name === "Ky" || name === "Dot" ? Number(value) : value,
     }));
 
     setDataUpdate((prev) => ({
@@ -93,7 +93,7 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
   // Cập nhật dữ liệu
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dataUpdate) return;
+    if (!form) return;
     try {
       // Lấy thông tin người dùng từ localStorage
       const nguoiDungStr = localStorage.getItem("nguoiDung");
@@ -104,9 +104,15 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
         console.log("ID người dùng:", nguoiDung.Id);
       }
 
+       const payload: UpdateBillingRequest = {
+          ...dataUpdate,
+          NgayCapNhat: new Date().toISOString(),
+          NguoiCapNhat: nguoiDung?.Id ?? 0, // FE sinh
+        };
+
       const res = await updateData<UpdateBillingRequest, BillingResponse>(
         apiUrls.NguoiDung.update(form.Id!),
-        dataUpdate
+        payload
       );
       onSave(res);
       alert(TextForms.thongBao.capNhatThanhCong);
