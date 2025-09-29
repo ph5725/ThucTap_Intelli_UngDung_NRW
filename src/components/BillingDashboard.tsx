@@ -17,36 +17,46 @@ import { FaDownload } from "react-icons/fa";
 import Papa from "papaparse"; // 👉 thêm thư viện để export CSV
 import "../styles/BillingDashboard.css";
 
-interface BillingRecord {
-  id: number;
-  consumption: number; // sản lượng tiêu thụ (số ngày / m³)
-  period: string;      // kỳ (ví dụ: T1, T2, ...)
-  year: number;        // năm
-  objectCode: string;  // mã đối tượng
-}
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+
+// text
+import { TextForms } from "src/constants/text";
+
+// interface BillingRecord {
+//   id: number;
+//   consumption: number; // sản lượng tiêu thụ (số ngày / m³)
+//   period: string;      // kỳ (ví dụ: T1, T2, ...)
+//   year: number;        // năm
+//   objectCode: string;  // mã đối tượng
+// }
 
 interface BillingDashboardProps {
-  data: BillingRecord[];
+  data: BillingResponse[];
 }
 
 const BillingDashboard: React.FC<BillingDashboardProps> = ({ data }) => {
   // ----- KPI -----
   const totalRecords = data.length;
-  const currentConsumption = data[totalRecords - 1]?.consumption || 0;
+  const currentConsumption = data[totalRecords - 1]?.SanLuongTieuThu || 0;
 
   const avgConsumption =
     totalRecords > 0
-      ? data.reduce((sum, row) => sum + row.consumption, 0) / totalRecords
+      ? data.reduce((sum, row) => sum + row.SanLuongTieuThu, 0) / totalRecords
       : 0;
 
   const abnormalCount = data.filter(
-    (row) => row.consumption === 0 || row.consumption < 500
+    (row) => row.SanLuongTieuThu === 0 || row.SanLuongTieuThu < 500
   ).length;
 
   // ----- Chart Line -----
   const lineData = data.map((row) => ({
-    name: row.period,
-    value: row.consumption,
+    name: row.Ky,
+    value: row.SanLuongTieuThu,
   }));
 
   // ----- Chart Pie -----
@@ -58,7 +68,7 @@ const BillingDashboard: React.FC<BillingDashboardProps> = ({ data }) => {
   // 👉 Hàm xuất CSV
   const handleExport = () => {
     if (data.length === 0) {
-      alert("Không có dữ liệu để xuất!");
+      alert(TextForms.thongBao.khongCoDuLieu);
       return;
     }
 

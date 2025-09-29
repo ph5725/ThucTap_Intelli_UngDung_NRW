@@ -1,9 +1,19 @@
 // EditBillingReadingModal.tsx
 import React, { useState, useEffect } from "react";
-import type { BillingReading } from "../../../services/he-thong-billing/billingReadingService";
-import { billingReadingService } from "../../../services/he-thong-billing/billingReadingService";
+// import type { BillingReading } from "../../../services/he-thong-billing/billingReadingService";
+// import { billingReadingService } from "../../../services/he-thong-billing/billingReadingService";
 import { mockBillingReadings } from "../../../config/mockData";
 import "../../../styles/songaydocbilling/EditBillingReadingModal.css";
+
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
+
+// text
+import { TextForms } from "src/constants/text";
 
 interface EditBillingReadingModalProps {
   readingId: number | undefined; // id của record cần edit

@@ -5,10 +5,20 @@ import Tabs from "../../../components/tabBilling/Tabs";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import { FaBookReader } from "react-icons/fa";
-import {
-  type BillingReadingDetail,
-  billingReadingDetailService,
-} from "../../../services/he-thong-billing/billingReadingDetailService";
+// import {
+//   type BillingReadingDetail,
+//   billingReadingDetailService,
+// } from "../../../services/he-thong-billing/billingReadingDetailService";
+
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+
+// text
+import { TextForms } from "src/constants/text";
 
 const AddBillingReadingDetailPage: React.FC = () => {
   const navigate = useNavigate();

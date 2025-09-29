@@ -14,6 +14,7 @@ import { apiUrls } from "src/services/apiUrls";
 
 // interface
 import { AddNguoiDungRequest, NguoiDungResponse, UpdateNguoiDungRequest, UpdateCapPhepNguoiDungRequest} from "src/types/nguoi-dung/nguoi-dung";
+import { TextForms } from "src/constants/text";
 
 interface AccountManagementProps {
   useMock?: boolean;
@@ -80,7 +81,7 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
   const handleDelete = async (id: number) => {
     const acc = accounts.find(a => a.Id === id);
     if (!acc) return;
-    if (!window.confirm(`Bạn có chắc muốn xóa tài khoản "${acc.TenNguoiDung}" không?`)) return;
+    if (!window.confirm(`${TextForms.thongBao.xacNhanXoa}"${acc.TenNguoiDung}"`)) return;
 
     if (useMock) {
       setAccounts(prev => prev.filter(a => a.Id !== id));
