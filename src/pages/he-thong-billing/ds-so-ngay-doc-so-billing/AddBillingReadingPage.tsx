@@ -57,7 +57,7 @@ const AddBillingReadingPage: React.FC = () => {
       };
 
       // await billingReadingService.create(newRecord);
-      const res = await createData<AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse>(
+      await createData<AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse>(
         apiUrls.Billing.create, // URL endpoint
         newRecord               // dữ liệu gửi đi
       );

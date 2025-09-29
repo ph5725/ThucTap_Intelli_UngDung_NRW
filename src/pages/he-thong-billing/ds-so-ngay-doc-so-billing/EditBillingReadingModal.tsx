@@ -61,7 +61,7 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
       const fetchReading = async () => {
         try {
           // const data = await billingReadingService.detail(readingId);
-          const data = await getById<DsNgayDocSoBillingResponse>(apiUrls.DSNgayDocSoBilling.detail(readingId));;
+          const data = await getById<DsNgayDocSoBillingResponse>(apiUrls.DSNgayDocSoBilling.detail(readingId));
           setFormData(data);
         } catch (err) {
           console.error("❌ Lỗi tải dữ liệu BillingReading:", err);
