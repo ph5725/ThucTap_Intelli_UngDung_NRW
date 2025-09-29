@@ -4,7 +4,16 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import { FaUser } from "react-icons/fa";
-import { userGroupService } from "../../../services/nguoi-dung/userGroupService";
+// import { userGroupService } from "../../../services/nguoi-dung/userGroupService";
+
+//types
+import { AddNhomNguoiDungRequest, NhomNguoiDungResponse } from "src/types/nguoi-dung/nhom-nguoi-dung";
+//crud
+import { createData } from "src/services/crudService";
+//Urls
+import { apiUrls } from "src/services/apiUrls";
+// text
+import { TextForms } from "src/constants/text";
 
 const AddUserGroupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -19,28 +28,34 @@ const AddUserGroupPage: React.FC = () => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      // 🔹 Frontend tự sinh createdAt + updatedAt
-      const now = new Date().toISOString();
-      const payload = {
-        groupName: formData.groupName,
-        members: formData.members,
-        note: formData.note,
-        createdAt: now,
-        updatedAt: now,
-      };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    // 🔹 Frontend tự sinh createdAt + updatedAt
+    const now = new Date().toISOString();
+    const currentUserId = Number(localStorage.getItem("userId") || 0);
+    const payload: AddNhomNguoiDungRequest = {
+      NhomNguoiDung1: formData.groupName,
+      ThanhVien: formData.members,
+      GhiChu: formData.note,
+      NgayTao: now,
+      NguoiTao: currentUserId,
+    };
 
-      await userGroupService.create(payload);
+    // Gọi API tạo mới
+    await createData<AddNhomNguoiDungRequest, NhomNguoiDungResponse>(
+      apiUrls.NhomNguoiDung.create,
+      payload
+    );
 
-      alert("✅ Nhóm người dùng đã được thêm thành công!");
-      navigate(-1);
-    } catch (error) {
-      console.error("❌ Lỗi khi thêm nhóm:", error);
-      alert("Có lỗi xảy ra khi thêm nhóm!");
-    }
-  };
+    alert(TextForms.thongBao.themMoiThanhCong);
+    navigate(-1);
+  } catch (error) {
+    console.error("❌ Lỗi khi thêm nhóm:", error);
+    alert(TextForms.thongBao.loiThem);
+  }
+};
+
 
   return (
     <div className="add-account-container">

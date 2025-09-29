@@ -5,15 +5,22 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import EditUserGroupModal from "./EditUserGroupModal";
 import DetailUserGroupModal from "./DetailUserGroupModal";
-import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
+// import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
 //import { mockUserGroups } from "../../../config/mockData";
 
+// service
+import { deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { NhomNguoiDungResponse } from "src/types/nguoi-dung/nhom-nguoi-dung";
+
 const UserGroupPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [groups, setGroups] = useState<UserGroup[]>([]);
+  const [groups, setGroups] = useState<NhomNguoiDungResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [error] = useState<string | null>(null);
@@ -21,9 +28,9 @@ const UserGroupPage: React.FC = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [filter, setFilter] = useState({ groupName: "", members: "" });
 
-  const [editingGroup, setEditingGroup] = useState<UserGroup | null>(null);
+  const [editingGroup, setEditingGroup] = useState<NhomNguoiDungResponse | null>(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [selectedGroup, setSelectedGroup] = useState<UserGroup | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<NhomNguoiDungResponse | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -31,8 +38,8 @@ const UserGroupPage: React.FC = () => {
   // 📌 Hàm fetchData để gọi API
  const fetchData = async () => {
   try {
-    const res = await userGroupService.getAll();
-    setGroups(res.data);
+    const res = await getList<NhomNguoiDungResponse>(apiUrls.NhomNguoiDung.list);
+    setGroups(res);
   } catch (err) {
     console.error("❌ Lỗi API:", err);
     alert("Không thể tải dữ liệu từ API!");
@@ -56,8 +63,7 @@ const UserGroupPage: React.FC = () => {
   const filteredGroups = useMemo(() => {
     return groups.filter(
       g =>
-        g.groupName.toLowerCase().includes(filter.groupName.toLowerCase()) &&
-        g.members.toLowerCase().includes(filter.members.toLowerCase())
+        g.NhomNguoiDung1.toLowerCase().includes(filter.groupName.toLowerCase()) 
     );
   }, [groups, filter]);
 
@@ -69,12 +75,12 @@ const UserGroupPage: React.FC = () => {
 
   // 📌 Xóa nhóm
   const handleDelete = async (id: number) => {
-    const g = groups.find(x => x.id === id);
+    const g = groups.find(x => x.Id === id);
     if (!g) return;
-    if (window.confirm(`Bạn có chắc muốn xóa "${g.groupName}" không?`)) {
+    if (window.confirm(`Bạn có chắc muốn xóa "${g.NhomNguoiDung1}" không?`)) {
       try {
-        await userGroupService.delete(id);
-        setGroups(groups.filter(x => x.id !== id));
+        await deleteData(apiUrls.NhomNguoiDung.delete(id));;
+        setGroups(groups.filter(x => x.Id !== id));
         setMessage("Xóa thành công!");
       } catch (err) {
         console.error("❌ Lỗi khi xóa:", err);
@@ -133,14 +139,14 @@ const UserGroupPage: React.FC = () => {
           </thead>
           <tbody>
             {currentGroups.map(g => (
-              <tr key={g.id}>
-                <td>{g.id}</td>
-                <td>{g.groupName}</td>
-                <td>{g.members}</td>
-                <td>{g.note}</td>
+              <tr key={g.Id}>
+                <td>{g.Id}</td>
+                <td>{g.NhomNguoiDung1}</td>
+                <td>{g.ThanhVien}</td>
+                <td>{g.GhiChu}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setEditingGroup(g)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(g.id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(g.Id)} />
                   <FaEye
                     title="Xem"
                     onClick={() => {

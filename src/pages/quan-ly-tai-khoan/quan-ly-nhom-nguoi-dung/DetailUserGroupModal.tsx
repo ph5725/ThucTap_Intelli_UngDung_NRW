@@ -2,17 +2,19 @@ import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 
-interface UserGroup {
-  id: number;
-  groupName: string;
-  members: string;
-  createdAt: string;
-  updatedAt: string;
-  note: string;
+export interface NhomNguoiDungResponse {
+  Id: number;
+  NhomNguoiDung1: string;
+  ThanhVien?: string;
+  GhiChu?: string;
+  NgayTao: string;
+  NgayCapNhat?: string;
+  NguoiTao?: string;
+  NguoiCapNhat?: string;
 }
 
 interface DetailUserGroupModalProps {
-  group: UserGroup;
+  group: NhomNguoiDungResponse;
   onClose: () => void;
 }
 
@@ -26,19 +28,19 @@ const DetailUserGroupModal: React.FC<DetailUserGroupModalProps> = ({ group, onCl
              </div>
 
         <label>Nhóm Người Dùng</label>
-        <input type="text" value={group.groupName} readOnly />
+        <input type="text" value={group.NhomNguoiDung1} readOnly />
 
         <label>Thành Viên</label>
-        <input type="text" value={group.members} readOnly />
+        <input type="text" value={group.ThanhVien} readOnly />
 
         <label>Ngày Tạo</label>
-        <input type="date" value={group.createdAt} readOnly />
+        <input type="date" value={group.NgayTao} readOnly />
 
         <label>Ngày Cập Nhật</label>
-        <input type="date" value={group.updatedAt} readOnly />
+        <input type="date" value={group.NgayCapNhat} readOnly />
 
         <label>Ghi Chú</label>
-        <textarea value={group.note} readOnly rows={3} />
+        <textarea value={group.GhiChu} readOnly rows={3} />
 
         <div className="form-actions">
           <button className="btn close" onClick={onClose}>

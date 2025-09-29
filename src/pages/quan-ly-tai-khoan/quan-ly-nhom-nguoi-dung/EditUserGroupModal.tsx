@@ -1,80 +1,69 @@
 import React, { useState } from "react";
-import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
-import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
+import { NhomNguoiDungResponse, UpdateNhomNguoiDungRequest } from "src/types/nguoi-dung/nhom-nguoi-dung";
+import { updateData } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+import { TextForms } from "src/constants/text";
 
 interface EditUserGroupModalProps {
-  group: UserGroup;
+  group: NhomNguoiDungResponse; // <-- dùng NhomNguoiDungResponse
   onClose: () => void;
-  onSave: () => void; // reload list
+  onSave: (updated: NhomNguoiDungResponse) => void;
 }
 
 const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose, onSave }) => {
-  const [formData, setFormData] = useState<UserGroup>({ ...group });
+  const [formData, setFormData] = useState<NhomNguoiDungResponse>({ ...group });
 
-  const handleChange = <K extends keyof UserGroup>(field: K, value: UserGroup[K]) => {
+  const handleChange = <K extends keyof NhomNguoiDungResponse>(field: K, value: NhomNguoiDungResponse[K]) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleSave = async () => {
+    if (!formData?.Id) return;
+
     try {
-      // 🔹 Frontend tự sinh updatedAt
-      const payload = {
-        groupName: formData.groupName,
-        members: formData.members,
-        note: formData.note,
-        updatedAt: new Date().toISOString(),
-        createdAt: formData.createdAt, // giữ nguyên
+      // Tạo payload gửi lên backend
+      const payload: UpdateNhomNguoiDungRequest = {
+        NhomNguoiDung1: formData.NhomNguoiDung1,
+        ThanhVien: formData.ThanhVien,
+        GhiChu: formData.GhiChu,
+        NgayCapNhat: new Date().toISOString(),
+        NguoiCapNhat: formData.NguoiCapNhat ? Number(formData.NguoiCapNhat) : undefined,
       };
 
-      await userGroupService.update(formData.id, payload);
+      // URL update dựa vào Id
+      const url = apiUrls.NhomNguoiDung.update(formData.Id);
 
-      onSave();
+      // Gọi API
+      const updated: NhomNguoiDungResponse = await updateData<UpdateNhomNguoiDungRequest, NhomNguoiDungResponse>(
+        url,
+        payload
+      );
+
+      onSave(updated);
       onClose();
     } catch (error) {
       console.error("❌ Lỗi khi cập nhật nhóm:", error);
-      alert("Có lỗi xảy ra khi cập nhật nhóm!");
+      alert(TextForms.thongBao.loiCapNhat);
     }
   };
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <div className="text-user">
-          <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
-        </div>
-
+        <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
         <label>Nhóm Người Dùng</label>
-        <input
-          type="text"
-          value={formData.groupName}
-          onChange={(e) => handleChange("groupName", e.target.value)}
-        />
-
+        <input value={formData.NhomNguoiDung1} onChange={e => handleChange("NhomNguoiDung1", e.target.value)} />
         <label>Thành Viên</label>
-        <input
-          type="text"
-          value={formData.members}
-          onChange={(e) => handleChange("members", e.target.value)}
-          placeholder="Nhập danh sách thành viên, cách nhau bằng dấu phẩy"
-        />
-
-        <label>Ngày Tạo</label>
-        <input type="date" value={formData.createdAt} readOnly />
-
-        <label>Ngày Cập Nhật</label>
-        <input type="date" value={formData.updatedAt} readOnly />
-
+        <input value={formData.ThanhVien} onChange={e => handleChange("ThanhVien", e.target.value)} />
         <label>Ghi Chú</label>
-        <textarea
-          value={formData.note}
-          onChange={(e) => handleChange("note", e.target.value)}
-          rows={3}
-        />
-
+        <textarea value={formData.GhiChu} onChange={e => handleChange("GhiChu", e.target.value)} rows={3} />
+        <label>Ngày Cập Nhật</label>
+        <input type="text" value={formData.NgayCapNhat} readOnly />
+        <label>Người Cập Nhật</label>
+        <input type="text" value={formData.NguoiCapNhat} readOnly />
         <div className="form-actions">
-          <button className="btn save" onClick={handleSave}>Lưu</button>
-          <button className="btn close" onClick={onClose}>Hủy</button>
+          <button className="btn save" onClick={handleSave}>{TextForms.nut.luuLai}</button>
+          <button className="btn close" onClick={onClose}>{TextForms.nut.huyBo}</button>
         </div>
       </div>
     </div>

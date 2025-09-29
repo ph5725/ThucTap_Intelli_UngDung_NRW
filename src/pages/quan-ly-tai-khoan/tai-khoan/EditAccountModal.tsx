@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/global.css";
-import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
+import { NguoiDungResponse, UpdateNguoiDungRequest } from "src/types/nguoi-dung/nguoi-dung";
+import { updateData } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+// text
+import { TextForms } from "src/constants/text";
 
 interface EditAccountModalProps {
-  account: UserInfo;
+  account: NguoiDungResponse;
   onClose: () => void;
-  onSave: (updated: UserInfo) => void;
+  onSave: (updated: NguoiDungResponse) => void;
   useMock?: boolean;
 }
 
@@ -16,34 +20,54 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
   onSave,
   useMock = false
 }) => {
-  const [formData, setFormData] = useState<UserInfo>(account);
+  const [formData, setFormData] = useState<NguoiDungResponse>({ ...account });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     setFormData(account);
   }, [account]);
 
-  const handleChange = (field: keyof UserInfo, value: string) => {
+  const handleChange = (field: keyof NguoiDungResponse, value: string) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleSave = async () => {
-  setSaving(true);
-  if (useMock) {
-    onSave(formData); // chỉ update local
-  } else {
+    if (formData.Id == null && !useMock) {
+      alert("ID người dùng không hợp lệ!");
+      return;
+    }
+
+    setSaving(true);
     try {
-      const res = await userService.update(formData.id!, formData);
-      onSave(res.data); // update từ backend
+      if (useMock) {
+        // Cập nhật local
+        onSave(formData);
+      } else {
+        // Tạo payload để gửi lên backend (chỉ các trường cần update)
+        const payload: UpdateNguoiDungRequest = {
+          Ten: formData.Ten,
+          TenNguoiDung: formData.TenNguoiDung,
+          Email: formData.Email,
+          VaiTro: formData.VaiTro,
+          Ma: "",
+          CapPhep: false
+        };
+
+        const updated = await updateData<UpdateNguoiDungRequest, NguoiDungResponse>(
+          apiUrls.NguoiDung.update(formData.Id),
+          payload
+        );
+
+        onSave(updated);
+      }
+      onClose();
     } catch (error) {
       console.error("Lỗi cập nhật:", error);
-      alert("Cập nhật thất bại!");
+      alert(TextForms.thongBao.loiCapNhat);
+    } finally {
+      setSaving(false);
     }
-  }
-  setSaving(false);
-  onClose();
-};
-
+  };
 
   return (
     <div className="modal-overlay">
@@ -52,34 +76,27 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
 
         <label>Tên tài khoản</label>
         <input
-          value={formData.username}
-          onChange={(e) => handleChange("username", e.target.value)}
+          value={formData.Ten}
+          onChange={(e) => handleChange("Ten", e.target.value)}
         />
 
         <label>Họ tên</label>
         <input
-          value={formData.fullname}
-          onChange={(e) => handleChange("fullname", e.target.value)}
+          value={formData.TenNguoiDung}
+          onChange={(e) => handleChange("TenNguoiDung", e.target.value)}
         />
 
         <label>Email</label>
         <input
           type="email"
-          value={formData.email}
-          onChange={(e) => handleChange("email", e.target.value)}
-        />
-
-        <label>Mật khẩu</label>
-        <input
-          type="password"
-          value={formData.password}
-          onChange={(e) => handleChange("password", e.target.value)}
+          value={formData.Email}
+          onChange={(e) => handleChange("Email", e.target.value)}
         />
 
         <label>Vai trò</label>
         <select
-          value={formData.role}
-          onChange={(e) => handleChange("role", e.target.value)}
+          value={formData.VaiTro}
+          onChange={(e) => handleChange("VaiTro", e.target.value)}
         >
           <option value="admin">Quản trị viên</option>
           <option value="user">Người dùng</option>
@@ -89,7 +106,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
           <button className="btn save" onClick={handleSave} disabled={saving}>
             {saving ? "Đang lưu..." : "Lưu"}
           </button>
-          <button className="btn close" onClick={onClose}>Hủy</button>
+          <button className="btn close" onClick={onClose}>{TextForms.nut.huyBo}</button>
         </div>
       </div>
     </div>

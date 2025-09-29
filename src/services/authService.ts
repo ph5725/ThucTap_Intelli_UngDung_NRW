@@ -29,6 +29,7 @@ export const login = async (payload: DangNhapRequest): Promise<DangNhapResponse>
     localStorage.setItem("phanQuyenTinhNang", JSON.stringify(response.data.PhanQuyenTinhNang));
 
     return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw error.response?.data || { message: "Đăng nhập thất bại" };
   }

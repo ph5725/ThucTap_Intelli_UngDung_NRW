@@ -4,6 +4,7 @@ export const TextForms = {
         thongBao: "Thông báo",
         timKiem: "Tìm kiếm",
 
+
         tongQuanDongHoTong: "Tổng quan đồng hồ tổng",
         danhSachDongHoTong: "Danh sách đồng hồ tổng",
         cauHinhDongHoTong: "Cấu hình đồng hồ tổng",
@@ -39,7 +40,7 @@ export const TextForms = {
         nhatKy: "Nhật ký",
     },
     thongBao: {
-        // Xác nhận
+       // Xác nhận
         xacNhanXoa: "Bạn có chắc chắn muốn xóa mục này không?",
         xacNhanLuu: "Bạn có chắc chắn muốn lưu thay đổi không?",
         xacNhanDangXuat: "Bạn có chắc chắn muốn đăng xuất không?",
@@ -55,6 +56,9 @@ export const TextForms = {
         khongTheTaiDuLieu: "Không thể tải dữ liệu",
         khongCoDuLieu: "Không có dữ liệu",
         loiXayRa: "Lỗi xảy ra, vui lòng thử lại",
+        loiThem: "Thêm dữ liệu thất bại",
+        loiCapNhat: "Cập nhật dữ liệu thất bại",
+        loiXoa: "Xóa dữ liệu thất bại",
 
         // Tài khoản
         dangNhapThanhCong: "Đăng nhập thành công",
@@ -70,6 +74,7 @@ export const TextForms = {
         apDung: "Áp dụng",
         luuLai: "Lưu",
         huyBo: "Hủy bỏ",
+        dong: "Đóng",
         loc: "Lọc",
 
         themKyMoi: "Thêm kỳ mới",
