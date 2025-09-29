@@ -13,7 +13,7 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
-import type { UserLog } from "../pages/nhat-ky-nguoi-dung/nhatky/UserLogPage";
+import type { UserLog } from "../pages/nhat-ky-nguoi-dung/UserLogPage";
 import "../styles/LogStats.css";
 
 interface Props {

@@ -6,10 +6,10 @@ import { useSnackbar } from 'notistack';
 // Material React Table Custom
 import { MaterialReactTableConfig } from '../../../../theme/style_table';
 //API
-import api from "src/config/api";
-import apiUrls from "src/config/api";
+import api from "src/services/api/api";
+import apiUrls from "src/services/api/api";
 // text
-import { TextForms } from "src/config/text";
+import { TextForms } from "src/constants/text";
 
 // Nếu có file màu thì import, tạm định nghĩa cho chạy
 const THEME_COLORS = {

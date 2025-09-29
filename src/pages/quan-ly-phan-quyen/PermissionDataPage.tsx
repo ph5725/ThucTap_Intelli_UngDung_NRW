@@ -7,7 +7,7 @@ import {
   type DataItem,
   type PermissionPayload,
   type Role,
-} from "../../services/permissionDataService";
+} from "../../services/phan-quyen/permissionDataService";
 
 const actions = ["view", "create", "update", "delete"];
 

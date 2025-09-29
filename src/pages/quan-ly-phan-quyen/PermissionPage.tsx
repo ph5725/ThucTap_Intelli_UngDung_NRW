@@ -8,7 +8,7 @@ import {
   type Role,
   type Feature,
   type FeaturePermissionPayload,
-} from "../../services/permissionFeatureService";
+} from "../../services/phan-quyen/permissionFeatureService";
 
 const actions = ["view", "create", "update", "delete"];
 

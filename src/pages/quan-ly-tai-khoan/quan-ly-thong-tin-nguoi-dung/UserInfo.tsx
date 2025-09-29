@@ -3,7 +3,7 @@ import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa
 import Tabs from "../../../components/tabQLTK/Tabs";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
-import { userService, type UserInfo } from "../../../services/userService";
+import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
 import EditUserInfoModal from "./EditUserInfoModal";
 import DetailUserInfoModal from "./DetailUserInfoModal";
 import { useNavigate } from "react-router-dom";
