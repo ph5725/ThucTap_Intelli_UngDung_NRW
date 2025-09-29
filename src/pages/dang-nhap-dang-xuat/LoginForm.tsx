@@ -110,9 +110,10 @@ import React, { useState } from "react";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import "../../styles/LoginForm.css";
 
-import { login, LoginPayload } from "src/services/authService";
+import { login } from "src/services/authService";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { DangNhapRequest } from "src/types/authTypes";
 
 const LoginForm: React.FC = () => {
   const [username, setUsername] = useState("");
@@ -122,13 +123,13 @@ const LoginForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-  const { handleSubmit } = useForm<LoginPayload>();
+  const { handleSubmit } = useForm<DangNhapRequest>();
 
   const onSubmit = async () => {
     try {
-      const payload: LoginPayload = {
-        tenNguoiDung: username,
-        matKhau: password
+      const payload: DangNhapRequest = {
+        TenNguoiDung: username,
+        MatKhau: password
       };
       const response = await login(payload);
       console.log("Đăng nhập thành công:", response);

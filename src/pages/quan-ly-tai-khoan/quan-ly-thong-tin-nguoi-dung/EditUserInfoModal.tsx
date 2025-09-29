@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/qlttnd/EditUserInfoModal.css";
-import { userService, type UserInfo } from "../../../services/userService";
+import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
 
 interface EditUserInfoModalProps {
   userId: number;               // id luôn tồn tại

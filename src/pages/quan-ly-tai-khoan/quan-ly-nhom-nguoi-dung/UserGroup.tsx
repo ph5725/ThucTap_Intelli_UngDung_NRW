@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLTK/Tabs";
 import EditUserGroupModal from "./EditUserGroupModal";
 import DetailUserGroupModal from "./DetailUserGroupModal";
-import { userGroupService, type UserGroup } from "../../../services/userGroupService";
+import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
 //import { mockUserGroups } from "../../../config/mockData";

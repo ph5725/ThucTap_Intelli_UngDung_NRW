@@ -4,8 +4,8 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-route
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 
-import AccountManagement from "./pages/quan-ly-tai-khoan/ql-tai-khoan/AccountManagement"; // trang quản lý tài khoản
-import AddAccount from "./pages//quan-ly-tai-khoan/ql-tai-khoan/AddAccount";
+import AccountManagement from "./pages/quan-ly-tai-khoan/tai-khoan/AccountManagement"; // trang quản lý tài khoản
+import AddAccount from "./pages/quan-ly-tai-khoan/tai-khoan/AddAccount";
 
 import UserInfoPage from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/UserInfo"; // trang quản lý người dùng
 import AddUserInfoModal from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoModal"; 
@@ -23,23 +23,23 @@ import LoginForm from "./pages/dang-nhap-dang-xuat/LoginForm"; // trang đăng n
 import PermissionPage from "./pages/quan-ly-phan-quyen/PermissionPage"; // trang quản lý phân quyền
 import PermissionDataPage from "./pages/quan-ly-phan-quyen/PermissionDataPage";
 
-import MeterManagementPage from "./pages/quan-ly-dht/qldh/MeterManagementPage"; // trang quản lý đồng hồ
-import AddMeterPage from "./pages/quan-ly-dht/qldh/AddMeterPage";
+import MeterManagementPage from "./pages/quan-ly-dht/dong-ho-tong/MeterManagementPage"; // trang quản lý đồng hồ
+import AddMeterPage from "./pages/quan-ly-dht/dong-ho-tong/AddMeterPage";
 
-import MeterConfigPage from "./pages/quan-ly-dht/qlchdht/MeterConfigPage";
-import AddMeterConfigPage from "./pages/quan-ly-dht/qlchdht/AddMeterConfigPage";
+import MeterConfigPage from "./pages/quan-ly-dht/cau-hinh-dht/MeterConfigPage";
+import AddMeterConfigPage from "./pages/quan-ly-dht/cau-hinh-dht/AddMeterConfigPage";
 
-import BillingPage from "./pages/he-thong-billing/qlbilling/BillingPage";
-import AddBillingPage from "./pages/he-thong-billing/qlbilling/AddBillingPage"
+import BillingPage from "./pages/he-thong-billing/billing/BillingPage";
+import AddBillingPage from "./pages/he-thong-billing/billing/AddBillingPage"
 
-import BillingReadingPage from "./pages/he-thong-billing/songaydocbilling/BillingReadingPage";
-import AddBillingReadingPage from "./pages/he-thong-billing/songaydocbilling/AddBillingReadingPage";
+import BillingReadingPage from "./pages/he-thong-billing/ds-so-ngay-doc-so-billing/BillingReadingPage";
+import AddBillingReadingPage from "./pages/he-thong-billing/ds-so-ngay-doc-so-billing/AddBillingReadingPage";
 
-import BillingReadingDetailPage from "./pages/he-thong-billing/songaydocbillingchitiet/BillingReadingDetailPage";
-import AddBillingReadingDetailPage from "./pages/he-thong-billing/songaydocbillingchitiet/AddBillingReadingDetailPage";
+import BillingReadingDetailPage from "./pages/he-thong-billing/ds-so-ngay-doc-so-billing-chi-tiet/BillingReadingDetailPage";
+import AddBillingReadingDetailPage from "./pages/he-thong-billing/ds-so-ngay-doc-so-billing-chi-tiet/AddBillingReadingDetailPage";
 
-import UserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/UserLogPage";
-import AddUserLogPage from "./pages/nhat-ky-nguoi-dung/nhatky/AddUserLogPage";
+import UserLogPage from "./pages/nhat-ky-nguoi-dung/UserLogPage";
+import AddUserLogPage from "./pages/nhat-ky-nguoi-dung/AddUserLogPage";
 
 // Tính NRW
 import TinhNRW from "./pages/tinh-toan-nrw/index"

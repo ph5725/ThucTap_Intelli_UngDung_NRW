@@ -1,28 +1,36 @@
-import api from "src/config/api";
-import { apiUrls } from "src/config/apiUrls";
-import { LoginResponse } from "src/types/authTypes";
-
-// Kiểu dữ liệu đầu vào
-export interface LoginPayload {
-  tenNguoiDung: string;
-  matKhau: string;
-}
+import api from "src/services/api";
+import { apiUrls } from "src/services/apiUrls";
+import { DangNhapResponse } from "src/types/authTypes";
+import { DangNhapRequest } from "src/types/authTypes";
 
 // Hàm đăng nhập
-export const login = async (payload: LoginPayload): Promise<LoginResponse> => {
+export const login = async (payload: DangNhapRequest): Promise<DangNhapResponse> => {
   try {
-    const response = await api.post<LoginResponse>(apiUrls.TaiKhoan.dangNhap, payload);
+    const response = await api.post<DangNhapResponse>(apiUrls.TaiKhoan.dangNhap, payload);
 
-    // Lưu token vào localStorage (hoặc sessionStorage nếu muốn)
-    if (response.data.token) {
-      localStorage.setItem("access_token", response.data.token);
+    /* Lưu vào localStorage */
+    // Lưu token
+    if (response.data.Token) {
+      localStorage.setItem("token", response.data.Token);
     }
+    // Lưu thời gian hết hạn
+    localStorage.setItem("token_exp", response.data.ExpiresIn.toString());
 
-    // Lưu luôn thông tin user nếu cần
-    localStorage.setItem("user_info", JSON.stringify(response.data.nguoiDung));
+    // Lưu thông tin người dùng
+    localStorage.setItem("nguoiDung", JSON.stringify(response.data.NguoiDung));
+
+    // Lưu nhóm người dùng
+    localStorage.setItem("nhomNguoiDung", JSON.stringify(response.data.NhomNguoiDung));
+
+    // Lưu phân quyền dữ liệu
+    localStorage.setItem("phanQuyenDuLieu", JSON.stringify(response.data.PhanQuyenDuLieu));
+
+    // Lưu phân quyền tính năng
+    localStorage.setItem("phanQuyenTinhNang", JSON.stringify(response.data.PhanQuyenTinhNang));
 
     return response.data;
   } catch (error: any) {
     throw error.response?.data || { message: "Đăng nhập thất bại" };
   }
 };
+
