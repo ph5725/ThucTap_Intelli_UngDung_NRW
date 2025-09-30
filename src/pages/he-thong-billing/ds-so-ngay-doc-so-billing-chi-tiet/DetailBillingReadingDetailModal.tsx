@@ -14,7 +14,7 @@ import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse,
 import { TextForms } from "src/constants/text";
 
 interface Props {
-  reading: BillingReadingDetail;
+  reading: DsNgayDocSoBillingChiTietResponse;
   onClose: () => void;
 }
 
@@ -22,37 +22,33 @@ const DetailBillingReadingDetailModal: React.FC<Props> = ({ reading, onClose }) 
   return (
     <div className="modal-overlay">
       <div className="modal detail-billing-reading-detail">
-
         <div className="text-user">
             <h3>Chi tiết ngày số đọc</h3>
         </div>
       
-
         <label>Mã ngày số đọc</label>
-        <input type="text" value={reading.code} disabled />
+        <input type="text" value={reading.MaNgayDocSo} disabled />
 
         <label>Năm</label>
-        <input type="number" value={reading.year} disabled />
+        <input type="number" value={reading.Nam} disabled />
 
         <label>Kỳ</label>
-        <input type="text" value={reading.period} disabled />
+        <input type="text" value={reading.Ky} disabled />
 
         <label>Đợt</label>
-        <input type="text" value={reading.batch} disabled />
+        <input type="text" value={reading.Dot} disabled />
 
         <label>Số ngày đọc</label>
-        <input type="number" value={reading.daysCount} disabled />
+        <input type="number" value={reading.SoNgayDocSoDot} disabled />
 
         <label>Ghi chú</label>
-        <textarea value={reading.note || ""} disabled />
-
-
+        <textarea value={reading.GhiChu || ""} disabled />
 
         <label>Người tạo</label>
-        <input type="text" value={reading.createdBy || ""} disabled />
+        <input type="text" value={reading.NgayTao || ""} disabled />
 
         <label>Ngày tạo</label>
-        <input type="date" value={reading.createdAt.slice(0, 10)} disabled />
+        <input type="date" value={reading.NgayTao.slice(0, 10)} disabled />
 
         <div className="modal-actions">
           <button className="btn close" onClick={onClose}>Đóng</button>

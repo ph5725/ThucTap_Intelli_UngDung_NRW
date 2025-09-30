@@ -16,6 +16,7 @@ import { apiUrls } from "src/services/apiUrls";
 
 // interface
 import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+import { ThongTinNguoiDung } from "src/types/authTypes";
 
 // text
 import { TextForms } from "src/constants/text";
@@ -26,22 +27,17 @@ const AddBillingReadingDetailPage: React.FC = () => {
   // Form data không chứa metadata (FE sẽ tự sinh khi submit)
   const [formData, setFormData] = useState<
     Omit<
-      BillingReadingDetail,
-      | "id"
-      | "createdAt"
-      | "createdBy"
-      | "updatedAt"
-      | "updatedBy"
-      | "updatedAtReading"
-      | "updatedByReading"
+      AddDsNgayDocSoBillingChiTietRequest,
+      | "NgayTao"
+      | "NguoiTao"
     >
   >({
-    code: "",
-    year: new Date().getFullYear(),
-    period: "",
-    batch: "",
-    daysCount: 0,
-    note: "",
+    MaNgayDocSo: 0,
+    Nam: 0,
+    Ky: 0,
+    Dot: 0,
+    SoNgayDocSoDot: 0,
+    GhiChu: "",
   });
 
   const handleChange = (
@@ -50,29 +46,39 @@ const AddBillingReadingDetailPage: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "year" || name === "daysCount" ? Number(value) : value,
+      [name]: name === "Nam" || name === "SoNgayDocSoDot" || name === "MaNgayDocSo" || name === "Ky" || name === "Dot" ? Number(value) : value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Lấy thông tin người dùng từ localStorage
+      const nguoiDungStr = localStorage.getItem("nguoiDung");
+      let nguoiDung: ThongTinNguoiDung | null = null;
+
+      if (nguoiDungStr) {
+        nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
+        console.log("ID người dùng:", nguoiDung.Id);
+      }
+
       // FE tự thêm metadata khi tạo mới
       const metadata = {
-        createdAt: new Date().toISOString(),
-        createdBy: "currentUser", // 👉 sau này thay bằng user login thực tế
+        ...formData,
+        NgayTao: new Date().toISOString(),
+        NguoiTao: nguoiDung?.Id ?? 0,
       };
 
-      await billingReadingDetailService.create({
-        ...formData,
-        ...metadata,
-      });
+      await createData<AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse>(
+        apiUrls.DSNgayDocSoBillingChiTiet.create, // URL endpoint
+        metadata               // dữ liệu gửi đi
+      );
 
-      alert("✅ Thêm mới thành công!");
+      alert(TextForms.thongBao.themMoiThanhCong);
       navigate("/billing-reading-detail");
     } catch (error) {
       console.error("❌ Lỗi thêm mới:", error);
-      alert("❌ Thêm thất bại!");
+      alert(TextForms.thongBao.loiThem);
     }
   };
 
@@ -95,7 +101,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             </label>
             <input
               name="code"
-              value={formData.code}
+              value={formData.MaNgayDocSo}
               onChange={handleChange}
               required
             />
@@ -108,7 +114,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             <input
               type="number"
               name="year"
-              value={formData.year}
+              value={formData.Nam}
               onChange={handleChange}
               required
             />
@@ -120,7 +126,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             </label>
             <input
               name="period"
-              value={formData.period}
+              value={formData.Ky}
               onChange={handleChange}
               required
             />
@@ -128,7 +134,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
 
           <div className="form-group">
             <label>Đợt</label>
-            <input name="batch" value={formData.batch} onChange={handleChange} />
+            <input name="batch" value={formData.Dot} onChange={handleChange} />
           </div>
 
           <div className="form-group">
@@ -138,7 +144,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             <input
               type="number"
               name="daysCount"
-              value={formData.daysCount}
+              value={formData.SoNgayDocSoDot}
               onChange={handleChange}
               required
             />
@@ -148,7 +154,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             <label>Ghi chú</label>
             <textarea
               name="note"
-              value={formData.note}
+              value={formData.GhiChu}
               onChange={handleChange}
             />
           </div>
@@ -157,14 +163,14 @@ const AddBillingReadingDetailPage: React.FC = () => {
         {/* Actions */}
         <div className="form-actions">
           <button type="submit" className="btn save">
-            Lưu
+            {TextForms.nut.themMoi}
           </button>
           <button
             type="button"
             className="btn close"
             onClick={() => navigate("/billing-reading-detail")}
           >
-            Hủy
+            {TextForms.nut.dong}
           </button>
         </div>
       </form>

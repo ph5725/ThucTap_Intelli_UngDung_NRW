@@ -3,52 +3,76 @@ import React, { useState, useMemo, useEffect } from "react";
 import { FaClipboardList, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 //import { mockUserLogs } from "../../../config/mockData";
-
 import "../../../styles/nhatky/UserLogPage.css";
 import "../../../styles/global.css";
 import LogStats from "../../components/LogStats";
 import EditUserLogModal from "./EditUserLogModal";
 import DetailUserLogModal from "./DetailUserLogModal";
-import { userLogService, type UserLog } from "../../../services/nguoi-dung/userLogService";
+// import { userLogService, type UserLog } from "../../../services/nguoi-dung/userLogService";
+// service
+import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
+
+// text
+import { TextForms } from "src/constants/text";
 
 const UserLogPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [logs, setLogs] = useState<UserLog[]>([]);
- const [loading, setLoading] = useState(true);
+  const [logs, setLogs] = useState<NhatKySuDungResponse[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"" | "Thành công" | "Thất bại">("");
   const [showFilter, setShowFilter] = useState(false);
-  const [editingLog, setEditingLog] = useState<UserLog | null>(null);
-  const [detailLog, setDetailLog] = useState<UserLog | null>(null);
+  const [editingLog, setEditingLog] = useState<NhatKySuDungResponse | null>(null);
+  const [detailLog, setDetailLog] = useState<NhatKySuDungResponse | null>(null);
 
+  //Lấy dữ liệu từ api
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await userLogService.getAll();
-        setLogs(res.data); // lấy data từ AxiosResponse
+        // const res = await userLogService.getAll();
+        const res = await getList<NhatKySuDungResponse>(apiUrls.NhatKySuDung.list);
+        setLogs(res); // lấy data từ AxiosResponse
       } catch {
         setError("Không thể tải dữ liệu nhật ký!");
-        alert("Không thể tải dữ liệu từ API!");
+        alert(TextForms.thongBao.khongTheTaiDuLieu);
       } finally {
         setLoading(false);
       }
     };
     fetchLogs();
-  }, []); 
+  }, []);
 
-/*  useEffect(() => {
-    setLogs(mockUserLogs);
-  }, []); */
+  // Xóa
+  const handleDelete = async (id: number) => {
+    if (window.confirm(`Bạn có chắc muốn xóa log ID ${id}?`)) {
+      try {
+        // await userLogService.delete(id);
+        await deleteData(apiUrls.NhatKySuDung.delete(id));;
+        setLogs((prev) => prev.filter((l) => l.Id !== id));
+        alert(TextForms.thongBao.xoaThanhCong);
+      } catch {
+        alert(TextForms.thongBao.loiXoa);
+      }
+    }
+  };
+
+  /*  useEffect(() => {
+      setLogs(mockUserLogs);
+    }, []); */
 
   const filteredLogs = useMemo(() => {
     return logs.filter(
       (l) =>
-        (l.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          l.action.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (filterStatus === "" || l.status === filterStatus)
+      (l.TenNguoiDung.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        l.HanhDong.toLowerCase().includes(searchTerm.toLowerCase()))
+      // &&(filterStatus === "" || l.status === filterStatus)
     );
   }, [logs, searchTerm, filterStatus]);
 
@@ -63,27 +87,16 @@ const UserLogPage: React.FC = () => {
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm(`Bạn có chắc muốn xóa log ID ${id}?`)) {
-      try {
-        await userLogService.delete(id);
-        setLogs((prev) => prev.filter((l) => l.id !== id));
-      } catch {
-        alert("Xóa thất bại!");
-      }
-    }
-  };
-
   const StatusBadge: React.FC<{ status: "Thành công" | "Thất bại" | "Chưa xác định"; }> = ({ status }) => (
     <span className={`status-badge ${status === "Thành công" ? "success" : "fail"}`}>
       {status}
     </span>
   );
 
-  const ActionButtons: React.FC<{ log: UserLog }> = ({ log }) => (
+  const ActionButtons: React.FC<{ log: NhatKySuDungResponse }> = ({ log }) => (
     <div className="actions">
       <FaEdit title="Sửa" onClick={() => setEditingLog(log)} />
-      <FaTrash title="Xóa" onClick={() => handleDelete(log.id)} />
+      <FaTrash title="Xóa" onClick={() => handleDelete(log.Id)} />
       <FaEye title="Chi tiết" onClick={() => setDetailLog(log)} />
     </div>
   );
@@ -98,9 +111,9 @@ const UserLogPage: React.FC = () => {
       </div>
 
       {/* Nếu có lỗi thì hiển thị nhưng không chặn render */}
-        {error && <div className="error">{error}</div>} 
+      {error && <div className="error">{error}</div>}
 
-      <LogStats logs={filteredLogs.map((l) => ({ ...l, timestamp: l.createdAt }))} />
+      <LogStats logs={filteredLogs.map((l) => ({ ...l, timestamp: l.NgayTao }))} />
 
       <div className="page-header">
         <FaClipboardList className="page-icon" />
@@ -147,14 +160,14 @@ const UserLogPage: React.FC = () => {
               </tr>
             ) : (
               currentLogs.map((l) => (
-                <tr key={l.id}>
-                  <td>{l.id}</td>
-                  <td>{l.user}</td>
-                  <td>{l.action}</td>
-                  <td>
+                <tr key={l.Id}>
+                  <td>{l.Id}</td>
+                  <td>{l.TenNguoiDung}</td>
+                  <td>{l.HanhDong}</td>
+                  {/* <td>
                     <StatusBadge status={l.status} />
-                  </td>
-                  <td>{new Date(l.createdAt).toLocaleString("vi-VN")}</td>
+                  </td> */}
+                  <td>{new Date(l.NgayTao).toLocaleString("vi-VN")}</td>
                   <td>
                     <ActionButtons log={l} />
                   </td>
@@ -205,21 +218,22 @@ const UserLogPage: React.FC = () => {
       )}
 
       {editingLog && (
-      <EditUserLogModal
-        logId={1}           // ID record muốn edit
-        useMock={false}      // dùng dữ liệu mock từ mockData.ts
-        onClose={() => setEditingLog(null)}
-        onSave={(updated) => {
-          console.log("Cập nhật mock:", updated);
-          setLogs(prev => prev.map(l => (l.id === updated.id ? updated : l)));
-        }}
-      />
+        <EditUserLogModal
+          logId={1}           // ID record muốn edit
+          useMock={false}      // dùng dữ liệu mock từ mockData.ts
+          onClose={() => setEditingLog(null)}
+          onSave={(updated) => {
+            console.log("Cập nhật mock:", updated);
+            setLogs(prev => prev.map(l => (l.Id === updated.Id ? updated : l)));
+          }}
+        />
 
       )}
 
       {detailLog && (
         <DetailUserLogModal
-          log={{ ...detailLog, data: detailLog.data ?? "" }}
+          // log={{ ...detailLog, data: detailLog.data ?? "" }}
+          log={detailLog}
           onClose={() => setDetailLog(null)}
         />
       )}
