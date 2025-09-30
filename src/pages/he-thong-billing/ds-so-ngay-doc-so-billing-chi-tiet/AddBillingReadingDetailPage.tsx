@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabBilling/Tabs";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 import { FaBookReader } from "react-icons/fa";
 // import {
 //   type BillingReadingDetail,

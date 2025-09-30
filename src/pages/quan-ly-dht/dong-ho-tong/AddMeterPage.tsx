@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
 // import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";

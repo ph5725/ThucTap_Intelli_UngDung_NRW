@@ -1,8 +1,8 @@
 import React from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 // import type { BillingReadingDetail } from "../../../services/he-thong-billing/billingReadingDetailService";
-import "../../../styles/songaydocbillingchitiet/DetailBillingReadingDetailModal.css"; // 👈 thêm css
+import "../../../styles/ds-so-ngay-doc-so-billing-chi-tiet/DetailBillingReadingDetailModal.css"; // 👈 thêm css
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";

@@ -1,8 +1,8 @@
 // src/pages/qlbilling/DetailBillingModal.tsx
 import React from "react";
 import "../../../styles/global.css";
-import "../../../styles/qlbiling/EditBillingModal.css";
-import "../../../styles/qlbiling/DetailBillingModal.css";
+import "../../../styles/billing/EditBillingModal.css";
+import "../../../styles/billing/DetailBillingModal.css";
 // import { type Billing } from "../../../services/he-thong-billing/billingService";
 
 // service

@@ -5,7 +5,7 @@ import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterConfigModal from "./EditMeterConfigModal";
 import DetailMeterConfigModal from "./DetailMeterConfigModal";
 // import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
-import "../../../styles/qldh/MeterManagementPage.css";
+import "../../../styles/dong-ho-tong/MeterManagementPage.css";
 //import { mockMeterConfigs } from "../../../config/mockData";
 
 // service

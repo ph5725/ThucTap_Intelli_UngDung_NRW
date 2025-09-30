@@ -6,8 +6,8 @@ import { useSnackbar } from 'notistack';
 // Material React Table Custom
 import { MaterialReactTableConfig } from '../../../../theme/style_table';
 //API
-import api from "src/services/api/api";
-import apiUrls from "src/services/api/api";
+import api from "src/services/api";
+import apiUrls from "src/services/apiUrls";
 // text
 import { TextForms } from "src/constants/text";
 

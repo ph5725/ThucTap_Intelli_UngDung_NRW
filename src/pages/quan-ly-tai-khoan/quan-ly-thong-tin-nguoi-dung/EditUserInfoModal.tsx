@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
-import "../../../styles/qlttnd/EditUserInfoModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
+import "../../../styles/nguoi-dung/EditUserInfoModal.css";
 import { NguoiDungResponse, UpdateNguoiDungRequest} from "src/types/nguoi-dung/nguoi-dung";
 //crud
 import { getById, updateData } from "src/services/crudService";

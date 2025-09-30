@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
-import "../../../styles/nhatky/EditUserLogModal.css";
+import "../../styles/global.css";
+import "../../styles/nhat-ky/EditUserLogModal.css";
 // import { userLogService, type UserLog } from "../../../services/nguoi-dung/userLogService";
 // import { mockUserLogs } from "../../config/mockData";
 

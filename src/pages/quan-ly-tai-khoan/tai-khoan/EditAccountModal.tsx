@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 import "../../../styles/global.css";
 import { NguoiDungResponse, UpdateNguoiDungRequest } from "src/types/nguoi-dung/nguoi-dung";
 import { updateData } from "src/services/crudService";

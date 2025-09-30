@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 // import type { BillingReading } from "../../../services/he-thong-billing/billingReadingService";
 // import { billingReadingService } from "../../../services/he-thong-billing/billingReadingService";
 // import { mockBillingReadings } from "../../../config/mockData";
-import "../../../styles/songaydocbilling/EditBillingReadingModal.css";
+import "../../../styles/ds-so-ngay-doc-so-billing/EditBillingReadingModal.css";
 
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";

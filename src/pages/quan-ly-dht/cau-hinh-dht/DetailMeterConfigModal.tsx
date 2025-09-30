@@ -1,8 +1,8 @@
 // src/pages/qlchdht/DetailMeterConfigModal.tsx
 import React from "react";
 import "../../../styles/global.css";
-import "../../../styles/qlchdht/EditMeterConfigModal.css";
-import "../../../styles/qlchdht/DetailMeterConfigModal.css";
+import "../../../styles/cau-hinh-dht/EditMeterConfigModal.css";
+import "../../../styles/cau-hinh-dht/DetailMeterConfigModal.css";
 // import type { MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";

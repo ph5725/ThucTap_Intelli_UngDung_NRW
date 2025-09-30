@@ -1,6 +1,6 @@
 import React from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 
 export interface NhomNguoiDungResponse {
   Id: number;

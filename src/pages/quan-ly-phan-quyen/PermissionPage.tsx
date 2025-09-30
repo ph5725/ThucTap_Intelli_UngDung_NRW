@@ -1,57 +1,69 @@
-// src/pages/quan-ly-phan-quyen/PermissionFeaturePage.tsx
+// src/pages/quan-ly-phan-quyen/PermissionPage.tsx
 import React, { useState, useEffect } from "react";
 import { FaShieldAlt } from "react-icons/fa";
-import "../../styles/role/PermissionPage.css";
+import "../../styles/phan-quyen/PermissionPage.css";
 import Tabs from "../../components/tabPQ/Tabs";
+import { getList, updateData } from "../../services/crudService";
+import { apiUrls } from "../../services/apiUrls";
 import {
-  permissionFeatureService,
-  type Role,
-  type Feature,
-  type FeaturePermissionPayload,
-} from "../../services/phan-quyen/permissionFeatureService";
+  PhanQuyenTinhNangResponse,
+  UpdatePhanQuyenTinhNangRequest,
+} from "../../types/phan-quyen/phan-quyen-tinh-nang";
 
-const actions = ["view", "create", "update", "delete"];
+const actions = ["Add", "Edit", "View", "Delete"];
 
-const PermissionFeaturePage: React.FC = () => {
-  // Roles cố định
-  const roles: Role[] = [
-    { id: 1, name: "Quản Lý" },
-    { id: 2, name: "Tổ Trưởng" },
-    { id: 3, name: "Caretaker" },
-    { id: 4, name: "Người Dùng" },
-  ];
+const PermissionPage: React.FC = () => {
+  const [roles, setRoles] = useState<{ id: number; name: string }[]>([]);
+  const [features, setFeatures] = useState<string[]>([]);
+  const [matrix, setMatrix] = useState<
+    Record<string, Record<string, boolean[]>>
+  >({});
 
-  const [features, setFeatures] = useState<Feature[]>([]);
-  const [matrix, setMatrix] = useState<boolean[][][]>([]);
-
-  // Load feature từ API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const featuresRes = await permissionFeatureService.getFeatures();
-        setFeatures(featuresRes.data);
-
-        // Khởi tạo ma trận [feature][action][role] với false
-        const tempMatrix = featuresRes.data.map(() =>
-          actions.map(() => roles.map(() => false))
+        const data = await getList<PhanQuyenTinhNangResponse>(
+          apiUrls.PhanQuyenTinhNang.list
         );
 
-        // Nếu backend trả quyền hiện tại, gán vào ma trận
-        const permissionsRes = await permissionFeatureService.getPermissions();
-        permissionsRes.data.forEach((p) => {
-          const fIdx = featuresRes.data.findIndex((f) => f.name === p.feature);
-          const rIdx = roles.findIndex((r) => r.id === p.roleId);
-          if (fIdx !== -1 && rIdx !== -1) {
-            tempMatrix[fIdx][0][rIdx] = p.permissions.view;
-            tempMatrix[fIdx][1][rIdx] = p.permissions.create;
-            tempMatrix[fIdx][2][rIdx] = p.permissions.update;
-            tempMatrix[fIdx][3][rIdx] = p.permissions.delete;
-          }
-        });
+        // Lấy danh sách role kèm Id
+        const roleList = data.map((item) => ({
+          id: item.Id,
+          name: String(item.NhomNguoiDung),
+        }));
+        setRoles(roleList);
 
-        setMatrix(tempMatrix);
-      } catch (error) {
-        console.error("Lỗi load features/permissions:", error);
+        // Loại bỏ field không phải là tính năng
+        const exclude = [
+          "Id",
+          "NhomNguoiDung",
+          "NgayTao",
+          "NgayCapNhat",
+          "NguoiTao",
+          "NguoiCapNhat",
+          "NrwCongTy", // dành cho phân quyền dữ liệu
+          "NrwDma", // dành cho phân quyền dữ liệu
+        ];
+
+        const featureNames = Object.keys(data[0]).filter(
+          (k) => !exclude.includes(k)
+        );
+        setFeatures(featureNames);
+
+        // Tạo ma trận quyền
+        const temp: Record<string, Record<string, boolean[]>> = {};
+        data.forEach((item) => {
+          const role = String(item.NhomNguoiDung);
+          temp[role] = {};
+          featureNames.forEach((f) => {   
+            const perms = (item as unknown as Record<string, unknown>)[f] as string | undefined;
+            const permsArr = perms ? perms.split(",") : [];
+            temp[role][f] = actions.map((a) => permsArr.includes(a));
+          });
+        });
+        setMatrix(temp);
+      } catch (err) {
+        console.error("Lỗi load phân quyền:", err);
       }
     };
 
@@ -59,36 +71,38 @@ const PermissionFeaturePage: React.FC = () => {
   }, []);
 
   // Toggle checkbox
-  const toggleCheck = (fIdx: number, aIdx: number, rIdx: number) => {
+  const toggleCheck = (role: string, feature: string, actionIdx: number) => {
     setMatrix((prev) => {
-      const copy = prev.map((f) => f.map((a) => [...a]));
-      copy[fIdx][aIdx][rIdx] = !copy[fIdx][aIdx][rIdx];
+      const copy = { ...prev };
+      copy[role] = { ...copy[role] };
+      copy[role][feature] = [...copy[role][feature]];
+      copy[role][feature][actionIdx] = !copy[role][feature][actionIdx];
       return copy;
     });
   };
 
   // Áp dụng quyền
   const handleApply = async () => {
-    const payload: FeaturePermissionPayload[] = features
-      .map((feature, fIdx) =>
-        roles.map((role, rIdx) => ({
-          roleId: role.id,
-          feature: feature.name,
-          permissions: {
-            view: matrix[fIdx][0][rIdx],
-            create: matrix[fIdx][1][rIdx],
-            update: matrix[fIdx][2][rIdx],
-            delete: matrix[fIdx][3][rIdx],
-          },
-        }))
-      )
-      .flat();
-
     try {
-      await permissionFeatureService.applyPermissions(payload);
+      for (const r of roles) {
+        const payload: UpdatePhanQuyenTinhNangRequest = {};
+        features.forEach((f) => {
+          const selected = matrix[r.name][f]
+            .map((val, idx) => (val ? actions[idx] : null))
+            .filter(Boolean);
+          payload[f] = selected.join(",");
+        });
+
+        // Gọi API update với Id thực tế
+        await updateData<
+          UpdatePhanQuyenTinhNangRequest,
+          PhanQuyenTinhNangResponse
+        >(apiUrls.PhanQuyenTinhNang.update(r.id), payload);
+      }
+
       alert("Áp dụng quyền tính năng thành công!");
     } catch (err) {
-      console.error(err);
+      console.error("Lỗi áp dụng quyền:", err);
       alert("Có lỗi xảy ra khi áp dụng quyền!");
     }
   };
@@ -101,17 +115,16 @@ const PermissionFeaturePage: React.FC = () => {
         <h2 className="page-title">PHÂN QUYỀN TÍNH NĂNG</h2>
       </div>
 
-      {/* Tabs */}
       <Tabs />
 
-      {/* Button Áp Dụng */}
+      {/* Button Apply */}
       <div className="apply-btn-wrapper">
         <button className="btn apply" onClick={handleApply}>
           Áp Dụng
         </button>
       </div>
 
-      {/* Bảng ma trận */}
+      {/* Bảng phân quyền */}
       <div className="permission-matrix">
         <table className="permission-matrix-table">
           <thead>
@@ -123,18 +136,18 @@ const PermissionFeaturePage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {features.map((feature, fIdx) =>
+            {features.map((feature) =>
               actions.map((action, aIdx) => (
-                <tr key={`${fIdx}-${aIdx}`}>
+                <tr key={`${feature}-${action}`}>
                   <td>
-                    {feature.name} - <b>{action}</b>
+                    {feature} - <b>{action}</b>
                   </td>
-                  {roles.map((role, rIdx) => (
-                    <td key={role.id}>
+                  {roles.map((r) => (
+                    <td key={r.id}>
                       <input
                         type="checkbox"
-                        checked={matrix[fIdx]?.[aIdx]?.[rIdx] || false}
-                        onChange={() => toggleCheck(fIdx, aIdx, rIdx)}
+                        checked={matrix[r.name]?.[feature]?.[aIdx] || false}
+                        onChange={() => toggleCheck(r.name, feature, aIdx)}
                       />
                     </td>
                   ))}
@@ -148,4 +161,4 @@ const PermissionFeaturePage: React.FC = () => {
   );
 };
 
-export default PermissionFeaturePage;
+export default PermissionPage;

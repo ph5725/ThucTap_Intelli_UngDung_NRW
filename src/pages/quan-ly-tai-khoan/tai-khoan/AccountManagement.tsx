@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaLock, FaFilter } from "react-icons/fa";
-import "../../../styles/qltk/AccountManagement.css";
+import "../../../styles/tai-khoan/AccountManagement.css";
 import EditAccountModal from "./EditAccountModal";
 import DetailAccountModal from "./DetailAccountModal";
 import "../../../styles/global.css";

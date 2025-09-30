@@ -1,7 +1,7 @@
 // src/pages/nhatky/DetailUserLogModal.tsx
 import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/nhatky/EditUserLogModal.css";
+import "../../styles/global.css";
+import "../../styles/nhat-ky/EditUserLogModal.css";
 // import { type UserLog } from "../../../services/nguoi-dung/userLogService";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";

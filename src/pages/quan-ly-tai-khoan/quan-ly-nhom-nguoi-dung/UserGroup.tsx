@@ -7,7 +7,7 @@ import EditUserGroupModal from "./EditUserGroupModal";
 import DetailUserGroupModal from "./DetailUserGroupModal";
 // import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
 import "../../../styles/global.css";
-import "../../../styles/qltk/AccountManagement.css";
+import "../../../styles/tai-khoan/AccountManagement.css";
 //import { mockUserGroups } from "../../../config/mockData";
 
 // service

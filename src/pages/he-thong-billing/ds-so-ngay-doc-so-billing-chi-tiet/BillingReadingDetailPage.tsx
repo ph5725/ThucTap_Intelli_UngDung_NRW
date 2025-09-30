@@ -4,7 +4,7 @@ import { FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabBilling/Tabs";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 
 
 import EditBillingReadingDetailModal from "./EditBillingReadingDetailModal";

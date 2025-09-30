@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
 // import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
 // import { mockMeters } from "../../../config/mockData";
-import "../../../styles/qldh/EditMeterModal.css";
+import "../../../styles/dong-ho-tong/EditMeterModal.css";
 
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";

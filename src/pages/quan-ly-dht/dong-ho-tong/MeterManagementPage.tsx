@@ -14,7 +14,7 @@ import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterModal from "./EditMeterModal";
 import DetailMeterModal from "./DetailMeterModal";
 import MeterStats from "../../../components/MeterStats";
-import "../../../styles/qldh/MeterManagementPage.css";
+import "../../../styles/dong-ho-tong/MeterManagementPage.css";
 // import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
 //import { mockMeters } from "../../../config/mockData";
 

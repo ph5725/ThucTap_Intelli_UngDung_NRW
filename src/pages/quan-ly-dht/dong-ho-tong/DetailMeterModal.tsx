@@ -1,8 +1,8 @@
 // src/pages/qldh/DetailMeterModal.tsx
 import React from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css"; // dùng lại CSS modal
-import "../../../styles/qldh/DetailMeterModal.css";   // CSS riêng cho đồng hồ
+import "../../../styles/tai-khoan/EditAccountModal.css"; // dùng lại CSS modal
+import "../../../styles/dong-ho-tong/DetailMeterModal.css";   // CSS riêng cho đồng hồ
 
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";

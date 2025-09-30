@@ -1,7 +1,7 @@
 // src/pages/quan-ly-dht/qlchdht/EditMeterConfigModal.tsx
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
-import "../../../styles/qlchdht/EditMeterConfigModal.css";
+import "../../../styles/cau-hinh-dht/EditMeterConfigModal.css";
 // import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
 // import { mockMeterConfigs } from "../../../config/mockData"; // mockMeters chứa list đồng hồ
 

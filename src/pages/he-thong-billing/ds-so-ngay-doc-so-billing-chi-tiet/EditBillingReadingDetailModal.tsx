@@ -1,8 +1,8 @@
 // src/pages/billing/EditBillingReadingDetailModal.tsx
 import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
-import "../../../styles/songaydocbillingchitiet/EditBillingReadingDetailModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
+import "../../../styles/ds-so-ngay-doc-so-billing-chi-tiet/EditBillingReadingDetailModal.css";
 // import {
 //   type BillingReadingDetail,
 //   billingReadingDetailService,

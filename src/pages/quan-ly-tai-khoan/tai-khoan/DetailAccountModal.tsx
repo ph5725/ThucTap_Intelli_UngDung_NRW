@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../styles/qltk/EditAccountModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css";
 import "../../../styles/global.css";
 import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
 // import type { UserInfo } from "../../../services/nguoi-dung/userService";

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css"; 
-import "../../../styles/qlttnd/EditUserInfoModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css"; 
+import "../../../styles/nguoi-dung/EditUserInfoModal.css";
 import { FaUser } from "react-icons/fa";
 import Tabs from "../../../components/tabQLTK/Tabs";
-import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
+// import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
 
 const AddUserInfoPage: React.FC = () => {
   const navigate = useNavigate();

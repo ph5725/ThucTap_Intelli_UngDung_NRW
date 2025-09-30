@@ -1,8 +1,8 @@
 import React from "react";
 import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css"; 
-import "../../../styles/qlttnd/EditUserInfoModal.css"; 
-import "../../../styles/qlttnd/DetailUserInfoModal.css";
+import "../../../styles/tai-khoan/EditAccountModal.css"; 
+import "../../../styles/nguoi-dung/EditUserInfoModal.css"; 
+import "../../../styles/nguoi-dung/DetailUserInfoModal.css";
 import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
 
 // export interface NguoiDungResponse {
