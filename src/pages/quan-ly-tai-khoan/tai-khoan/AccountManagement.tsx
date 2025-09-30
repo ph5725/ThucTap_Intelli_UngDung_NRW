@@ -8,13 +8,16 @@ import Tabs from "../../../components/tabQLTK/Tabs";
 // import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
 import { mockUsers } from "../../../config/mockData";
 
+// text
+import { TextForms } from "src/constants/text";
+
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 
 // interface
-import { AddNguoiDungRequest, NguoiDungResponse, UpdateNguoiDungRequest, UpdateCapPhepNguoiDungRequest} from "src/types/nguoi-dung/nguoi-dung";
-import { TextForms } from "src/constants/text";
+import {NguoiDungResponse, UpdateCapPhepNguoiDungRequest} from "src/types/nguoi-dung/nguoi-dung";
+
 
 interface AccountManagementProps {
   useMock?: boolean;
@@ -64,10 +67,6 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
       setAccounts(prev => prev.map(acc => (acc.Id === updated.Id ? updated : acc)));
     } else {
       try {
-        const res = await updateData<UpdateNguoiDungRequest, NguoiDungResponse>(
-          apiUrls.NguoiDung.update(updated.Id!),
-          updated
-        );
         setAccounts(prev => prev.map(acc => (acc.Id === updated.Id ? updated : acc)));
       } catch (error) {
         console.error("Lỗi cập nhật:", error);
@@ -90,10 +89,10 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
       try {
         await deleteData(apiUrls.NguoiDung.delete(id));;
         setAccounts(prev => prev.filter(a => a.Id !== id));
-        setMessage("Xóa tài khoản thành công!");
+        setMessage(TextForms.thongBao.xoaThanhCong);
       } catch (error) {
-        console.error("Lỗi xóa tài khoản:", error);
-        alert("Xóa thất bại!");
+        console.error(TextForms.thongBao.loiXoa, error);
+        alert(TextForms.thongBao.loiXoa);
       }
     }
 
@@ -257,8 +256,8 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
             </label>
 
             <div className="modal-actions">
-              <button className="btn apply" onClick={applyFilter}>Áp dụng</button>
-              <button className="btn close" onClick={() => setShowFilter(false)}>Đóng</button>
+              <button className="btn apply" onClick={applyFilter}>{TextForms.nut.apDung}</button>
+              <button className="btn close" onClick={() => setShowFilter(false)}>{TextForms.nut.dong}</button>
             </div>
           </div>
         </div>

@@ -1,10 +1,11 @@
 import React from "react";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/global.css";
-import type { UserInfo } from "../../../services/nguoi-dung/userService";
+import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
+// import type { UserInfo } from "../../../services/nguoi-dung/userService";
 
 interface DetailAccountModalProps {
-  account: UserInfo;
+  account: NguoiDungResponse;
   onClose: () => void;
 }
 
@@ -21,23 +22,19 @@ const DetailAccountModal: React.FC<DetailAccountModalProps> = ({
 
         {/* Tên tài khoản */}
         <label>Tên tài khoản</label>
-        <input type="text" value={account.username} readOnly disabled />
+        <input type="text" value={account.Ten} readOnly disabled />
 
         {/* Họ tên */}
         <label>Họ tên</label>
-        <input type="text" value={account.fullname} readOnly disabled />
+        <input type="text" value={account.TenNguoiDung} readOnly disabled />
 
         {/* Email */}
         <label>Email</label>
-        <input type="email" value={account.email} readOnly disabled />
-
-        {/* Mật khẩu */}
-        <label>Mật khẩu</label>
-        <input type="password" value={account.password} readOnly disabled />
+        <input type="email" value={account.Email} readOnly disabled />
 
         {/* Vai trò */}
         <label>Vai trò</label>
-        <select value={account.role} disabled>
+        <select value={account.VaiTro} disabled>
           <option value="admin">Quản trị viên</option>
           <option value="user">Người dùng</option>
         </select>

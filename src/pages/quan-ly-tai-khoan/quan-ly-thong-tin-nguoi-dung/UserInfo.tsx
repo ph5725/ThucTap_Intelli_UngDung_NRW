@@ -3,15 +3,26 @@ import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa
 import Tabs from "../../../components/tabQLTK/Tabs";
 import "../../../styles/global.css";
 import "../../../styles/qltk/AccountManagement.css";
-import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
+// import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
 import EditUserInfoModal from "./EditUserInfoModal";
 import DetailUserInfoModal from "./DetailUserInfoModal";
 import { useNavigate } from "react-router-dom";
 //import { mockUsers } from "../../../config/mockData";
+// service
+import {  deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
 
-const UserInfoPage: React.FC = () => {
+// interface
+import {  NguoiDungResponse, } from "src/types/nguoi-dung/nguoi-dung";
+
+interface UserInfoPageProps {
+  useMock?: boolean;
+}
+
+const UserInfoPage: React.FC<UserInfoPageProps> = ({ useMock = false }) => {
+  
   const navigate = useNavigate();
-  const [users, setUsers] = useState<UserInfo[]>([]);
+  const [users, setUsers] = useState<NguoiDungResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -19,8 +30,8 @@ const UserInfoPage: React.FC = () => {
   const [showFilter, setShowFilter] = useState(false);
 
   // Modal
-  const [editingUser, setEditingUser] = useState<UserInfo | null>(null);
-  const [detailUser, setDetailUser] = useState<UserInfo | null>(null);
+  const [editingUser, setEditingUser] = useState<NguoiDungResponse | null>(null);
+  const [detailUser, setDetailUser] = useState<NguoiDungResponse | null>(null);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,8 +41,8 @@ const UserInfoPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await userService.getAll();
-        setUsers(res.data);
+        const data = await getList<NguoiDungResponse>(apiUrls.NguoiDung.list);
+        setUsers(data);
       } catch (err) {
         console.error("❌ Lỗi khi tải dữ liệu từ API:", err);
         alert("Không thể tải dữ liệu từ API!");
@@ -51,10 +62,10 @@ const UserInfoPage: React.FC = () => {
   // 📌 Lọc dữ liệu
   const filteredUsers = useMemo(() =>
     users.filter(u =>
-      u.code.toLowerCase().includes(filter.code.toLowerCase()) &&
-      u.username.toLowerCase().includes(filter.username.toLowerCase()) &&
-      u.fullname.toLowerCase().includes(filter.fullname.toLowerCase()) &&
-      u.email.toLowerCase().includes(filter.email.toLowerCase())
+      u.Ma.toLowerCase().includes(filter.code.toLowerCase()) &&
+      u.Ten.toLowerCase().includes(filter.username.toLowerCase()) &&
+      u.TenNguoiDung.toLowerCase().includes(filter.fullname.toLowerCase()) &&
+      u.Email.toLowerCase().includes(filter.email.toLowerCase())
     ), [users, filter]
   );
 
@@ -64,19 +75,24 @@ const UserInfoPage: React.FC = () => {
 
   // 📌 Xóa người dùng
   const handleDelete = async (id: number) => {
-    if (window.confirm("Bạn có chắc muốn xóa người dùng này?")) {
-      try {
-        await userService.delete(id);
-        setUsers(users.filter(u => u.id !== id));
-        setMessage("Xóa thành công!");
-      } catch (err) {
-        console.error("❌ Lỗi khi xóa:", err);
-        setMessage("Lỗi khi xóa người dùng!");
-      } finally {
-        setTimeout(() => setMessage(null), 3000);
+      const acc = users.find(a => a.Id === id);
+      if (!acc) return;
+      if (!window.confirm(`Bạn có chắc muốn xóa tài khoản "${acc.TenNguoiDung}" không?`)) return;
+  
+      if (useMock) {
+        setUsers(prev => prev.filter(a => a.Id !== id));
+        setMessage("Xóa tài khoản thành công!");
+      } else {
+        try {
+          await deleteData(apiUrls.NguoiDung.delete(id));;
+          setUsers(prev => prev.filter(a => a.Id !== id));
+          setMessage("Xóa tài khoản thành công!");
+        } catch (error) {
+          console.error("Lỗi xóa tài khoản:", error);
+          alert("Xóa thất bại!");
+        }
       }
-    }
-  };
+  }
 
   // 📌 Lưu khi sửa
 
@@ -128,15 +144,15 @@ const UserInfoPage: React.FC = () => {
           </thead>
           <tbody>
             {currentUsers.map(u => (
-              <tr key={u.id}>
-                <td>{u.id}</td>
-                <td>{u.code}</td>
-                <td>{u.username}</td>
-                <td>{u.fullname}</td>
-                <td>{u.email}</td>
+              <tr key={u.Id}>
+                <td>{u.Id}</td>
+                <td>{u.Ma}</td>
+                <td>{u.Ten}</td>
+                <td>{u.TenNguoiDung}</td>
+                <td>{u.Email}</td>
                 <td className="actions">
-                  <FaEdit onClick={() => u.id !== undefined && setEditingUser(u)} title="Sửa" />
-                  <FaTrash onClick={() => handleDelete(u.id!)} title="Xóa" />
+                  <FaEdit onClick={() => u.Id !== undefined && setEditingUser(u)} title="Sửa" />
+                  <FaTrash onClick={() => handleDelete(u.Id!)} title="Xóa" />
                   <FaEye onClick={() => setDetailUser(u)} title="Chi tiết" />
                 </td>
               </tr>
@@ -170,35 +186,28 @@ const UserInfoPage: React.FC = () => {
       )}
 
       {/* Modal Edit */}
-      {editingUser?.id !== undefined && (
+      {editingUser?.Id !== undefined && (
         <EditUserInfoModal
-          userId={editingUser.id}
+          userId={editingUser.Id}
           onClose={() => setEditingUser(null)}
           onSave={(updated) => {
             setUsers(prev =>
-              prev.map(u => (u.id === updated.id ? { ...u, ...updated } : u))
+              prev.map(u => (u.Id === updated.Id ? { ...u, ...updated } : u))
             );
           }}
-          useMock={false} // bật/tắt mock
         />
       )}
 
       {/* Modal Detail */}
       {detailUser && (
         <DetailUserInfoModal
-          user={{
-            ...detailUser,
-            id: detailUser.id!,
-            createdAt: detailUser.metadata?.createdAt ?? new Date().toISOString(),
-            updatedAt: detailUser.metadata?.updatedAt ?? new Date().toISOString(),
-            createdBy: detailUser.metadata?.createdBy ?? "System",
-            updatedBy: detailUser.metadata?.updatedBy ?? "System"
-          }}
+          user={detailUser}
           onClose={() => setDetailUser(null)}
         />
       )}
     </div>
   );
 };
+
 
 export default UserInfoPage;

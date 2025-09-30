@@ -4,6 +4,7 @@ export const TextForms = {
         thongBao: "Thông báo",
         timKiem: "Tìm kiếm",
 
+
         tongQuanDongHoTong: "Tổng quan đồng hồ tổng",
         danhSachDongHoTong: "Danh sách đồng hồ tổng",
         cauHinhDongHoTong: "Cấu hình đồng hồ tổng",
@@ -39,7 +40,7 @@ export const TextForms = {
         nhatKy: "Nhật ký",
     },
     thongBao: {
-        // Xác nhận
+       // Xác nhận
         xacNhanXoa: "Bạn có chắc chắn muốn xóa mục này không?",
         xacNhanLuu: "Bạn có chắc chắn muốn lưu thay đổi không?",
         xacNhanDangXuat: "Bạn có chắc chắn muốn đăng xuất không?",
