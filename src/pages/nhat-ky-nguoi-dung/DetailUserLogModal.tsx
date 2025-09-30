@@ -1,15 +1,14 @@
 // src/pages/nhatky/DetailUserLogModal.tsx
-import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/nhatky/EditUserLogModal.css";
+// import "../../../styles/nhatky/EditUserLogModal.css";
 // import { type UserLog } from "../../../services/nguoi-dung/userLogService";
+import React from "react";
+import "src/styles/global.css";
+import "src/styles/nhat-ky/EditUserLogModal.css";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
-
 // text
 import { TextForms } from "src/constants/text";
 

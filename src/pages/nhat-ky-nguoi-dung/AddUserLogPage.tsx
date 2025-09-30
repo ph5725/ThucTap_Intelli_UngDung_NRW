@@ -1,16 +1,13 @@
+// import { userLogService, type UserLogCreate } from "../../../services/nguoi-dung/userLogService";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBookReader } from "react-icons/fa";
-// import { userLogService, type UserLogCreate } from "../../../services/nguoi-dung/userLogService";
-
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -42,14 +39,14 @@ const AddUserLogPage: React.FC = () => {
 
     if (nguoiDungStr) {
       nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-      console.log("ID người dùng:", nguoiDung.Id);
+      console.log("ID người dùng:", nguoiDung.id);
     }
 
     // Tạo payload JSON với metadata
     const payload: AddNhatKySuDungRequest = {
       ...formData,
       NgayTao: "FrontendUser",
-      NguoiTao: nguoiDung?.Id ?? 0,
+      NguoiTao: nguoiDung?.id ?? 0,
     };
 
     try {

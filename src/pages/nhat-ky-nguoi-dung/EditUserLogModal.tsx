@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
-import "../../../styles/nhatky/EditUserLogModal.css";
+// import "../../../styles/nhatky/EditUserLogModal.css";
 // import { userLogService, type UserLog } from "../../../services/nguoi-dung/userLogService";
 // import { mockUserLogs } from "../../config/mockData";
-
+import React, { useState, useEffect } from "react";
+import "src/styles/global.css";
+import "src/styles/nhat-ky/EditUserLogModal.css";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -94,11 +92,11 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       const now = new Date().toISOString();
-      const currentUser = nguoiDung?.Id ?? 0; // 👉 sau này thay bằng user login thật
+      const currentUser = nguoiDung?.id ?? 0; // 👉 sau này thay bằng user login thật
 
       const payload: UpdateNhatKySuDungRequest = {
         ...dataUpdate,

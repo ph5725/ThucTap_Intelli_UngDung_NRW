@@ -1,16 +1,15 @@
 // src/pages/qldh/DetailMeterModal.tsx
+// import "../../../styles/qltk/EditAccountModal.css"; // dùng lại CSS modal
+// import "../../../styles/qldh/DetailMeterModal.css";   // CSS riêng cho đồng hồ
 import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css"; // dùng lại CSS modal
-import "../../../styles/qldh/DetailMeterModal.css";   // CSS riêng cho đồng hồ
-
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
+import "src/styles/tai-khoan/DetailAccount.css"
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
-
 // text
 import { TextForms } from "src/constants/text";
 

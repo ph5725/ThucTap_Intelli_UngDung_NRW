@@ -1,11 +1,11 @@
+// import "../../../styles/qltk/AccountManagement.css";
+// import { userGroupService } from "../../../services/nguoi-dung/userGroupService";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../styles/global.css";
-import "../../../styles/qltk/AccountManagement.css";
-import Tabs from "../../../components/tabQLTK/Tabs";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/AccountManagement.css"
+import Tabs from "src/components/tabQLTK/Tabs";
 import { FaUser } from "react-icons/fa";
-// import { userGroupService } from "../../../services/nguoi-dung/userGroupService";
-
 //types
 import { AddNhomNguoiDungRequest, NhomNguoiDungResponse } from "src/types/nguoi-dung/nhom-nguoi-dung";
 //crud

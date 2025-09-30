@@ -108,14 +108,18 @@
 
 import React, { useState } from "react";
 import { FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
-import "../../styles/LoginForm.css";
-
+import "src/styles/LoginForm.css";
 import { login } from "src/services/authService";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { DangNhapRequest } from "src/types/authTypes";
 
-const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  onLogin: () => void; // 👈 thêm khai báo này
+}
+
+// const LoginForm: React.FC = () => {
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);

@@ -1,6 +1,7 @@
+// import "../../../styles/qltk/EditAccountModal.css";
 import React from "react";
-import "../../../styles/qltk/EditAccountModal.css";
-import "../../../styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
+import "src/styles/global.css";
 import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
 // import type { UserInfo } from "../../../services/nguoi-dung/userService";
 

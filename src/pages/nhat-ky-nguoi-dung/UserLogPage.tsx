@@ -1,31 +1,27 @@
 // src/pages/nhatky/UserLogPage.tsx
+//import { mockUserLogs } from "../../../config/mockData";
+// import { userLogService, type UserLog } from "../../../services/nguoi-dung/userLogService";
 import React, { useState, useMemo, useEffect } from "react";
 import { FaClipboardList, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-//import { mockUserLogs } from "../../../config/mockData";
-import "../../../styles/nhatky/UserLogPage.css";
-import "../../../styles/global.css";
-import LogStats from "../../components/LogStats";
+import "src/styles/nhat-ky/UserLogPage.css";
+import "src/styles/global.css";
+import LogStats from "src/components/LogStats";
 import EditUserLogModal from "./EditUserLogModal";
 import DetailUserLogModal from "./DetailUserLogModal";
-// import { userLogService, type UserLog } from "../../../services/nguoi-dung/userLogService";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
-
 // text
 import { TextForms } from "src/constants/text";
 
 const UserLogPage: React.FC = () => {
   const navigate = useNavigate();
-
   const [logs, setLogs] = useState<NhatKySuDungResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"" | "Thành công" | "Thất bại">("");
   const [showFilter, setShowFilter] = useState(false);

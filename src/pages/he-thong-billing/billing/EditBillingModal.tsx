@@ -1,17 +1,14 @@
 // src/pages/qlbilling/qlbilling/EditBillingModal.tsx
-import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
 // import { billingService, type Billing, type UpdateBillingDTO } from "../../../services/he-thong-billing/billingService";
 // import { mockBillings } from "../../../config/mockData";
-
+import React, { useState, useEffect } from "react";
+import "src/styles/global.css";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -117,13 +114,13 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       const payload: UpdateBillingRequest = {
         ...dataUpdate,
         NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: nguoiDung?.Id ?? 0, // FE sinh
+        NguoiCapNhat: nguoiDung?.id ?? 0, // FE sinh
       };
 
       const res = await updateData<UpdateBillingRequest, BillingResponse>(

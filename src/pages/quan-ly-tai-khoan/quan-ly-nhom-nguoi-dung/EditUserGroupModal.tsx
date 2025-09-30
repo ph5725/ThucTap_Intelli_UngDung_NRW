@@ -62,7 +62,7 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
         <label>Người Cập Nhật</label>
         <input type="text" value={formData.NguoiCapNhat} readOnly />
         <div className="form-actions">
-          <button className="btn save" onClick={handleSave}>{TextForms.nut.luuLai}</button>
+          <button className="btn save" onClick={handleSave}>{TextForms.nut.luu}</button>
           <button className="btn close" onClick={onClose}>{TextForms.nut.huyBo}</button>
         </div>
       </div>

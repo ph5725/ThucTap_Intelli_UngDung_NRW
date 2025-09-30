@@ -1,4 +1,7 @@
 // src/pages/quan-ly-dong-ho/MeterManagementPage.tsx
+// import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
+//import { mockMeters } from "../../../config/mockData";
+// import "../../../styles/qldh/MeterManagementPage.css";
 import React, { useState, useEffect, useMemo } from "react";
 import {
   FaTachometerAlt,
@@ -13,36 +16,27 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterModal from "./EditMeterModal";
 import DetailMeterModal from "./DetailMeterModal";
-import MeterStats from "../../../components/MeterStats";
-import "../../../styles/qldh/MeterManagementPage.css";
-// import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
-//import { mockMeters } from "../../../config/mockData";
-
+import MeterStats from "src/components/MeterStats";
+import "src/styles/dong-ho-tong/MeterManagementPage.css"
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
 const MeterManagementPage: React.FC = () => {
   const navigate = useNavigate();
-
   const [meters, setMeters] = useState<DongHoTongResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"" | "Hoạt động" | "Cảnh báo" | "Lỗi">("");
   const [showFilter, setShowFilter] = useState(false);
-
   const [selectedMeter, setSelectedMeter] = useState<DongHoTongResponse | null>(null);
   const [detailMeter, setDetailMeter] = useState<DongHoTongResponse | null>(null);
-
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -240,7 +234,7 @@ const MeterManagementPage: React.FC = () => {
           onClose={() => setSelectedMeter(null)}
           onSave={(updatedMeter) => {
             setMeters(prev =>
-              prev.map(m => (m.Id === updatedMeter.id ? updatedMeter : m))
+              prev.map(m => (m.Id === updatedMeter.Id ? updatedMeter : m))
             );
             setSelectedMeter(null);
           }}

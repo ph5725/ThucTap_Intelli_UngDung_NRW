@@ -1,20 +1,18 @@
+// import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
+// import "../../../styles/qldh/MeterManagementPage.css";
+//import { mockMeterConfigs } from "../../../config/mockData";
 import React, { useState, useMemo, useEffect } from "react";
 import { FaTachometerAlt, FaEdit, FaTrash, FaEye, FaLock, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterConfigModal from "./EditMeterConfigModal";
 import DetailMeterConfigModal from "./DetailMeterConfigModal";
-// import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
-import "../../../styles/qldh/MeterManagementPage.css";
-//import { mockMeterConfigs } from "../../../config/mockData";
-
+import "src/styles/dong-ho-tong/MeterManagementPage.css"
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
-
 // text
 import { TextForms } from "src/constants/text";
 
