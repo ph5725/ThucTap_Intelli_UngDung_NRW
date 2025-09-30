@@ -1,17 +1,14 @@
 // src/pages/qlbilling/DetailBillingModal.tsx
-import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/billing/EditBillingModal.css";
-import "../../../styles/billing/DetailBillingModal.css";
 // import { type Billing } from "../../../services/he-thong-billing/billingService";
-
+import React from "react";
+import "src/styles/global.css";
+import "src/styles/billing/EditBillingModal.css";
+import "src/styles/billing/DetailBillingModal.css";
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
-
 // text
 import { TextForms } from "src/constants/text";
 

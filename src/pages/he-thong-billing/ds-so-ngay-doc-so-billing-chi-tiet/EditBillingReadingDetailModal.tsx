@@ -1,22 +1,21 @@
 // src/pages/billing/EditBillingReadingDetailModal.tsx
-import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
-import "../../../styles/tai-khoan/EditAccountModal.css";
-import "../../../styles/ds-so-ngay-doc-so-billing-chi-tiet/EditBillingReadingDetailModal.css";
+// import "../../../styles/qltk/EditAccountModal.css";
+// import "../../../styles/songaydocbillingchitiet/EditBillingReadingDetailModal.css";
 // import {
 //   type BillingReadingDetail,
 //   billingReadingDetailService,
 // } from "../../../services/he-thong-billing/billingReadingDetailService";
 // import { mockBillingReadingDetails } from "../../../config/mockData";
-
+import React, { useState, useEffect } from "react";
+import "src/styles/global.css";
+import "src/styles/ds-so-ngay-doc-so-billing-chi-tiet/EditBillingReadingDetailModal.css";
+import "src/styles/tai-khoan/EditAccountModal.css";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -121,11 +120,11 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       const now = new Date().toISOString();
-      const currentUser = nguoiDung?.Id ?? 0; // 👉 sau này thay bằng user login thật
+      const currentUser = nguoiDung?.id ?? 0; // 👉 sau này thay bằng user login thật
 
       const payload: UpdateDsNgayDocSoBillingChiTietRequest = {
         ...dataUpdate,

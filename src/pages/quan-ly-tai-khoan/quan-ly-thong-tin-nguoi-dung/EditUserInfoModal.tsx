@@ -1,7 +1,9 @@
+// import "../../../styles/qltk/EditAccountModal.css";
+// import "../../../styles/qlttnd/EditUserInfoModal.css";
 import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
-import "../../../styles/tai-khoan/EditAccountModal.css";
-import "../../../styles/nguoi-dung/EditUserInfoModal.css";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
+import "src/styles/nguoi-dung/EditUserInfoModal.css"
 import { NguoiDungResponse, UpdateNguoiDungRequest} from "src/types/nguoi-dung/nguoi-dung";
 //crud
 import { getById, updateData } from "src/services/crudService";
@@ -29,7 +31,7 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ userId, onClose, 
       try {
         const userData: NguoiDungResponse = await getById<NguoiDungResponse>(
           apiUrls.NguoiDung.detail(userId),
-          userId
+          // userId
         );
         setFormData(userData);
       } catch (error) {

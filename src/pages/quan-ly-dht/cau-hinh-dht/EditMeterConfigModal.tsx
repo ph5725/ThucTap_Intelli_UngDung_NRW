@@ -1,18 +1,16 @@
 // src/pages/quan-ly-dht/qlchdht/EditMeterConfigModal.tsx
-import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
-import "../../../styles/cau-hinh-dht/EditMeterConfigModal.css";
 // import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
 // import { mockMeterConfigs } from "../../../config/mockData"; // mockMeters chứa list đồng hồ
-
+// import "../../../styles/qlchdht/EditMeterConfigModal.css";
+import React, { useState, useEffect } from "react";
+import "src/styles/global.css";
+import "src/styles/cau-hinh-dht/EditMeterConfigModal.css"
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -91,14 +89,14 @@ const EditMeterConfigModal: React.FC<Props> = ({ configId, onClose, onSave, useM
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       // gửi lên API với meterCode là number (id)
       const payload = {
         ...dataUpdate,
         NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: nguoiDung?.Id ?? 0, // có thể lấy từ context/token
+        NguoiCapNhat: nguoiDung?.id ?? 0, // có thể lấy từ context/token
       };
 
       const res = await updateData<UpdateCauHinhDhtRequest, CauHinhDhtResponse>(

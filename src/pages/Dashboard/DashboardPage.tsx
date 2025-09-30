@@ -3,8 +3,8 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
   PieChart, Pie, Cell, Legend,
 } from "recharts";
-import "../../styles/Dashboard.css";
-import { getCompanyStats, getDmaStats } from "../../config/Dashboard-api";
+import "src/styles/Dashboard.css";
+import { getCompanyStats, getDmaStats } from "src/config/Dashboard-api";
 
 const DashboardPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"company" | "dma">("company");

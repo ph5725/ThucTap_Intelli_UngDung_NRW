@@ -1,16 +1,16 @@
 // src/pages/qlchdht/DetailMeterConfigModal.tsx
-import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/cau-hinh-dht/EditMeterConfigModal.css";
-import "../../../styles/cau-hinh-dht/DetailMeterConfigModal.css";
 // import type { MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
+// import "../../../styles/qlchdht/EditMeterConfigModal.css";
+// import "../../../styles/qlchdht/DetailMeterConfigModal.css";
+import React from "react";
+import "src/styles/global.css";
+import "src/styles/cau-hinh-dht/EditMeterConfigModal.css"
+import "src/styles/cau-hinh-dht/DetailMeterConfigModal.css"
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";;
-
 // text
 import { TextForms } from "src/constants/text";
 

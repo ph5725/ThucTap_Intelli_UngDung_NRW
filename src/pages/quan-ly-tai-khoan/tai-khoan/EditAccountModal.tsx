@@ -1,6 +1,7 @@
+// import "../../../styles/qltk/EditAccountModal.css";
 import React, { useState, useEffect } from "react";
-import "../../../styles/tai-khoan/EditAccountModal.css";
-import "../../../styles/global.css";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
 import { NguoiDungResponse, UpdateNguoiDungRequest } from "src/types/nguoi-dung/nguoi-dung";
 import { updateData } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";

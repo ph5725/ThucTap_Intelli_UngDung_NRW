@@ -5,7 +5,7 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 
 import AccountManagement from "./pages/quan-ly-tai-khoan/tai-khoan/AccountManagement"; // trang quản lý tài khoản
-import AddAccount from "./pages/quan-ly-tai-khoan/tai-khoan/AddAccount";
+// import AddAccount from "./pages/quan-ly-tai-khoan/tai-khoan/AddAccount";
 
 import UserInfoPage from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/UserInfo"; // trang quản lý người dùng
 import AddUserInfoModal from "./pages/quan-ly-tai-khoan/quan-ly-thong-tin-nguoi-dung/AddUserInfoModal"; 
@@ -77,7 +77,7 @@ const MainLayout: React.FC = () => {
           <Routes>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="accounts" element={<AccountManagement />} />
-            <Route path="add-account" element={<AddAccount />} />
+            {/* <Route path="add-account" element={<AddAccount />} /> */}
 
             <Route path="user-info" element={<UserInfoPage />} />
             <Route path="add-user" element={<AddUserInfoModal />} />
@@ -128,7 +128,9 @@ const LoginWrapper: React.FC = () => {
   //   }
   // };
   // return <LoginForm onLogin={handleLogin} />;
-  return <LoginForm onLogin={() => {}} />; 
+  // return <LoginForm onLogin={() => {}} />; 
+  return <LoginForm onLogin={() => console.log("Đăng nhập thành công!")} />
+
 };
 
 export default App;

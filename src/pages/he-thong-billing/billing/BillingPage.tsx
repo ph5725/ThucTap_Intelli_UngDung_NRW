@@ -1,22 +1,19 @@
 // src/pages/he-thong-billing/qlbilling/BillingPage.tsx
+// import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
+//import { mockBillings } from "../../../config/mockData";
 import React, { useState, useEffect, useMemo } from "react";
 import { FaMoneyBill, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Tabs from "../../../components/tabBilling/Tabs";
-import "../../../styles/global.css";
+import Tabs from "src/components/tabBilling/Tabs";
+import "src/styles/global.css";
 import BillingDashboard from "../../../components/BillingDashboard";
 import EditBillingModal from "./EditBillingModal";
 import DetailBillingModal from "./DetailBillingModal";
-// import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
-//import { mockBillings } from "../../../config/mockData";
-
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
-
 // text
 import { TextForms } from "src/constants/text";
 

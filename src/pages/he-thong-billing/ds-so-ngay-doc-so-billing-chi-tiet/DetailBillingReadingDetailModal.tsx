@@ -1,15 +1,15 @@
-import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/tai-khoan/EditAccountModal.css";
 // import type { BillingReadingDetail } from "../../../services/he-thong-billing/billingReadingDetailService";
-import "../../../styles/ds-so-ngay-doc-so-billing-chi-tiet/DetailBillingReadingDetailModal.css"; // 👈 thêm css
+// import "../../../styles/songaydocbillingchitiet/DetailBillingReadingDetailModal.css"; // 👈 thêm css
+// import "../../../styles/qltk/EditAccountModal.css";
+import React from "react";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
+import "src/styles/ds-so-ngay-doc-so-billing-chi-tiet/DetailBillingReadingDetailModal.css";
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
-
 // text
 import { TextForms } from "src/constants/text";
 

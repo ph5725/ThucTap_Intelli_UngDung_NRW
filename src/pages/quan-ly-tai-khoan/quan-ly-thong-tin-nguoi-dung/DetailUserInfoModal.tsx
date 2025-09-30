@@ -1,10 +1,6 @@
-import React from "react";
-import "../../../styles/global.css";
-import "../../../styles/tai-khoan/EditAccountModal.css"; 
-import "../../../styles/nguoi-dung/EditUserInfoModal.css"; 
-import "../../../styles/nguoi-dung/DetailUserInfoModal.css";
-import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
-
+// import "../../../styles/qltk/EditAccountModal.css"; 
+// import "../../../styles/qlttnd/EditUserInfoModal.css"; 
+// import "../../../styles/qlttnd/DetailUserInfoModal.css";
 // export interface NguoiDungResponse {
 //   Id: number;
 //   Ma: string;
@@ -19,6 +15,13 @@ import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
 //   NguoiTao?: string;
 //   NguoiCapNhat?: string;
 // }
+
+import React from "react";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
+import "src/styles/nguoi-dung/EditUserInfoModal.css"
+import "src/styles/nguoi-dung/DetailUserInfoModal.css"
+import { NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
 
 interface DetailUserInfoModalProps {
   user: NguoiDungResponse;

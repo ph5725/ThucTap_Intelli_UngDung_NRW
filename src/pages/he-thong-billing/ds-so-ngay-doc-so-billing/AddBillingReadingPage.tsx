@@ -1,18 +1,15 @@
 // src/pages/qlbilling/qlbilling/AddBillingReadingPage.tsx
+// import { billingReadingService, type BillingReading } from "../../../services/he-thong-billing/billingReadingService";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBookReader } from "react-icons/fa";
-import Tabs from "../../../components/tabBilling/Tabs";
-// import { billingReadingService, type BillingReading } from "../../../services/he-thong-billing/billingReadingService";
-
+import Tabs from "src/components/tabBilling/Tabs";
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -46,14 +43,14 @@ const AddBillingReadingPage: React.FC = () => {
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       // FE tự sinh metadata khi Add
       const newRecord: AddDsNgayDocSoBillingRequest = {
         ...formData,
         NgayTao: new Date().toISOString(),
-        NguoiTao: nguoiDung?.Id ?? 0,
+        NguoiTao: nguoiDung?.id ?? 0,
       };
 
       // await billingReadingService.create(newRecord);

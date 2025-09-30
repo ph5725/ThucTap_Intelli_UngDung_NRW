@@ -1,17 +1,14 @@
+// import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaMoneyBill } from "react-icons/fa";
-import Tabs from "../../../components/tabBilling/Tabs";
-// import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
-
+import Tabs from "src/components/tabBilling/Tabs";
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -57,13 +54,13 @@ const AddBillingPage: React.FC = () => {
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       // Sinh metadata ở FE
       const metadata = {
         NgayTao: new Date().toISOString(), // hoặc format theo BE yêu cầu
-        NguoiTao: nguoiDung?.Id ?? 0,
+        NguoiTao: nguoiDung?.id ?? 0,
       };
       const payload: AddBillingRequest = {
         ...formData,

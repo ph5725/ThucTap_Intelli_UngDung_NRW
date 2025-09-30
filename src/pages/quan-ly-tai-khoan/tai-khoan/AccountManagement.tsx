@@ -1,23 +1,20 @@
+// import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
+// import { mockUsers } from "../../../config/mockData";
+// import "../../../styles/qltk/AccountManagement.css";
 import React, { useState, useEffect } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaLock, FaFilter } from "react-icons/fa";
-import "../../../styles/tai-khoan/AccountManagement.css";
 import EditAccountModal from "./EditAccountModal";
 import DetailAccountModal from "./DetailAccountModal";
-import "../../../styles/global.css";
-import Tabs from "../../../components/tabQLTK/Tabs";
-// import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
-import { mockUsers } from "../../../config/mockData";
-
+import "src/styles/global.css";
+import "src/styles/tai-khoan/AccountManagement.css"
+import Tabs from "src/components/tabQLTK/Tabs";
 // text
 import { TextForms } from "src/constants/text";
-
 // service
 import { updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import {NguoiDungResponse, UpdateCapPhepNguoiDungRequest} from "src/types/nguoi-dung/nguoi-dung";
-
 
 interface AccountManagementProps {
   useMock?: boolean;
@@ -43,9 +40,9 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
   // Lấy danh sách
   useEffect(() => {
     const fetchAccounts = async () => {
-      if (useMock) {
-        setAccounts(mockUsers);
-      } else {
+      // if (useMock) {
+      //   setAccounts(mockUsers);
+      // } else {
         try {
           const data = await getList<NguoiDungResponse>(apiUrls.NguoiDung.list);
           setAccounts(data.map(item => ({
@@ -56,7 +53,7 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
           console.error("Lỗi tải danh sách tài khoản:", error);
           alert("Không thể tải danh sách tài khoản!");
         }
-      }
+      // }
     };
     fetchAccounts();
   }, [useMock]);
@@ -126,7 +123,8 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
   };
 
   const filteredAccounts = accounts.filter(acc => {
-    const matchUsername = acc.TenNguoiDung.toLowerCase().includes(filterValues.username.toLowerCase());
+    // const matchUsername = acc.TenNguoiDung.toLowerCase().includes(filterValues.username.toLowerCase());
+    const matchUsername = (acc?.TenNguoiDung || "").toLowerCase().includes(filterValues.username.toLowerCase())
     const matchRole =
       filterValues.role === "Tất cả" || acc.VaiTro?.toLowerCase() === filterValues.role.toLowerCase();
     const matchStatus =

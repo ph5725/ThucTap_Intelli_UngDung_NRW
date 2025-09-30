@@ -1,20 +1,18 @@
 // src/pages/quan-ly-dong-ho/AddMeterPage.tsx
+// import "../../../styles/qltk/EditAccountModal.css";
+// import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../styles/global.css";
-import "../../../styles/tai-khoan/EditAccountModal.css";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css"
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
-// import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
-
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -69,7 +67,7 @@ const AddMeterPage: React.FC = () => {
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       // Sinh metadata ở FE
@@ -77,7 +75,7 @@ const AddMeterPage: React.FC = () => {
         ...formData,
         NgayTao: new Date().toISOString(),
         NgayGhi: new Date().toISOString(),
-        NguoiTao: nguoiDung?.Id ?? 0,
+        NguoiTao: nguoiDung?.id ?? 0,
       };
 
       await createData<AddDongHoTongRequest, DongHoTongResponse>(
