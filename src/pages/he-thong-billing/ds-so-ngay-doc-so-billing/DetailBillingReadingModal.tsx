@@ -12,7 +12,7 @@ import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayD
 import { TextForms } from "src/constants/text";
 
 interface DetailBillingReadingModalProps {
-  reading: BillingReading;
+  reading: DsNgayDocSoBillingResponse;
   onClose: () => void;
 }
 
@@ -25,35 +25,35 @@ const DetailBillingReadingModal: React.FC<DetailBillingReadingModalProps> = ({ r
         <div className="modal-content-scroll">
           <form>
             <label>Năm:
-              <input type="number" value={reading.year} disabled />
+              <input type="number" value={reading.Nam} disabled />
             </label>
 
             <label>Kỳ:
-              <input type="text" value={reading.period} disabled />
+              <input type="text" value={reading.Ky} disabled />
             </label>
 
             <label>Ngày tạo:
-              <input type="text" value={reading.createdAt} disabled />
+              <input type="text" value={reading.NgayTao} disabled />
             </label>
 
             <label>Ngày cập nhật:
-              <input type="text" value={reading.updatedAt || "-"} disabled />
+              <input type="text" value={reading.NgayCapNhat || "-"} disabled />
             </label>
 
             <label>Người tạo:
-              <input type="text" value={reading.createdBy || "-"} disabled />
+              <input type="text" value={reading.NguoiTao || "-"} disabled />
             </label>
 
             <label>Người cập nhật:
-              <input type="text" value={reading.updatedBy || "-"} disabled />
+              <input type="text" value={reading.NguoiCapNhat || "-"} disabled />
             </label>
 
             <label>Số ngày đọc:
-              <input type="number" value={reading.daysCount} disabled />
+              <input type="number" value={reading.SoNgayDocSoBilling} disabled />
             </label>
 
             <div className="modal-actions">
-              <button type="button" className="btn close" onClick={onClose}>Đóng</button>
+              <button type="button" className="btn close" onClick={onClose}>{TextForms.nut.dong}</button>
             </div>
           </form>
         </div>

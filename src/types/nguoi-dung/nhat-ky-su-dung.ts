@@ -25,13 +25,13 @@ export interface UpdateNhatKySuDungRequest {
 // Dữ liệu trả về
 export interface NhatKySuDungResponse {
   Id: number;
-  TenNguoiDung?: string;
+  TenNguoiDung: string;
   HanhDong: string;
-  TinhNang?: string;
-  DuLieu?: string;
+  TinhNang: string;
+  DuLieu: string;
   GhiChu?: string;
   NgayTao: string;
   NgayCapNhat?: string;
-  NguoiTao?: string;
+  NguoiTao: string;
   NguoiCapNhat?: string;
 }

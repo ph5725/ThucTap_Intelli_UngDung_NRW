@@ -21,28 +21,44 @@ import { TextForms } from "src/constants/text";
 const BillingReadingPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [readings, setReadings] = useState<BillingReading[]>([]);
+  const [readings, setReadings] = useState<DsNgayDocSoBillingResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [filterYear, setFilterYear] = useState("");
   const [filterPeriod, setFilterPeriod] = useState("");
 
-  const [selectedReading, setSelectedReading] = useState<BillingReading | null>(null);
-  const [detailReading, setDetailReading] = useState<BillingReading | null>(null);
+  const [selectedReading, setSelectedReading] = useState<DsNgayDocSoBillingResponse | null>(null);
+  const [detailReading, setDetailReading] = useState<DsNgayDocSoBillingResponse | null>(null);
 
   // Load dữ liệu từ API
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await billingReadingService.list();
+        // const data = await billingReadingService.list();
+        const data = await getList<DsNgayDocSoBillingResponse>(apiUrls.DSNgayDocSoBilling.list);
         setReadings(data);
       } catch (error) {
         console.error("❌ Lỗi tải danh sách ngày đọc số:", error);
-        alert("Không thể tải dữ liệu từ API!");
+        alert(TextForms.thongBao.khongTheTaiDuLieu);
       }
     };
     fetchData();
   }, []); 
+
+  // Xóa dữ liệu
+  const handleDelete = async (id: number) => {
+    if (window.confirm(`Bạn có chắc muốn xóa kỳ đọc ID ${id}?`)) {
+      try {
+        // await billingReadingService.delete(id);
+        await deleteData(apiUrls.DSNgayDocSoBilling.delete(id));;
+        setReadings(prev => prev.filter(r => r.Id !== id));
+        alert(TextForms.thongBao.xoaThanhCong);
+      } catch (error) {
+        console.error("❌ Lỗi xóa:", error);
+        alert(TextForms.thongBao.loiXoa);
+      }
+    }
+  };
 
 /*  useEffect(() => {
   // Dùng dữ liệu giả
@@ -53,11 +69,11 @@ const BillingReadingPage: React.FC = () => {
   const filteredReadings = useMemo(() => {
     return readings.filter(r => {
       const matchSearch =
-        r.year.toString().includes(searchTerm) ||
-        r.period.includes(searchTerm);
+        r.Nam.toString().includes(searchTerm) ||
+        r.Ky.toString().includes(searchTerm);
 
-      const matchYear = filterYear ? r.year.toString() === filterYear : true;
-      const matchPeriod = filterPeriod ? r.period === filterPeriod : true;
+      const matchYear = filterYear ? r.Nam.toString() === filterYear : true;
+      const matchPeriod = filterPeriod ? r.Ky.toString() === filterPeriod : true;
 
       return matchSearch && matchYear && matchPeriod;
     });
@@ -75,21 +91,8 @@ const BillingReadingPage: React.FC = () => {
   const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm(`Bạn có chắc muốn xóa kỳ đọc ID ${id}?`)) {
-      try {
-        await billingReadingService.delete(id);
-        setReadings(prev => prev.filter(r => r.id !== id));
-        alert("Xóa thành công!");
-      } catch (error) {
-        console.error("❌ Lỗi xóa:", error);
-        alert("Xóa thất bại!");
-      }
-    }
-  };
-
-  const handleSave = (updated: BillingReading) => {
-    setReadings(prev => prev.map(r => (r.id === updated.id ? updated : r)));
+  const handleSave = (updated: DsNgayDocSoBillingResponse) => {
+    setReadings(prev => prev.map(r => (r.Id === updated.Id ? updated : r)));
   };
 
   return (
@@ -98,7 +101,6 @@ const BillingReadingPage: React.FC = () => {
         <FaBookReader className="page-icon" />
         <h2 className="page-title">DANH SÁCH NGÀY SỐ ĐỌC BILLING</h2>
       </div>
-
       <Tabs />
 
       <div className="boder">
@@ -135,15 +137,15 @@ const BillingReadingPage: React.FC = () => {
           </thead>
           <tbody>
             {currentReadings.map(r => (
-              <tr key={r.id}>
-                <td>{r.id}</td>
-                <td>{r.year}</td>
-                <td>{r.period}</td>
-                <td>{r.createdAt}</td>
-                <td>{r.updatedAt || "-"}</td>
+              <tr key={r.Id}>
+                <td>{r.Id}</td>
+                <td>{r.Nam}</td>
+                <td>{r.Ky}</td>
+                <td>{r.NgayCapNhat}</td>
+                <td>{r.NguoiCapNhat || "-"}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedReading(r)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(r.id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(r.Id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailReading(r)} />
                 </td>
               </tr>
@@ -180,7 +182,7 @@ const BillingReadingPage: React.FC = () => {
 
       {selectedReading && (
         <EditBillingReadingModal
-          readingId={selectedReading?.id}
+          readingId={selectedReading?.Id}
           onClose={() => setSelectedReading(null)}
           onSave={handleSave}
           useMock={false} // nếu muốn dùng mock

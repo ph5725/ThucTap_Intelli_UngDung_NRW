@@ -7,14 +7,15 @@ import "../../../styles/songaydocbillingchitiet/EditBillingReadingDetailModal.cs
 //   type BillingReadingDetail,
 //   billingReadingDetailService,
 // } from "../../../services/he-thong-billing/billingReadingDetailService";
-import { mockBillingReadingDetails } from "../../../config/mockData";
+// import { mockBillingReadingDetails } from "../../../config/mockData";
 
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 
 // interface
 import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+import { ThongTinNguoiDung } from "src/types/authTypes";
 
 // text
 import { TextForms } from "src/constants/text";
@@ -22,7 +23,7 @@ import { TextForms } from "src/constants/text";
 interface Props {
   readingId: number;
   onClose: () => void;
-  onSave: (updated: BillingReadingDetail) => void;
+  onSave: (updated: DsNgayDocSoBillingChiTietResponse) => void;
   useMock?: boolean;
 }
 
@@ -32,24 +33,32 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
   onSave,
   useMock,
 }) => {
-  const [formData, setFormData] = useState<BillingReadingDetail | null>(null);
+  const [formData, setFormData] = useState<DsNgayDocSoBillingChiTietResponse | null>(null);
+  // Dữ liệu người dùng nhập
+  const [dataUpdate, setDataUpdate] = useState<Omit<
+    UpdateDsNgayDocSoBillingChiTietRequest,
+    | "NgayCapNhat"
+    | "NguoiCapNhat"
+  >>({
+    MaNgayDocSo: 0,
+    Nam: 0,
+    Ky: 0,
+    Dot: 0,
+    SoNgayDocSoDot: 0,
+    GhiChu: "",
+  });
   const [loading, setLoading] = useState(true);
 
-  // Load chi tiết
+  // Load dữ liệu ban 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        if (useMock) {
-          const mock = mockBillingReadingDetails.find((r) => r.id === readingId);
-          if (!mock) throw new Error("Không tìm thấy dữ liệu mock");
-          setFormData(mock);
-        } else {
-          const data = await billingReadingDetailService.detail(readingId);
-          setFormData(data);
-        }
+        // const data = await billingReadingDetailService.detail(readingId);
+        const data = await getById<DsNgayDocSoBillingChiTietResponse>(apiUrls.DSNgayDocSoBillingChiTiet.detail(readingId));;
+        setFormData(data);
       } catch (error) {
         console.error("❌ Lỗi tải dữ liệu:", error);
-        alert("Không tải được dữ liệu!");
+        alert(TextForms.thongBao.khongTheTaiDuLieu);
         onClose();
       } finally {
         setLoading(false);
@@ -57,51 +66,102 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
     };
     fetchDetail();
   }, [readingId, onClose, useMock]);
+  // useEffect(() => {
+  //   const fetchDetail = async () => {
+  //     try {
+  //       if (useMock) {
+  //         const mock = mockBillingReadingDetails.find((r) => r.id === readingId);
+  //         if (!mock) throw new Error("Không tìm thấy dữ liệu mock");
+  //         setFormData(mock);
+  //       } else {
+  //         // const data = await billingReadingDetailService.detail(readingId);
+  //         const data = await getById<DsNgayDocSoBillingChiTietResponse>(apiUrls.DSNgayDocSoBillingChiTiet.detail(readingId));;
+  //         setFormData(data);
+  //       }
+  //     } catch (error) {
+  //       console.error("❌ Lỗi tải dữ liệu:", error);
+  //       alert(TextForms.thongBao.khongTheTaiDuLieu);
+  //       onClose();
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchDetail();
+  // }, [readingId, onClose, useMock]);
 
   if (loading || !formData) {
-    return <div className="modal-overlay">Đang tải dữ liệu...</div>;
+    return <div className="modal-overlay">{TextForms.thongBao.dangTaiDuLieu}</div>;
   }
 
+  // Xử lý thay đổi input
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev!,
-      [name]: name === "year" || name === "daysCount" ? Number(value) : value,
+      [name]: name === "nam" || name === "SoNgayDocSoDot" ? Number(value) : value,
+    }));
+
+    setDataUpdate((prev) => ({
+      ...prev,
+      [name]: name === "Nam" || name === "SoNgayDocSoDot" || name === "MaNgayDocSo" || name === "Ky" || name === "Dot" ? Number(value) : value,
     }));
   };
 
+  // Cập nhật dữ liệu
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData) return;
 
     try {
-      const now = new Date().toISOString();
-      const currentUser = "admin"; // 👉 sau này thay bằng user login thật
+      // Lấy thông tin người dùng từ localStorage
+      const nguoiDungStr = localStorage.getItem("nguoiDung");
+      let nguoiDung: ThongTinNguoiDung | null = null;
 
-      const payload: BillingReadingDetail = {
-        ...formData,
-        updatedAt: now,
-        updatedBy: currentUser,
+      if (nguoiDungStr) {
+        nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
+        console.log("ID người dùng:", nguoiDung.Id);
+      }
+
+      const now = new Date().toISOString();
+      const currentUser = nguoiDung?.Id ?? 0; // 👉 sau này thay bằng user login thật
+
+      const payload: UpdateDsNgayDocSoBillingChiTietRequest = {
+        ...dataUpdate,
+        NgayCapNhat: now,
+        NguoiCapNhat: currentUser,
       };
 
-      if (useMock) {
-        onSave(payload);
-        alert("✅ Cập nhật mock thành công!");
-      } else {
-        const updated = await billingReadingDetailService.update(
-          readingId,
-          payload
-        );
-        onSave(updated);
-        alert("✅ Cập nhật thành công!");
-      }
+      const res = await updateData<UpdateDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse>(
+        apiUrls.NguoiDung.update(formData.Id!),
+        payload
+      );
+      onSave(res);
+      alert("✅ Cập nhật thành công!");
+
       onClose();
     } catch (error) {
       console.error("❌ Lỗi cập nhật:", error);
       alert("Cập nhật thất bại!");
     }
+
+    //   if (useMock) {
+    //     onSave(payload);
+    //     alert("✅ Cập nhật mock thành công!");
+    //   } else {
+    //     const updated = await billingReadingDetailService.update(
+    //       readingId,
+    //       payload
+    //     );
+    //     onSave(updated);
+    //     alert("✅ Cập nhật thành công!");
+    //   }
+    //   onClose();
+    // } catch (error) {
+    //   console.error("❌ Lỗi cập nhật:", error);
+    //   alert("Cập nhật thất bại!");
+    // }
   };
 
   return (
@@ -114,7 +174,7 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <label>Mã ngày số đọc</label>
           <input
             name="code"
-            value={formData.code}
+            value={formData.MaNgayDocSo}
             onChange={handleChange}
             required
           />
@@ -123,7 +183,7 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <input
             type="number"
             name="year"
-            value={formData.year}
+            value={formData.Nam}
             onChange={handleChange}
             required
           />
@@ -131,19 +191,19 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <label>Kỳ</label>
           <input
             name="period"
-            value={formData.period}
+            value={formData.Ky}
             onChange={handleChange}
             required
           />
 
           <label>Đợt</label>
-          <input name="batch" value={formData.batch} onChange={handleChange} />
+          <input name="batch" value={formData.Dot} onChange={handleChange} />
 
           <label>Số ngày đọc</label>
           <input
             type="number"
             name="daysCount"
-            value={formData.daysCount}
+            value={formData.SoNgayDocSoDot}
             onChange={handleChange}
             required
           />
@@ -151,26 +211,26 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.note || ""}
+            value={formData.GhiChu || ""}
             onChange={handleChange}
           />
 
           {/* Metadata hiển thị */}
           <label>Ngày tạo:</label>
-          <input type="text" value={formData.createdAt} readOnly />
+          <input type="text" value={formData.NgayTao} readOnly />
           <label>Người tạo:</label>
-          <input type="text" value={formData.createdBy || ""} readOnly />
+          <input type="text" value={formData.NguoiTao || ""} readOnly />
           <label>Ngày cập nhật:</label>
-          <input type="text" value={formData.updatedAt || ""} readOnly />
+          <input type="text" value={formData.NgayCapNhat || ""} readOnly />
           <label>Người cập nhật:</label>
-          <input type="text" value={formData.updatedBy || ""} readOnly />
+          <input type="text" value={formData.NguoiCapNhat || ""} readOnly />
 
           <div className="modal-actions">
             <button type="submit" className="btn save">
-              Lưu
+              {TextForms.nut.themMoi}
             </button>
             <button type="button" className="btn close" onClick={onClose}>
-              Hủy
+              {TextForms.nut.huyBo}
             </button>
           </div>
         </form>

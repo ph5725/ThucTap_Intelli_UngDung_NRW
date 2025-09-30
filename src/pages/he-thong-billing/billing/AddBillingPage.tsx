@@ -21,8 +21,7 @@ const AddBillingPage: React.FC = () => {
   // Dữ liệu người dùng nhập
   const [formData, setFormData] = useState<Omit<
     AddBillingRequest,
-    | "NgayTao"
-    | "NguoiTao"
+    | "NgayTao" | "NguoiTao"
   >>({
     SanLuongTieuThu: 0,
     MaDoiTuong: "",
@@ -66,13 +65,12 @@ const AddBillingPage: React.FC = () => {
         NgayTao: new Date().toISOString(), // hoặc format theo BE yêu cầu
         NguoiTao: nguoiDung?.Id ?? 0,
       };
-
       const payload: AddBillingRequest = {
         ...formData,
         ...metadata,
       };
 
-      const res = await createData<AddBillingRequest, BillingResponse>(
+      await createData<AddBillingRequest, BillingResponse>(
         apiUrls.Billing.create, // URL endpoint
         payload                 // dữ liệu gửi đi
       );

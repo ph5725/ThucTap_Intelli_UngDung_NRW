@@ -2,10 +2,19 @@
 import React from "react";
 import "../../../styles/global.css";
 import "../../../styles/nhatky/EditUserLogModal.css";
-import { type UserLog } from "../../../services/nguoi-dung/userLogService";
+// import { type UserLog } from "../../../services/nguoi-dung/userLogService";
+// service
+import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
+
+// text
+import { TextForms } from "src/constants/text";
 
 interface DetailUserLogModalProps {
-  log: UserLog;
+  log: NhatKySuDungResponse;
   onClose: () => void;
 }
 
@@ -19,38 +28,38 @@ const DetailUserLogModal: React.FC<DetailUserLogModalProps> = ({ log, onClose })
 
         <div className="modal-content-scroll">
           <label>Người dùng</label>
-          <input value={log.user} disabled />
+          <input value={log.TenNguoiDung} disabled />
 
           <label>Hành động</label>
-          <input value={log.action} disabled />
+          <input value={log.HanhDong} disabled />
 
           <label>Tính năng</label>
-          <input value={log.feature} disabled />
+          <input value={log.TinhNang} disabled />
 
           <label>Dữ liệu</label>
-          <input value={log.data} disabled />
+          <input value={log.DuLieu} disabled />
 
-          <label>Trạng thái</label>
-          <input value={log.status} disabled />
+          {/* <label>Trạng thái</label>
+          <input value={log.status} disabled /> */}
 
           <label>Người tạo</label>
-          <input value={log.createdBy} disabled />
+          <input value={log.NguoiTao} disabled />
 
           <label>Người cập nhật</label>
-          <input value={log.updatedByUser || ""} disabled />
+          <input value={log.NgayCapNhat || ""} disabled />
 
           <label>Ngày tạo</label>
-          <input value={log.createdAt} disabled />
+          <input value={log.NgayTao} disabled />
 
           <label>Ngày cập nhật</label>
-          <input value={log.updatedAt || ""} disabled />
+          <input value={log.NgayCapNhat || ""} disabled />
 
           <label>Ghi chú</label>
-          <textarea value={log.note || ""} disabled />
+          <textarea value={log.GhiChu || ""} disabled />
         </div>
 
         <div className="modal-actions">
-          <button className="btn close" onClick={onClose}>Đóng</button>
+          <button className="btn close" onClick={onClose}>{TextForms.nut.dong}</button>
         </div>
       </div>
     </div>

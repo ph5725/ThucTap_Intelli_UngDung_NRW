@@ -5,21 +5,33 @@ import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
-import { meterConfigService } from "../../../services/dong-ho-tong/meterConfigService";
+// import { meterConfigService } from "../../../services/dong-ho-tong/meterConfigService";
+// service
+import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
+import { ThongTinNguoiDung } from "src/types/authTypes";
+
+// text
+import { TextForms } from "src/constants/text";
 
 const AddMeterConfigPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  // chỉ khởi tạo field cần nhập
-  const [formData, setFormData] = useState({
-    objectCode: "",
-    meterCode: "",
-    note: "",
-    locked: false,
-    errorFlag: false,
+  // Dữ liệu người dùng nhập
+  const [formData, setFormData] = useState<Omit<
+    AddCauHinhDhtRequest,
+    | "NgayTao" | "NguoiTao"
+  >>({
+    MaDoiTuong: 0,
+    MaDongHo: 0,
+    GhiChu: "",
   });
 
+  // Cập nhật formData khi người dùng nhập vào form
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
     setFormData(prev => ({
@@ -28,33 +40,78 @@ const AddMeterConfigPage: React.FC = () => {
     }));
   };
 
+  // Submit form: Gọi API thêm dữ liệu
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // user hiện tại (giả sử lấy từ localStorage hoặc context)
-      const currentUser = localStorage.getItem("username") || "admin";
+      // Lấy thông tin người dùng từ localStorage
+      const nguoiDungStr = localStorage.getItem("nguoiDung");
+      let nguoiDung: ThongTinNguoiDung | null = null;
 
-      // gắn metadata ở FE
+      if (nguoiDungStr) {
+        nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
+        console.log("ID người dùng:", nguoiDung.Id);
+      }
+
+      // Sinh metadata ở FE
       const payload = {
         ...formData,
-        createdAt: new Date().toISOString(),
-        createdBy: currentUser,
-        updatedAt: null,
-        updatedByUser: null,
+        NgayTao: new Date().toISOString(),
+        NguoiTao: nguoiDung?.Id ?? 0,
       };
 
-      await meterConfigService.create(payload);
-      alert("✅ Thêm mới cấu hình đồng hồ thành công!");
+      await createData<AddCauHinhDhtRequest, CauHinhDhtResponse>(
+        apiUrls.CauHinhDHT.create, // URL endpoint
+        payload                 // dữ liệu gửi đi
+      );
+      alert(TextForms.thongBao.themMoiThanhCong);
       navigate("/meter-config");
     } catch (error) {
       console.error("❌ Lỗi khi thêm mới cấu hình:", error);
-      alert("Xảy ra lỗi khi thêm mới!");
+      alert(TextForms.thongBao.loiThem);
     } finally {
       setLoading(false);
     }
   };
+
+  // // Cập nhật formData khi người dùng nhập vào form
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const { name, value, type, checked } = e.target as HTMLInputElement;
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     [name]: type === "checkbox" ? checked : value
+  //   }));
+  // };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   try {
+  //     // user hiện tại (giả sử lấy từ localStorage hoặc context)
+  //     const currentUser = localStorage.getItem("username") || "admin";
+
+  //     // gắn metadata ở FE
+  //     const payload = {
+  //       ...formData,
+  //       createdAt: new Date().toISOString(),
+  //       createdBy: currentUser,
+  //       updatedAt: null,
+  //       updatedByUser: null,
+  //     };
+
+  //     await meterConfigService.create(payload);
+  //     alert("✅ Thêm mới cấu hình đồng hồ thành công!");
+  //     navigate("/meter-config");
+  //   } catch (error) {
+  //     console.error("❌ Lỗi khi thêm mới cấu hình:", error);
+  //     alert("Xảy ra lỗi khi thêm mới!");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="add-account-container">
@@ -70,7 +127,7 @@ const AddMeterConfigPage: React.FC = () => {
           <label>Mã đối tượng</label>
           <input
             name="objectCode"
-            value={formData.objectCode}
+            value={formData.MaDoiTuong}
             onChange={handleChange}
             required
           />
@@ -78,23 +135,23 @@ const AddMeterConfigPage: React.FC = () => {
           <label>Mã đồng hồ</label>
           <input
             name="meterCode"
-            value={formData.meterCode}
+            value={formData.MaDongHo}
             onChange={handleChange}
             required
           />
 
-          <label>Khóa</label>
+          {/* <label>Khóa</label>
           <input
             type="checkbox"
             name="locked"
             checked={formData.locked}
             onChange={handleChange}
-          />
+          /> */}
 
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.note}
+            value={formData.GhiChu}
             onChange={handleChange}
             rows={3}
           />
@@ -102,10 +159,10 @@ const AddMeterConfigPage: React.FC = () => {
 
         <div className="form-actions">
           <button type="submit" className="btn save" disabled={loading}>
-            {loading ? "Đang lưu..." : "Lưu"}
+            {loading ? "Đang lưu..." : TextForms.nut.themMoi}
           </button>
           <button type="button" className="btn close" onClick={() => navigate(-1)}>
-            Hủy
+            {TextForms.nut.huyBo}
           </button>
         </div>
       </form>

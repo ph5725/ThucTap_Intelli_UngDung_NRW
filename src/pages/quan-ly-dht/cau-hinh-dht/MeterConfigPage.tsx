@@ -4,13 +4,23 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterConfigModal from "./EditMeterConfigModal";
 import DetailMeterConfigModal from "./DetailMeterConfigModal";
-import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
+// import { meterConfigService, type MeterConfig } from "../../../services/dong-ho-tong/meterConfigService";
 import "../../../styles/qldh/MeterManagementPage.css";
 //import { mockMeterConfigs } from "../../../config/mockData";
 
+// service
+import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
+
+// text
+import { TextForms } from "src/constants/text";
+
 const MeterConfigPage: React.FC = () => {
   const navigate = useNavigate();
-  const [configs, setConfigs] = useState<MeterConfig[]>([]);
+  const [configs, setConfigs] = useState<CauHinhDhtResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,35 +28,48 @@ const MeterConfigPage: React.FC = () => {
 
   // Modal state
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [detailConfig, setDetailConfig] = useState<MeterConfig | null>(null);
-  
+  const [detailConfig, setDetailConfig] = useState<CauHinhDhtResponse | null>(null);
 
   // Load dữ liệu API thật
-  
   useEffect(() => {
     const fetchConfigs = async () => {
       try {
-        const res = await meterConfigService.getAll();
-        setConfigs(res.data);
+        // const res = await meterConfigService.getAll();
+        const res = await getList<CauHinhDhtResponse>(apiUrls.CauHinhDHT.list);
+        setConfigs(res);
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu API:", error);
-        alert("Không thể tải dữ liệu từ API!");
+        alert(TextForms.thongBao.khongTheTaiDuLieu);
       }
     };
     fetchConfigs();
   }, []);
-  
+
+  // Xóa
+  const handleDelete = async (id: number) => {
+    if (!window.confirm(`Bạn có chắc muốn xóa cấu hình ID ${id}?`)) return;
+    try {
+      // await meterConfigService.delete(id);
+      await deleteData(apiUrls.CauHinhDHT.delete(id));;
+      setConfigs(prev => prev.filter(c => c.Id !== id));
+      alert(TextForms.thongBao.xoaThanhCong);
+    } catch (error) {
+      console.error("Lỗi khi xóa API:", error);
+      alert(TextForms.thongBao.loiXoa);
+    }
+  };
 
   // Load mock data
-/*  useEffect(() => {
-    setConfigs(mockMeterConfigs);
-  }, []); */
+  /*  useEffect(() => {
+      setConfigs(mockMeterConfigs);
+    }, []); */
 
   // Filter
   const filteredConfigs = useMemo(() => {
-    return configs.filter(c =>
-      c.objectCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.meterCode.toLowerCase().includes(searchTerm.toLowerCase())
+    return configs.filter(
+      (c) =>
+        (c.MaDoiTuong?.toString()?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+        (c.MaDongHo?.toLowerCase() ?? "").includes(searchTerm.toLowerCase())
     );
   }, [configs, searchTerm]);
 
@@ -60,44 +83,32 @@ const MeterConfigPage: React.FC = () => {
   const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
 
-  // Delete
-  const handleDelete = async (id: number) => {
-    if (!window.confirm(`Bạn có chắc muốn xóa cấu hình ID ${id}?`)) return;
-    try {
-      await meterConfigService.delete(id);
-      setConfigs(prev => prev.filter(c => c.id !== id));
-    } catch (error) {
-      console.error("Lỗi khi xóa API:", error);
-      alert("Xảy ra lỗi khi xóa!");
-    }
-  };
-
   // Toggle lock
-   const handleToggleLock = async (cfg: MeterConfig) => {
-    try {
-      const updated = {
-        objectCode: cfg.objectCode,
-        meterCode: cfg.meterCode,
-        note: cfg.note,
-        locked: !cfg.locked,
-        updatedAt: new Date().toISOString(),
-        updatedByUser: "current-user" // FE tự tạo
-      };
-      await meterConfigService.update(cfg.id, updated);
-      setConfigs(prev => prev.map(c => (c.id === cfg.id ? { ...c, locked: !c.locked } : c)));
-    } catch (error) {
-      console.error("Lỗi khi toggle lock API:", error);
-      alert("Xảy ra lỗi!");
-    }
-  };
+  // const handleToggleLock = async (cfg: MeterConfig) => {
+  //   try {
+  //     const updated = {
+  //       objectCode: cfg.objectCode,
+  //       meterCode: cfg.meterCode,
+  //       note: cfg.note,
+  //       locked: !cfg.locked,
+  //       updatedAt: new Date().toISOString(),
+  //       updatedByUser: "current-user" // FE tự tạo
+  //     };
+  //     await meterConfigService.update(cfg.id, updated);
+  //     setConfigs(prev => prev.map(c => (c.id === cfg.id ? { ...c, locked: !c.locked } : c)));
+  //   } catch (error) {
+  //     console.error("Lỗi khi toggle lock API:", error);
+  //     alert("Xảy ra lỗi!");
+  //   }
+  // };
 
   // Open edit modal
   const handleEdit = (id: number) => setSelectedId(id);
 
   // KPI
   const totalConfigs = configs.length;
-  const lockedConfigs = configs.filter(c => c.locked).length;
-  const activeConfigs = configs.filter(c => !c.locked).length;
+  // const lockedConfigs = configs.filter(c => c.locked).length;
+  // const activeConfigs = configs.filter(c => !c.locked).length;
 
   return (
     <div className="meter-page">
@@ -114,14 +125,14 @@ const MeterConfigPage: React.FC = () => {
           <span>Tổng số cấu hình</span>
           <p>{totalConfigs}</p>
         </div>
-        <div className="card red">
+        {/* <div className="card red">
           <span>Đang khóa</span>
           <h3>{lockedConfigs}</h3>
         </div>
         <div className="card green">
           <span>Đang hoạt động</span>
           <h3>{activeConfigs}</h3>
-        </div>
+        </div> */}
       </div>
 
       {/* Toolbar */}
@@ -158,16 +169,17 @@ const MeterConfigPage: React.FC = () => {
           </thead>
           <tbody>
             {currentConfigs.map(c => (
-              <tr key={c.id} className={c.locked ? "locked-row" : ""}>
-                <td>{c.id}</td>
-                <td>{c.objectCode}</td>
-                <td>{c.meterCode}</td>
-                <td>{c.createdAt}</td>
+              // <tr key={c.Id} className={c.locked ? "locked-row" : ""}>
+              <tr key={c.Id}>
+                <td>{c.Id}</td>
+                <td>{c.MaDoiTuong}</td>
+                <td>{c.MaDongHo}</td>
+                <td>{c.NgayTao}</td>
                 <td className="actions">
-                  <FaEdit title="Sửa" onClick={() => handleEdit(c.id)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(c.id)} />
+                  <FaEdit title="Sửa" onClick={() => handleEdit(c.Id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(c.Id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailConfig(c)} />
-                  <FaLock title="Khóa/Mở" onClick={() => handleToggleLock(c)} />
+                  {/* <FaLock title="Khóa/Mở" onClick={() => handleToggleLock(c)} /> */}
                 </td>
               </tr>
             ))}
@@ -206,7 +218,7 @@ const MeterConfigPage: React.FC = () => {
           useMock={false} // đổi false nếu muốn dùng API thật
           onClose={() => setSelectedId(null)}
           onSave={(updated) => {
-            setConfigs(prev => prev.map(c => (c.id === updated.id ? updated : c)));
+            setConfigs(prev => prev.map(c => (c.Id === updated.Id ? updated : c)));
             setSelectedId(null);
           }}
         />
