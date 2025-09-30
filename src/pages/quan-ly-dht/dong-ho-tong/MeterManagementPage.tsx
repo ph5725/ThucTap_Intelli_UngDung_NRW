@@ -15,13 +15,24 @@ import EditMeterModal from "./EditMeterModal";
 import DetailMeterModal from "./DetailMeterModal";
 import MeterStats from "../../../components/MeterStats";
 import "../../../styles/qldh/MeterManagementPage.css";
-import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
+// import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
 //import { mockMeters } from "../../../config/mockData";
+
+// service
+import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
+import { ThongTinNguoiDung } from "src/types/authTypes";
+
+// text
+import { TextForms } from "src/constants/text";
 
 const MeterManagementPage: React.FC = () => {
   const navigate = useNavigate();
 
-  const [meters, setMeters] = useState<Meter[]>([]);
+  const [meters, setMeters] = useState<DongHoTongResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -29,8 +40,8 @@ const MeterManagementPage: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<"" | "Hoạt động" | "Cảnh báo" | "Lỗi">("");
   const [showFilter, setShowFilter] = useState(false);
 
-  const [selectedMeter, setSelectedMeter] = useState<Meter | null>(null);
-  const [detailMeter, setDetailMeter] = useState<Meter | null>(null);
+  const [selectedMeter, setSelectedMeter] = useState<DongHoTongResponse | null>(null);
+  const [detailMeter, setDetailMeter] = useState<DongHoTongResponse | null>(null);
 
 
   // Pagination
@@ -41,32 +52,55 @@ const MeterManagementPage: React.FC = () => {
   useEffect(() => {
     const fetchMeters = async () => {
       try {
-        const res = await meterService.getAll();
-        setMeters(res.data);
+        // const res = await meterService.getAll();
+        const res = await getList<DongHoTongResponse>(apiUrls.DongHoTong.list);
+        setMeters(res);
       } catch (error) {
         console.error("❌ Lỗi khi tải dữ liệu đồng hồ:", error);
-        alert("Không thể tải dữ liệu từ API!");
+        alert(TextForms.thongBao.khongTheTaiDuLieu);
         setMeters([]); // show table rỗng nếu API lỗi
       } finally {
         setLoading(false);
       }
     };
     fetchMeters();
-  }, []); 
+  }, []);
+
+  // 📌 Xóa đồng hồ
+  const handleDelete = async (id: number) => {
+    if (!window.confirm(`Bạn có chắc muốn xóa đồng hồ ID ${id}?`)) return;
+    try {
+      // await meterService.delete(id);
+      await deleteData(apiUrls.DongHoTong.delete(id));;
+      setMeters(meters.filter((m) => m.Id !== id));
+      setMessage(TextForms.thongBao.xoaThanhCong);
+      alert(TextForms.thongBao.xoaThanhCong);
+    } catch (error) {
+      console.error("❌ Lỗi khi xóa đồng hồ:", error);
+      setMessage("Xóa thất bại!");
+      alert(TextForms.thongBao.loiXoa);
+    } finally {
+      setTimeout(() => setMessage(null), 3000);
+    }
+  };
+
+  // 📌 Lưu chỉnh sửa
+
+  if (loading) return <div>{TextForms.thongBao.dangTaiDuLieu}</div>;
 
   // Dữ liệu giả cho MeterPage
-/* useEffect(() => {  
-  setMeters(mockMeters);       
-  setLoading(false);
-}, []); */
+  /* useEffect(() => {  
+    setMeters(mockMeters);       
+    setLoading(false);
+  }, []); */
 
   // 📌 Lọc & tìm kiếm
   const filteredMeters = useMemo(() => {
     return meters.filter(
       (m) =>
-        (m.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          m.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-        (filterStatus === "" || m.status === filterStatus)
+      (m.Ma.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        m.Ten.toLowerCase().includes(searchTerm.toLowerCase()))
+      // &&(filterStatus === "" || m.status === filterStatus)
     );
   }, [meters, searchTerm, filterStatus]);
 
@@ -80,24 +114,7 @@ const MeterManagementPage: React.FC = () => {
   const handlePrev = () => setCurrentPage((p) => Math.max(p - 1, 1));
   const handleNext = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
 
-  // 📌 Xóa đồng hồ
-  const handleDelete = async (id: number) => {
-    if (!window.confirm(`Bạn có chắc muốn xóa đồng hồ ID ${id}?`)) return;
-    try {
-      await meterService.delete(id);
-      setMeters(meters.filter((m) => m.id !== id));
-      setMessage("Xóa thành công!");
-    } catch (error) {
-      console.error("❌ Lỗi khi xóa đồng hồ:", error);
-      setMessage("Xóa thất bại!");
-    } finally {
-      setTimeout(() => setMessage(null), 3000);
-    }
-  };
 
-  // 📌 Lưu chỉnh sửa
-
-  if (loading) return <div>Đang tải dữ liệu...</div>;
 
   return (
     <div className="meter-page">
@@ -110,7 +127,7 @@ const MeterManagementPage: React.FC = () => {
       </div>
 
       {/* KPI + Charts */}
-      <MeterStats meters={meters} />
+      {/* <MeterStats meters={meters} /> */}
 
       {/* Danh sách đồng hồ */}
       <div className="page-header">
@@ -155,15 +172,15 @@ const MeterManagementPage: React.FC = () => {
           </thead>
           <tbody>
             {currentMeters.map((m) => (
-              <tr key={m.id}>
-                <td>{m.id}</td>
-                <td>{m.code}</td>
-                <td>{m.name}</td>
-                <td>{m.volume}</td>
-                <td>{m.status}</td>
+              <tr key={m.Id}>
+                <td>{m.Id}</td>
+                <td>{m.Ma}</td>
+                <td>{m.Ten}</td>
+                <td>{m.SanLuong}</td>
+                {/* <td>{m.status}</td> */}
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedMeter(m)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(m.id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(m.Id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailMeter(m)} />
                   <FaLock title="Khóa/Mở" />
                 </td>
@@ -217,17 +234,17 @@ const MeterManagementPage: React.FC = () => {
 
       {/* Modal Edit */}
       {selectedMeter && (
-<EditMeterModal
-    meterId={selectedMeter.id}
-    useMock={false} // hoặc true nếu muốn dùng mock
-    onClose={() => setSelectedMeter(null)}
-    onSave={(updatedMeter) => {
-      setMeters(prev =>
-        prev.map(m => (m.id === updatedMeter.id ? updatedMeter : m))
-      );
-      setSelectedMeter(null);
-    }}
-  />
+        <EditMeterModal
+          meterId={selectedMeter.Id}
+          useMock={false} // hoặc true nếu muốn dùng mock
+          onClose={() => setSelectedMeter(null)}
+          onSave={(updatedMeter) => {
+            setMeters(prev =>
+              prev.map(m => (m.Id === updatedMeter.id ? updatedMeter : m))
+            );
+            setSelectedMeter(null);
+          }}
+        />
       )}
 
       {/* Modal Detail */}
