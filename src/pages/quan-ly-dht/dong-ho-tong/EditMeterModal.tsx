@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react";
-import "../../../styles/global.css";
 // import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
 // import { mockMeters } from "../../../config/mockData";
-import "../../../styles/qldh/EditMeterModal.css";
-
+// import "../../../styles/qldh/EditMeterModal.css";
+import React, { useState, useEffect } from "react";
+import "src/styles/global.css";
+import "src/styles/dong-ho-tong/EditMeterModal.css"
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -96,15 +94,15 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       const payload = {
         ...formData,
         NgayChinhSua: new Date().toISOString(),
-        NguoiChinhSua: nguoiDung?.Id ?? 0, // có thể lấy từ context/token
+        NguoiChinhSua: nguoiDung?.id ?? 0, // có thể lấy từ context/token
         NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: nguoiDung?.Id ?? 0, // có thể lấy từ context/token
+        NguoiCapNhat: nguoiDung?.id ?? 0, // có thể lấy từ context/token
       };
 
       const res = await updateData<UpdateDongHoTongRequest, DongHoTongResponse>(

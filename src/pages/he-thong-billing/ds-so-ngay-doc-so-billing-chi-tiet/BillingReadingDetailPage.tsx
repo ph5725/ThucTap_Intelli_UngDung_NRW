@@ -1,17 +1,16 @@
 // src/pages/billing/BillingReadingDetailPage.tsx
+// import "../../../styles/qltk/EditAccountModal.css";
+// import { type BillingReadingDetail, billingReadingDetailService } from "../../../services/he-thong-billing/billingReadingDetailService";
+//import { mockBillingReadingDetails } from "../../../config/mockData";
 import React, { useState, useEffect, useMemo } from "react";
 import { FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Tabs from "../../../components/tabBilling/Tabs";
-import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
-
-
+import Tabs from "src/components/tabBilling/Tabs";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css";
+import "src/styles/ds-so-ngay-doc-so-billing-chi-tiet/EditBillingReadingDetailModal.css";
 import EditBillingReadingDetailModal from "./EditBillingReadingDetailModal";
 import DetailBillingReadingDetailModal from "./DetailBillingReadingDetailModal";
-// import { type BillingReadingDetail, billingReadingDetailService } from "../../../services/he-thong-billing/billingReadingDetailService";
-//import { mockBillingReadingDetails } from "../../../config/mockData";
-
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";

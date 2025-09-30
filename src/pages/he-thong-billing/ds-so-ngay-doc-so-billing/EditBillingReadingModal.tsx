@@ -1,18 +1,15 @@
 // EditBillingReadingModal.tsx
-import React, { useState, useEffect } from "react";
 // import type { BillingReading } from "../../../services/he-thong-billing/billingReadingService";
 // import { billingReadingService } from "../../../services/he-thong-billing/billingReadingService";
 // import { mockBillingReadings } from "../../../config/mockData";
-import "../../../styles/songaydocbilling/EditBillingReadingModal.css";
-
+import React, { useState, useEffect } from "react";
+import "src/styles/ds-so-ngay-doc-so-billing/EditBillingReadingModal.css";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
@@ -130,14 +127,14 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
 
     if (nguoiDungStr) {
       nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-      console.log("ID người dùng:", nguoiDung.Id);
+      console.log("ID người dùng:", nguoiDung.id);
     }
 
     // Chuẩn bị object update có metadata
     const updated: UpdateDsNgayDocSoBillingRequest = {
       ...dataUpdate,
       NgayCapNhat: new Date().toISOString(),
-      NguoiCapNhat: nguoiDung?.Id ?? 0, // TODO: thay bằng user login thật từ Auth
+      NguoiCapNhat: nguoiDung?.id ?? 0, // TODO: thay bằng user login thật từ Auth
     };
 
     try {

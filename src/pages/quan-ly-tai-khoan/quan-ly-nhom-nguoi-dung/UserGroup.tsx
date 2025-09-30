@@ -1,19 +1,18 @@
 // src/pages/quan-ly-tai-khoan/quan-ly-nhom-nguoi-dung/UserGroupPage.tsx
+// import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
+// import "../../../styles/qltk/AccountManagement.css";
+//import { mockUserGroups } from "../../../config/mockData";
 import React, { useState, useEffect, useMemo } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Tabs from "../../../components/tabQLTK/Tabs";
+import Tabs from "src/components/tabQLTK/Tabs";
 import EditUserGroupModal from "./EditUserGroupModal";
 import DetailUserGroupModal from "./DetailUserGroupModal";
-// import { userGroupService, type UserGroup } from "../../../services/nguoi-dung/userGroupService";
-import "../../../styles/global.css";
-import "../../../styles/qltk/AccountManagement.css";
-//import { mockUserGroups } from "../../../config/mockData";
-
+import "src/styles/global.css";
+import "src/styles/tai-khoan/AccountManagement.css"
 // service
 import { deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { NhomNguoiDungResponse } from "src/types/nguoi-dung/nhom-nguoi-dung";
 

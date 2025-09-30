@@ -1,32 +1,27 @@
+//import { mockBillingReadings } from "../../../config/mockData";
+// import { billingReadingService, type BillingReading } from "../../../services/he-thong-billing/billingReadingService";
 import React, { useState, useEffect, useMemo } from "react";
 import { FaBookReader, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Tabs from "../../../components/tabBilling/Tabs";
-import "../../../styles/global.css";
-//import { mockBillingReadings } from "../../../config/mockData";
-// import { billingReadingService, type BillingReading } from "../../../services/he-thong-billing/billingReadingService";
+import Tabs from "src/components/tabBilling/Tabs";
+import "src/styles/global.css";
 import EditBillingReadingModal from "./EditBillingReadingModal";
 import DetailBillingReadingModal from "./DetailBillingReadingModal";
-
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
-
 // text
 import { TextForms } from "src/constants/text";
 
 const BillingReadingPage: React.FC = () => {
   const navigate = useNavigate();
-
   const [readings, setReadings] = useState<DsNgayDocSoBillingResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilter, setShowFilter] = useState(false);
   const [filterYear, setFilterYear] = useState("");
   const [filterPeriod, setFilterPeriod] = useState("");
-
   const [selectedReading, setSelectedReading] = useState<DsNgayDocSoBillingResponse | null>(null);
   const [detailReading, setDetailReading] = useState<DsNgayDocSoBillingResponse | null>(null);
 

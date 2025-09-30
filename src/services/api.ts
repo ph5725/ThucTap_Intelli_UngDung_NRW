@@ -14,7 +14,18 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+  else
+    console.error("Không có token");
   return config;
 });
+
+// Interceptor xử lý lỗi khi gọi API
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.error("Kết nối API thất bại:", error.message);
+    return Promise.reject(error);
+  }
+);
 
 export default api;

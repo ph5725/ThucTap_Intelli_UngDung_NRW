@@ -1,17 +1,17 @@
+//import { mockUsers } from "../../../config/mockData";
+// import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
+// import "../../../styles/qltk/AccountManagement.css";
 import React, { useState, useEffect, useMemo } from "react";
 import { FaUser, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
-import Tabs from "../../../components/tabQLTK/Tabs";
-import "../../../styles/global.css";
-import "../../../styles/qltk/AccountManagement.css";
-// import { userService, type UserInfo } from "../../../services/nguoi-dung/userService";
+import Tabs from "src/components/tabQLTK/Tabs";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/AccountManagement.css"
 import EditUserInfoModal from "./EditUserInfoModal";
 import DetailUserInfoModal from "./DetailUserInfoModal";
 import { useNavigate } from "react-router-dom";
-//import { mockUsers } from "../../../config/mockData";
 // service
 import {  deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import {  NguoiDungResponse, } from "src/types/nguoi-dung/nguoi-dung";
 

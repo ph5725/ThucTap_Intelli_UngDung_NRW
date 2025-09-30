@@ -23,48 +23,48 @@ export interface QuenMatKhauRequest {
 /* ========== RESPONE (API --> CLIENT) ========== */
 // Response đăng nhập
 export interface DangNhapResponse {
-  Token: string;
-  ExpiresIn: number;
-  NguoiDung: ThongTinNguoiDung;
-  NhomNguoiDung: ThongTinNhomNguoiDung;
-  PhanQuyenDuLieu: ThongTinPhanQuyenDuLieu;
-  PhanQuyenTinhNang: ThongTinPhanQuyenTinhNang;
+  token: string;
+  expiresIn: number;
+  nguoiDung: ThongTinNguoiDung;
+  nhomNguoiDung: ThongTinNhomNguoiDung;
+  phanQuyenDuLieu: ThongTinPhanQuyenDuLieu;
+  phanQuyenTinhNang: ThongTinPhanQuyenTinhNang;
 }
 
 // Thông tin người dùng
 export interface ThongTinNguoiDung {
-  Id: number;
-  Ma: string;
-  Ten: string;
-  TenNguoiDung: string;
-  Email: string;
-  VaiTro?: string;
-  CapPhep: boolean;
+  id: number;
+  ma: string;
+  ten: string;
+  tenNguoiDung: string;
+  email: string;
+  vaiTro?: string;
+  capPhep: boolean;
 }
 
 // Nhóm người dùng
 export interface ThongTinNhomNguoiDung {
-  Id: number;
-  NhomNguoiDung: string;
-  ThanhVien?: string;
+  id: number;
+  nhomNguoiDung: string;
+  thanhVien?: string;
 }
 
 // Phân quyền dữ liệu
 export interface ThongTinPhanQuyenDuLieu {
-  DuLieuNrwcongTy?: string;
-  DuLieuNrwdma?: string;
+  duLieuNrwcongTy?: string;
+  duLieuNrwdma?: string;
 }
 
 // Phân quyền tính năng
 export interface ThongTinPhanQuyenTinhNang {
-  DongHoTong?: string;
-  CauHinhDht?: string;
-  Dsdma?: string;
-  NrwcongTy?: string;
-  Nrwdma?: string;
-  DsngayDocSoBilling?: string;
-  NguoiDung?: string;
-  NhomNguoiDungTinhNang?: string;
-  NhatKySuDung?: string;
-  PhanQuyen?: string;
+  dongHoTong?: string;
+  cauHinhDht?: string;
+  dsdma?: string;
+  nrwcongTy?: string;
+  nrwdma?: string;
+  dsngayDocSoBilling?: string;
+  nguoiDung?: string;
+  nhomNguoiDungTinhNang?: string;
+  nhatKySuDung?: string;
+  phanQuyen?: string;
 }

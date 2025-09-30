@@ -1,7 +1,7 @@
 
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
-// import "../../../styles/global.css";
+// import "src/styles/global.css";
 // import "../../../styles/qltk/AddAccount.css";
 // import { FaUser } from "react-icons/fa";
 // import Tabs from "../../../components/tabQLTK/Tabs";

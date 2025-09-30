@@ -1,26 +1,25 @@
 // src/pages/qlchdht/AddMeterConfigPage.tsx
+// import "../../../styles/qltk/EditAccountModal.css";
+// import { meterConfigService } from "../../../services/dong-ho-tong/meterConfigService";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../../../styles/global.css";
-import "../../../styles/qltk/EditAccountModal.css";
+import "src/styles/global.css";
+import "src/styles/tai-khoan/EditAccountModal.css";
+import "src/styles/cau-hinh-dht/EditMeterConfigModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
-import Tabs from "../../../components/tabQLDH/Tabs";
-// import { meterConfigService } from "../../../services/dong-ho-tong/meterConfigService";
+import Tabs from "src/components/tabQLDH/Tabs";
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
-
 // interface
 import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
 import { ThongTinNguoiDung } from "src/types/authTypes";
-
 // text
 import { TextForms } from "src/constants/text";
 
 const AddMeterConfigPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
   // Dữ liệu người dùng nhập
   const [formData, setFormData] = useState<Omit<
     AddCauHinhDhtRequest,
@@ -52,14 +51,14 @@ const AddMeterConfigPage: React.FC = () => {
 
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
-        console.log("ID người dùng:", nguoiDung.Id);
+        console.log("ID người dùng:", nguoiDung.id);
       }
 
       // Sinh metadata ở FE
       const payload = {
         ...formData,
         NgayTao: new Date().toISOString(),
-        NguoiTao: nguoiDung?.Id ?? 0,
+        NguoiTao: nguoiDung?.id ?? 0,
       };
 
       await createData<AddCauHinhDhtRequest, CauHinhDhtResponse>(
