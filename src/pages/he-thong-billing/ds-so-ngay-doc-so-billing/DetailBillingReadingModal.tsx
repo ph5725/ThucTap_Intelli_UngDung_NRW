@@ -1,6 +1,15 @@
 import React from "react";
 import "../../../styles/global.css";
-import type { BillingReading } from "../../../services/he-thong-billing/billingReadingService";
+// import type { BillingReading } from "../../../services/he-thong-billing/billingReadingService";
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
+
+// text
+import { TextForms } from "src/constants/text";
 
 interface DetailBillingReadingModalProps {
   reading: BillingReading;

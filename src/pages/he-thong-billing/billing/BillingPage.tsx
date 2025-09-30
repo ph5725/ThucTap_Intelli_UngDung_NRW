@@ -7,17 +7,26 @@ import "../../../styles/global.css";
 import BillingDashboard from "../../../components/BillingDashboard";
 import EditBillingModal from "./EditBillingModal";
 import DetailBillingModal from "./DetailBillingModal";
-import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
+// import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
 //import { mockBillings } from "../../../config/mockData";
 
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+
+// text
+import { TextForms } from "src/constants/text";
 
 const BillingPage: React.FC = () => {
   const navigate = useNavigate();
-  const [billings, setBillings] = useState<Billing[]>([]);
+  const [billings, setBillings] = useState<BillingResponse[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilter, setShowFilter] = useState(false);
-  const [selectedBilling, setSelectedBilling] = useState<Billing | null>(null);
-  const [detailBilling, setDetailBilling] = useState<Billing | null>(null);
+  const [selectedBilling, setSelectedBilling] = useState<BillingResponse | null>(null);
+  const [detailBilling, setDetailBilling] = useState<BillingResponse | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -25,28 +34,43 @@ const BillingPage: React.FC = () => {
   useEffect(() => {
     const fetchBillings = async () => {
       try {
-        const res = await billingService.getAll();
-        setBillings(res.data); // giữ nguyên id: number
+        // const res = await billingService.getAll();
+        const res = await getList<BillingResponse>(apiUrls.Billing.list);
+        setBillings(res); // giữ nguyên id: number
       } catch (error) {
         console.error("❌ Lỗi khi lấy dữ liệu Billing:", error);
-        alert("Không thể tải dữ liệu từ API!");
+        alert(TextForms.thongBao.khongTheTaiDuLieu);
       }
     };
     fetchBillings();
-  }, []);  
+  }, []);
+
+  // Xóa Billing
+  const handleDelete = async (id: number) => {
+    if (window.confirm(`Bạn có chắc muốn xóa hóa đơn ID ${id}?`)) {
+      try {
+        // await billingService.delete(id);
+        await deleteData(apiUrls.Billing.delete(id));;
+        setBillings((prev) => prev.filter((b) => b.Id !== id));
+      } catch (error) {
+        console.error("❌ Lỗi khi xóa Billing:", error);
+        alert(TextForms.thongBao.loiXoa);
+      }
+    }
+  };
 
   // Sử dụng dữ liệu giả từ mockData.ts
-/* useEffect(() => {
-  setBillings(mockBillings);
-}, []); */
+  /* useEffect(() => {
+    setBillings(mockBillings);
+  }, []); */
 
   // Lọc & tìm kiếm
   const filteredBillings = useMemo(() => {
     return billings.filter(
       (b) =>
-        b.objectCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        b.period.includes(searchTerm) ||
-        b.year.toString().includes(searchTerm)
+        b.MaDoiTuong.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        b.Ky.toString().includes(searchTerm) ||
+        b.Nam.toString().includes(searchTerm)
     );
   }, [billings, searchTerm]);
 
@@ -59,21 +83,6 @@ const BillingPage: React.FC = () => {
   // Pagination handlers
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-
-  // Xóa Billing
-  const handleDelete = async (id: number) => {
-    if (window.confirm(`Bạn có chắc muốn xóa hóa đơn ID ${id}?`)) {
-      try {
-        await billingService.delete(id);
-        setBillings((prev) => prev.filter((b) => b.id !== id));
-      } catch (error) {
-        console.error("❌ Lỗi khi xóa Billing:", error);
-        alert("Xóa thất bại!");
-      }
-    }
-  };
-
-
 
   return (
     <div className="billing-page">
@@ -127,15 +136,15 @@ const BillingPage: React.FC = () => {
           </thead>
           <tbody>
             {currentBillings.map((b) => (
-              <tr key={b.id}>
-                <td>{b.id}</td>
-                <td>{b.consumption} m³</td>
-                <td>{b.objectCode}</td>
-                <td>{b.period}</td>
-                <td>{b.year}</td>
+              <tr key={b.Id}>
+                <td>{b.Id}</td>
+                <td>{b.SanLuongTieuThu} m³</td>
+                <td>{b.MaDoiTuong}</td>
+                <td>{b.Ky}</td>
+                <td>{b.Nam}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedBilling(b)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(b.id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(b.Id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailBilling(b)} />
                 </td>
               </tr>
@@ -167,7 +176,7 @@ const BillingPage: React.FC = () => {
               Năm: <input type="number" placeholder="Nhập năm..." />
             </label>
             <div className="modal-actions">
-              <button className="btn apply">Áp dụng</button>
+              <button className="btn apply">{TextForms.nut.apDung}</button>
               <button className="btn close" onClick={() => setShowFilter(false)}>
                 Đóng
               </button>
@@ -178,23 +187,23 @@ const BillingPage: React.FC = () => {
 
       {/* Edit Modal */}
       {selectedBilling && (
-/*        <EditBillingModal
-          billingId={selectedBilling.id}
-          onClose={() => setSelectedBilling(null)}
-          onSave={(updated) =>
-          setBillings((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
-          }
-        /> */
+        /*        <EditBillingModal
+                  billingId={selectedBilling.id}
+                  onClose={() => setSelectedBilling(null)}
+                  onSave={(updated) =>
+                  setBillings((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
+                  }
+                /> */
 
         <EditBillingModal
-          billingId={selectedBilling?.id}
+          billingId={selectedBilling?.Id}
           useMock={false}
           onClose={() => setSelectedBilling(null)}
           onSave={(updated) =>
-            setBillings((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
+            setBillings((prev) => prev.map((b) => (b.Id === updated.Id ? updated : b)))
           }
         />
-      )} 
+      )}
 
       {/* Detail Modal */}
       {detailBilling && (

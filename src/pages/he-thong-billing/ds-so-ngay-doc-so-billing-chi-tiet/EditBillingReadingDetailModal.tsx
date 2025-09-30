@@ -3,11 +3,21 @@ import React, { useState, useEffect } from "react";
 import "../../../styles/global.css";
 import "../../../styles/qltk/EditAccountModal.css";
 import "../../../styles/songaydocbillingchitiet/EditBillingReadingDetailModal.css";
-import {
-  type BillingReadingDetail,
-  billingReadingDetailService,
-} from "../../../services/he-thong-billing/billingReadingDetailService";
+// import {
+//   type BillingReadingDetail,
+//   billingReadingDetailService,
+// } from "../../../services/he-thong-billing/billingReadingDetailService";
 import { mockBillingReadingDetails } from "../../../config/mockData";
+
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+
+// interface
+import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+
+// text
+import { TextForms } from "src/constants/text";
 
 interface Props {
   readingId: number;

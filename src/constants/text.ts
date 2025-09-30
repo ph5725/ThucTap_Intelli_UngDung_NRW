@@ -51,6 +51,7 @@ export const TextForms = {
         themMoiThanhCong: "Thêm mới thành công",
         capNhatThanhCong: "Cập nhật thành công",
         xoaThanhCong: "Xóa thành công",
+        dangTaiDuLieu: "Đang tải dữ liệu...",
 
         // Lỗi
         khongTheTaiDuLieu: "Không thể tải dữ liệu",
@@ -72,10 +73,11 @@ export const TextForms = {
         themMoi: "Thêm mới",
         xoa: "Xóa",
         apDung: "Áp dụng",
-        luuLai: "Lưu",
+        luu: "Lưu",
         huyBo: "Hủy bỏ",
         dong: "Đóng",
         loc: "Lọc",
+        capNhat: "Cập nhật",
 
         themKyMoi: "Thêm kỳ mới",
 

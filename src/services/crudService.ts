@@ -12,9 +12,9 @@ export const getList = async <TResponse>(
 // Lấy chi tiết
 export const getById = async <TResponse>(
   url: string,
-  id: number | string
+  // id: number | string
 ): Promise<TResponse> => {
-  const response = await api.get<TResponse>(`${url}/${id}`);
+  const response = await api.get<TResponse>(`${url}`);
   return response.data;
 };
 
