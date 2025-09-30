@@ -7,7 +7,7 @@ import "../../../styles/songaydocbillingchitiet/EditBillingReadingDetailModal.cs
 //   type BillingReadingDetail,
 //   billingReadingDetailService,
 // } from "../../../services/he-thong-billing/billingReadingDetailService";
-import { mockBillingReadingDetails } from "../../../config/mockData";
+// import { mockBillingReadingDetails } from "../../../config/mockData";
 
 // service
 import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
@@ -49,19 +49,13 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
   });
   const [loading, setLoading] = useState(true);
 
-  // Load dữ liệu ban đầu
+  // Load dữ liệu ban 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        if (useMock) {
-          const mock = mockBillingReadingDetails.find((r) => r.id === readingId);
-          if (!mock) throw new Error("Không tìm thấy dữ liệu mock");
-          setFormData(mock);
-        } else {
-          // const data = await billingReadingDetailService.detail(readingId);
-          const data = await getById<DsNgayDocSoBillingChiTietResponse>(apiUrls.DSNgayDocSoBillingChiTiet.detail(readingId));;
-          setFormData(data);
-        }
+        // const data = await billingReadingDetailService.detail(readingId);
+        const data = await getById<DsNgayDocSoBillingChiTietResponse>(apiUrls.DSNgayDocSoBillingChiTiet.detail(readingId));;
+        setFormData(data);
       } catch (error) {
         console.error("❌ Lỗi tải dữ liệu:", error);
         alert(TextForms.thongBao.khongTheTaiDuLieu);
@@ -72,6 +66,28 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
     };
     fetchDetail();
   }, [readingId, onClose, useMock]);
+  // useEffect(() => {
+  //   const fetchDetail = async () => {
+  //     try {
+  //       if (useMock) {
+  //         const mock = mockBillingReadingDetails.find((r) => r.id === readingId);
+  //         if (!mock) throw new Error("Không tìm thấy dữ liệu mock");
+  //         setFormData(mock);
+  //       } else {
+  //         // const data = await billingReadingDetailService.detail(readingId);
+  //         const data = await getById<DsNgayDocSoBillingChiTietResponse>(apiUrls.DSNgayDocSoBillingChiTiet.detail(readingId));;
+  //         setFormData(data);
+  //       }
+  //     } catch (error) {
+  //       console.error("❌ Lỗi tải dữ liệu:", error);
+  //       alert(TextForms.thongBao.khongTheTaiDuLieu);
+  //       onClose();
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchDetail();
+  // }, [readingId, onClose, useMock]);
 
   if (loading || !formData) {
     return <div className="modal-overlay">{TextForms.thongBao.dangTaiDuLieu}</div>;
