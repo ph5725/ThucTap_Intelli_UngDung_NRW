@@ -1,5 +1,6 @@
 import { MRT_Localization_VI } from 'material-react-table/locales/vi';
 import { THEME_COLORS } from "./theme_color";
+import 'src/styles/global.css'
 
 export const MaterialReactTableConfig = (containerWidth: number | undefined) => ({
     localization: MRT_Localization_VI,
@@ -38,20 +39,22 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
 
     // ==== Container ====
     muiTableContainerProps: {
+        className: "custom-scrollbar",
         sx: {
             height: '100%',
             maxHeight: '100%',
-            minHeight: '150px',
+            minHeight: '100%',
 
             width: '100%',
-            minWidth: '150px',
+            minWidth: '100%',
             maxWidth: '100%',
 
             overflow: 'auto',
-            ...(containerWidth !== undefined ? { maxWidth: containerWidth } : {}),
             overflowX: 'auto',
             overflowY: 'auto',
-            
+
+            // ...customScrollbar, , 
+            ...(containerWidth !== undefined ? { maxWidth: containerWidth } : {}),
         },
     },
 
@@ -60,10 +63,10 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
         sx: {
             height: '100%',
             maxHeight: '100%',
-            minHeight: '150px',
+            minHeight: '100%',
 
             width: '100%',
-            minWidth: '150px',
+            minWidth: '100%',
             maxWidth: '100%',
 
             border: 'none',
@@ -89,9 +92,9 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
         sx: {
             backgroundColor: THEME_COLORS.tableHeader,
             border: `1px solid ${THEME_COLORS.border}`,
-            fontWeight: 600,
+            // fontWeight: 400,
             fontSize: '12px',
-            color: THEME_COLORS.text.primary,
+            color: THEME_COLORS.text.secondary,
             verticalAlign: 'middle',
             py: 1,
             minHeight: '40px',
@@ -153,7 +156,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
         sx: {
             borderRadius: '0px',
             flexShrink: 0,
-            backgroundColor: THEME_COLORS.tableHeader,
+            backgroundColor: THEME_COLORS.tableFooter,
             py: 1,
             px: 2,
             '& .MuiTablePagination-root': {

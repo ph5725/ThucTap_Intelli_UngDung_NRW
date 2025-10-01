@@ -10,7 +10,7 @@ const customScrollbar = {
     height: "6px",
   },
   "&::-webkit-scrollbar-thumb": {
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(0, 0, 0, 0)",
     borderRadius: "4px",
   },
   "&::-webkit-scrollbar-track": {
@@ -37,6 +37,7 @@ export default function ThemePanelProvider({ left, right }: ThemePanelProviderPr
         {/* Panel trái */}
         <Paper
           sx={{
+            width:"100%",
             flex: 1,
             p: 2,
             overflow: "auto",

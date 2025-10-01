@@ -68,7 +68,7 @@ export const appTheme = createTheme({
     // 🔹 Tabs container
     MuiTabs: {
       styleOverrides: {
-        indicator: { display: "none" }, // Ẩn gạch dưới mặc định
+        // indicator: { display: "none" }
       },
     },
 

@@ -42,23 +42,23 @@ export interface UpdateNrwCongTyRequest {
 /* ========== RESPONE (API --> CLIENT) ========== */
 // Dữ liệu trả về
 export interface NrwCongTyResponse {
-  Id: number;
-  Ma: string;
-  Ky: number;
-  Nam: number;
-  SanLuongDauVao: number;
-  SanLuongTieuThu: number;
-  LuongNuocThatThoat?: number;
-  TyLeThatThoatChuan2?: number;
-  TyLeThatThoatChuan1?: number;
-  TuNgay: string;
-  DenNgay: string;
-  SoNgayDocSoDht?: number;
-  SoNgayDocSoBilling?: number;
-  NguyenNhan?: string;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  ma: string;
+  ky: number;
+  nam: number;
+  sanLuongDauVao: number;
+  sanLuongTieuThu: number;
+  luongNuocThatThoat?: number;
+  tyLeThatThoatChuan2?: number;
+  tyLeThatThoatChuan1?: number;
+  tuNgay: string;
+  denNgay: string;
+  soNgayDocSoDht?: number;
+  soNgayDocSoBilling?: number;
+  nguyenNhan?: string;
+  ghiChu?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

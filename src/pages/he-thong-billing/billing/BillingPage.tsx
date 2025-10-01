@@ -34,7 +34,6 @@ const BillingPage: React.FC = () => {
         // const res = await billingService.getAll();
         const res = await getList<BillingResponse>(apiUrls.Billing.list);
         setBillings(res); // giữ nguyên id: number
-        alert(TextForms.thongBao.xoaThanhCong);
       } catch (error) {
         console.error("❌ Lỗi khi lấy dữ liệu Billing:", error);
         alert(TextForms.thongBao.khongTheTaiDuLieu);

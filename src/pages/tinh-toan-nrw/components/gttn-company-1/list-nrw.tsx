@@ -5,9 +5,11 @@ import { MaterialReactTable, useMaterialReactTable, type MRT_TableInstance, type
 import { useSnackbar } from 'notistack';
 // Material React Table Custom
 import { MaterialReactTableConfig } from '../../../../theme/style_table';
-//API
-import api from "src/services/api";
-import apiUrls from "src/services/api";
+// service
+import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { apiUrls } from "src/services/apiUrls";
+// interface
+import { AddNrwCongTyRequest, NrwCongTyResponse, UpdateNrwCongTyRequest } from "src/types/nrw-cong-ty/nrw-cong-ty";
 // text
 import { TextForms } from "src/constants/text";
 
@@ -19,22 +21,22 @@ const THEME_COLORS = {
 };
 
 // Định nghĩa type cho dữ liệu NRW
-interface NRWData {
-  id: number;
-  sysInput: number;
-  billedAuth: number;
-  nrw: number;
-  percentnrw?: number;
-  period: string;
-  year: number;
-  fromdate: string;
-  todate: string;
-  daynumber: number;
-}
+// interface NRWData {
+//   id: number;
+//   sanLuongVao: number;
+//   sanLuongRa: number;
+//   luongNuocThatThoat: number;
+//   tyLeThatThoat?: number;
+//   ky: string;
+//   nam: number;
+//   tuNgay: string;
+//   denNgay: string;
+//   soNgay: number;
+// }
 
 interface NRWDataResponse {
   data: {
-    result: NRWData[];
+    result: NrwCongTyResponse[];
     total: number;
   };
   message: string;
@@ -44,7 +46,7 @@ export default function ListNrw() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [openAddPeriod, setOpenAddPeriod] = useState(false);
-  const [nrwData, setNRWData] = useState<NRWData[]>([]);
+  const [nrwData, setNRWData] = useState<NrwCongTyResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   // modal delete
@@ -73,70 +75,86 @@ export default function ListNrw() {
     return new Intl.NumberFormat('vi-VN').format(num);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await api.get<NRWDataResponse>("/nrwCongTy");
-        setNRWData(response.data.data.result);
-        setTotalPage(response.data.data.total);
-      } catch (error: any) {
-        console.error("Error fetching data:", error);
-        enqueueSnackbar("Không thể tải dữ liệu NRW", { variant: "error" });
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await api.get<NRWDataResponse>("/nrwCongTy");
+  //       setNRWData(response.data.data.result);
+  //       setTotalPage(response.data.data.total);
+  //     } catch (error: any) {
+  //       console.error("Error fetching data:", error);
+  //       enqueueSnackbar("Không thể tải dữ liệu NRW", { variant: "error" });
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
+
+  // Lấy dữ liệu từ API
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          // const res = await billingService.getAll();
+          const res = await getList<NrwCongTyResponse>(apiUrls.NRWCongTy.list);
+          setNRWData(res);
+          console.log("Dữ liệu: ", res);
+        } catch (error) {
+          console.error("Lỗi khi lấy dữ liệu Nrw Công ty:", error);
+          alert(TextForms.thongBao.khongTheTaiDuLieu);
+        }
+      };
+      fetchData();
+    }, []);
 
   // Định nghĩa columns
-  const columns = useMemo<MRT_ColumnDef<NRWData>[]>(
+  const columns = useMemo<MRT_ColumnDef<NrwCongTyResponse>[]>(
     () => [
       {
-        accessorKey: 'sysInput',
+        accessorKey: 'sanLuongDauVao',
         header: TextForms.nrw.sanLuongMuaVao,
         size: 150,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'billedAuth',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'sanLuongTieuThu',
+        header: TextForms.nrw.sanLuongBanRa,
         size: 150,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'nrw',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'luongNuocThatThoat',
+        header: TextForms.nrw.luongNuocThatThoat,
         size: 200,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'percentnrw',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'tyLeThatThoat',
+        header: TextForms.nrw.tyLeThatThoat,
         size: 150,
         Cell: ({ row }) => {
-          const sysInput = row.original.sysInput;
-          const nrw = row.original.nrw;
-          if (!sysInput) return '-';
-          const percent = (nrw / sysInput) * 100;
+          const sanLuongVao = row.original.sanLuongDauVao;
+          const tyLeThatThoat = row.original.tyLeThatThoatChuan1 ?? 0;
+          if (!sanLuongVao) return '-';
+          const percent = (tyLeThatThoat / sanLuongVao) * 100;
           return formatPercentage(percent);
         },
       },
       {
-        accessorKey: 'period',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'ky',
+        header: TextForms.nrw.ky,
         size: 80,
       },
       {
-        accessorKey: 'year',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'nam',
+        header: TextForms.nrw.nam,
         size: 100,
       },
       {
-        accessorKey: 'fromdate',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'tuNgay',
+        header: TextForms.nrw.tuNgay,
         size: 120,
         Cell: ({ cell }) => {
           const date = new Date(cell.getValue<string>());
@@ -148,8 +166,8 @@ export default function ListNrw() {
         },
       },
       {
-        accessorKey: 'todate',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'denNgay',
+        header: TextForms.nrw.denNgay,
         size: 120,
         Cell: ({ cell }) => {
           const date = new Date(cell.getValue<string>());
@@ -161,14 +179,19 @@ export default function ListNrw() {
         },
       },
       {
-        accessorKey: 'daynumber',
-        header: TextForms.nrw.sanLuongMuaVao,
+        accessorKey: 'soNgayDocSoDht',
+        header: TextForms.nrw.soNgayDocSoDht,
+      },
+       {
+        accessorKey: 'soNgayDocSoBilling',
+        header: TextForms.nrw.soNgayDocSoBilling,
       },
     ],
     [],
   );
 
   const table = useMaterialReactTable({
+    ...MaterialReactTableConfig(0),
     state: {
       isLoading: isLoading,
       showSkeletons: isLoading,
@@ -179,13 +202,12 @@ export default function ListNrw() {
       },
     },
     initialState: {
-      pagination: {
-        pageSize: 12,
-        pageIndex: 0,
-      },
+      // pagination: {
+      //   pageSize: 12,
+      //   pageIndex: 0,
+      // },
       density: 'compact',
     },
-    ...MaterialReactTableConfig(containerWidth),
     columns,
     data: nrwData,
     pageCount: totalPage,
@@ -204,7 +226,7 @@ export default function ListNrw() {
         </Tooltip>
       </Box>
     ),
-    renderEmptyRowsFallback: (props: { table: MRT_TableInstance<NRWData> }) => (
+    renderEmptyRowsFallback: (props: { table: MRT_TableInstance<NrwCongTyResponse> }) => (
       <Box sx={{ p: 2, textAlign: 'center', color: THEME_COLORS.text.secondary }}>
         {TextForms.thongBao.khongCoDuLieu}
       </Box>
