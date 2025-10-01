@@ -90,17 +90,21 @@ const EditMeterConfigModal: React.FC<Props> = ({ configId, onClose, onSave, useM
       if (nguoiDungStr) {
         nguoiDung = JSON.parse(nguoiDungStr) as ThongTinNguoiDung;
         console.log("ID người dùng:", nguoiDung.id);
+        
       }
 
       // gửi lên API với meterCode là number (id)
       const payload = {
+      
         ...dataUpdate,
-        NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: nguoiDung?.id ?? 0, // có thể lấy từ context/token
+        ngayCapNhat: new Date().toISOString(),
+        nguoiCapNhat: String(nguoiDung?.id ?? ""), 
+        // có thể lấy từ context/token
       };
 
+      console.log("Payload gửi:", payload);
       const res = await updateData<UpdateCauHinhDhtRequest, CauHinhDhtResponse>(
-        apiUrls.NguoiDung.update(formData.id!),
+        apiUrls.CauHinhDHT.update(formData.id!),
         payload
       );
       alert(TextForms.thongBao.capNhatThanhCong);
@@ -196,18 +200,20 @@ const EditMeterConfigModal: React.FC<Props> = ({ configId, onClose, onSave, useM
         <form onSubmit={handleSubmit}>
           <label>Mã đối tượng</label>
           <input
+            name="maDoiTuong"
             type="text"
             value={formData.maDoiTuong}
             onChange={handleChange}
           />
 
           <label>Mã đồng hồ</label>
-          <input type="text" value={formData.maDongHo} readOnly />
+          <input name="maDongHo"
+          type="text" value={formData.maDongHo} readOnly />
 
 
           <label>Ghi chú</label>
           <textarea
-            name="note"
+            name="ghiChu"
             value={formData.ghiChu || ""}
             onChange={handleChange}
           />

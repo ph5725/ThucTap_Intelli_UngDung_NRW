@@ -14,7 +14,7 @@ export interface UpdateNhomNguoiDungRequest {
   thanhVien?: string;
   ghiChu?: string;
   ngayCapNhat?: string;
-  nguoiCapNhat?: string; // BE trả về string
+  nguoiCapNhat?: number; // BE trả về string
 }
 
 /* ========== RESPONSE (API --> CLIENT) ========== */
