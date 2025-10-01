@@ -4,10 +4,10 @@
 import React, { useState, useEffect } from "react";
 import "src/styles/global.css";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  updateData,  getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+import { BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -29,17 +29,17 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
   // Dữ liệu người dùng nhập
   const [dataUpdate, setDataUpdate] = useState<Omit<
     UpdateBillingRequest,
-    | "NgayCapNhat"
-    | "NguoiCapNhat"
+    | "ngayCapNhat"
+    | "nguoiCapNhat"
   >>({
-    SanLuongTieuThu: 0,
-    MaDoiTuong: "",
-    Ky: 0,
-    Nam: 0,
-    Dot: 0,
-    TuNgay: "",
-    DenNgay: "",
-    GhiChu: "",
+    sanLuongTieuThu: 0,
+    maDoiTuong: "",
+    ky: 0,
+    nam: 0,
+    dot: 0,
+    tuNgay: "",
+    denNgay: "",
+    ghiChu: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -119,12 +119,12 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
 
       const payload: UpdateBillingRequest = {
         ...dataUpdate,
-        NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: nguoiDung?.id ?? 0, // FE sinh
+        ngayCapNhat: new Date().toISOString(),
+        nguoiCapNhat: (nguoiDung?.id ?? 0).toString(), // FE sinh
       };
 
       const res = await updateData<UpdateBillingRequest, BillingResponse>(
-        apiUrls.NguoiDung.update(form.Id!),
+        apiUrls.NguoiDung.update(form.id!),
         payload
       );
       onSave(res);
@@ -198,42 +198,42 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
 
         <form onSubmit={handleSubmit}>
           <label>Mã đối tượng:</label>
-          <input name="objectCode" value={form.MaDoiTuong} onChange={handleChange} required />
+          <input name="objectCode" value={form.maDoiTuong} onChange={handleChange} required />
 
           <label>Sản lượng tiêu thụ:</label>
-          <input type="number" name="consumption" value={form.SanLuongTieuThu} onChange={handleChange} required />
+          <input type="number" name="consumption" value={form.sanLuongTieuThu} onChange={handleChange} required />
 
           <label>Kỳ:</label>
-          <input name="period" value={form.Ky} onChange={handleChange} required />
+          <input name="period" value={form.ky} onChange={handleChange} required />
 
           <label>Năm:</label>
-          <input type="number" name="year" value={form.Nam} onChange={handleChange} required />
+          <input type="number" name="year" value={form.nam} onChange={handleChange} required />
 
           <label>Đợt:</label>
-          <input name="batch" value={form.Dot} onChange={handleChange} />
+          <input name="batch" value={form.dot} onChange={handleChange} />
 
           <label>Từ ngày:</label>
-          <input type="date" name="fromDate" value={form.TuNgay} onChange={handleChange} />
+          <input type="date" name="fromDate" value={form.tuNgay} onChange={handleChange} />
 
           <label>Đến ngày:</label>
-          <input type="date" name="toDate" value={form.DenNgay} onChange={handleChange} />
+          <input type="date" name="toDate" value={form.denNgay} onChange={handleChange} />
 
           <label>Ghi chú:</label>
-          <textarea name="note" value={form.GhiChu} onChange={handleChange} />
+          <textarea name="note" value={form.ghiChu} onChange={handleChange} />
 
           {/* Metadata hiển thị chỉ đọc */}
 
           <label>Ngày tạo:</label>
-          <input type="text" value={form.NgayTao} readOnly />
+          <input type="text" value={form.ngayTao} readOnly />
 
           <label>Người tạo:</label>
-          <input type="text" value={form.NguoiTao} readOnly />
+          <input type="text" value={form.nguoiTao} readOnly />
 
           <label>Ngày cập nhật:</label>
-          <input type="text" value={form.NgayCapNhat || ""} readOnly />
+          <input type="text" value={form.ngayCapNhat || ""} readOnly />
 
           <label>Người cập nhật:</label>
-          <input type="text" value={form.NguoiCapNhat || ""} readOnly />
+          <input type="text" value={form.nguoiCapNhat || ""} readOnly />
 
           <div className="modal-actions">
             <button type="submit" className="btn save">{TextForms.nut.luu}</button>

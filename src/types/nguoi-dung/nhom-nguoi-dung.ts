@@ -1,31 +1,31 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
 // Thêm dữ liệu
 export interface AddNhomNguoiDungRequest {
-  NhomNguoiDung1: string;
-  ThanhVien?: string;
-  GhiChu?: string;
-  NgayTao: string;
-  NguoiTao: number;
+  nhomNguoiDung1: string;
+  thanhVien?: string;
+  ghiChu?: string;
+  ngayTao: string;
+  nguoiTao: string;   // BE trả về string, nên để string
 }
 
 // Cập nhật dữ liệu
 export interface UpdateNhomNguoiDungRequest {
-  NhomNguoiDung1: string;
-  ThanhVien?: string;
-  GhiChu?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: number;
+  nhomNguoiDung1: string;
+  thanhVien?: string;
+  ghiChu?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: string; // BE trả về string
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
+/* ========== RESPONSE (API --> CLIENT) ========== */
 // Dữ liệu trả về
 export interface NhomNguoiDungResponse {
-  Id: number;
-  NhomNguoiDung1: string;
-  ThanhVien?: string;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  nhomNguoiDung1: string;
+  thanhVien?: string;
+  ghiChu?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

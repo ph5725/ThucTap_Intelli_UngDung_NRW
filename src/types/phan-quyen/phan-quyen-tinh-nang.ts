@@ -31,6 +31,8 @@ export interface UpdatePhanQuyenTinhNangRequest {
   PhanQuyen?: string;
   NgayCapNhat?: string;
   NguoiCapNhat?: number;
+   // 👇 Cho phép key động
+  [key: string]: string | number | undefined;
 }
 
 /* ========== RESPONE (API --> CLIENT) ========== */

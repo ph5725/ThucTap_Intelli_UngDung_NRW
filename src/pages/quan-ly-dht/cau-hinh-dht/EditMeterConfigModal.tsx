@@ -6,10 +6,10 @@ import React, { useState, useEffect } from "react";
 import "src/styles/global.css";
 import "src/styles/cau-hinh-dht/EditMeterConfigModal.css"
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  updateData, getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
+import {  CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -26,12 +26,12 @@ const EditMeterConfigModal: React.FC<Props> = ({ configId, onClose, onSave, useM
   // Dữ liệu người dùng nhập
   const [dataUpdate, setDataUpdate] = useState<Omit<
     UpdateCauHinhDhtRequest,
-    | "NgayCapNhat"
-    | "NguoiCapNhat"
+    | "ngayCapNhat"
+    | "nguoiCapNhat"
   >>({
-    MaDoiTuong: 0,
-    MaDongHo: 0,
-    GhiChu: "",
+    maDoiTuong: 0,
+    maDongHo: "0",
+    ghiChu: "",
   });
   const [loading, setLoading] = useState(false);
 
@@ -100,7 +100,7 @@ const EditMeterConfigModal: React.FC<Props> = ({ configId, onClose, onSave, useM
       };
 
       const res = await updateData<UpdateCauHinhDhtRequest, CauHinhDhtResponse>(
-        apiUrls.NguoiDung.update(formData.Id!),
+        apiUrls.NguoiDung.update(formData.id!),
         payload
       );
       alert(TextForms.thongBao.capNhatThanhCong);
@@ -197,30 +197,30 @@ const EditMeterConfigModal: React.FC<Props> = ({ configId, onClose, onSave, useM
           <label>Mã đối tượng</label>
           <input
             type="text"
-            value={formData.MaDoiTuong}
+            value={formData.maDoiTuong}
             onChange={handleChange}
           />
 
           <label>Mã đồng hồ</label>
-          <input type="text" value={formData.MaDongHo} readOnly />
+          <input type="text" value={formData.maDongHo} readOnly />
 
 
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.GhiChu || ""}
+            value={formData.ghiChu || ""}
             onChange={handleChange}
           />
 
           {/* Metadata readonly */}
           <label>Ngày tạo</label>
-          <input type="text" value={formData.NgayTao} readOnly />
+          <input type="text" value={formData.ngayTao} readOnly />
           <label>Người tạo</label>
-          <input type="text" value={formData.NguoiTao} readOnly />
+          <input type="text" value={formData.nguoiTao} readOnly />
           <label>Ngày cập nhật</label>
-          <input type="text" value={formData.NgayCapNhat || ""} readOnly />
+          <input type="text" value={formData.ngayCapNhat || ""} readOnly />
           <label>Người cập nhật</label>
-          <input type="text" value={formData.NguoiCapNhat || ""} readOnly />
+          <input type="text" value={formData.nguoiCapNhat || ""} readOnly />
 
           {/* <label>Khóa</label>
           <input

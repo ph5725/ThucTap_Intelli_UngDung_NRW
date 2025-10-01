@@ -33,7 +33,7 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
   };
 
   const handleSave = async () => {
-    if (formData.Id == null && !useMock) {
+    if (formData.id == null && !useMock) {
       alert("ID người dùng không hợp lệ!");
       return;
     }
@@ -46,16 +46,16 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
       } else {
         // Tạo payload để gửi lên backend (chỉ các trường cần update)
         const payload: UpdateNguoiDungRequest = {
-          Ten: formData.Ten,
-          TenNguoiDung: formData.TenNguoiDung,
-          Email: formData.Email,
-          VaiTro: formData.VaiTro,
-          Ma: "",
-          CapPhep: false
+          ten: formData.ten,
+          tenNguoiDung: formData.tenNguoiDung,
+          email: formData.email,
+          vaiTro: formData.vaiTro,
+          ma: "",
+          capPhep: false
         };
 
         const updated = await updateData<UpdateNguoiDungRequest, NguoiDungResponse>(
-          apiUrls.NguoiDung.update(formData.Id),
+          apiUrls.NguoiDung.update(formData.id),
           payload
         );
 
@@ -77,27 +77,27 @@ const EditAccountModal: React.FC<EditAccountModalProps> = ({
 
         <label>Tên tài khoản</label>
         <input
-          value={formData.Ten}
-          onChange={(e) => handleChange("Ten", e.target.value)}
+          value={formData.ten}
+          onChange={(e) => handleChange("ten", e.target.value)}
         />
 
         <label>Họ tên</label>
         <input
-          value={formData.TenNguoiDung}
-          onChange={(e) => handleChange("TenNguoiDung", e.target.value)}
+          value={formData.tenNguoiDung}
+          onChange={(e) => handleChange("tenNguoiDung", e.target.value)}
         />
 
         <label>Email</label>
         <input
           type="email"
-          value={formData.Email}
-          onChange={(e) => handleChange("Email", e.target.value)}
+          value={formData.email}
+          onChange={(e) => handleChange("email", e.target.value)}
         />
 
         <label>Vai trò</label>
         <select
-          value={formData.VaiTro}
-          onChange={(e) => handleChange("VaiTro", e.target.value)}
+          value={formData.vaiTro}
+          onChange={(e) => handleChange("vaiTro", e.target.value)}
         >
           <option value="admin">Quản trị viên</option>
           <option value="user">Người dùng</option>

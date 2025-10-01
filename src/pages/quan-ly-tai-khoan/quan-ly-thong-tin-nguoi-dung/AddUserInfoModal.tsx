@@ -9,10 +9,10 @@ import "src/styles/nguoi-dung/EditUserInfoModal.css"
 import { FaUser } from "react-icons/fa";
 import Tabs from "src/components/tabQLTK/Tabs";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { createData,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddNguoiDungRequest, NguoiDungResponse, UpdateNguoiDungRequest } from "src/types/nguoi-dung/nguoi-dung";
+import { AddNguoiDungRequest, NguoiDungResponse } from "src/types/nguoi-dung/nguoi-dung";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -20,20 +20,17 @@ import { TextForms } from "src/constants/text";
 const AddUserInfoPage: React.FC = () => {
   const navigate = useNavigate();
   // Dữ liệu người dùng nhập
-  const [formData, setFormData] = useState<Omit<
-    AddNguoiDungRequest,
-    | "NgayTao" | "NguoiTao"
-  >>({
-    Ma: "",
-    Ten: "",
-    TenNguoiDung: "",
-    MatKhau: "",
-    Email: "",
-    VaiTro: "",
-    CapPhep: true,
-    AnhDaiDien: "",
+  const [formData, setFormData] = useState <Omit<AddNguoiDungRequest,| "ngayTao" | "nguoiTao">>({
+    ma: "",
+    ten: "",
+    tenNguoiDung: "",
+    matKhau: "",
+    email: "",
+    vaiTro: "",
+    capPhep: true,
+    anhDaiDien: "",
   });
-  const [file, setFile] = useState<File | null>(null);
+  const [,setFile] = useState<File | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -43,7 +40,7 @@ const AddUserInfoPage: React.FC = () => {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
-      setFormData({ ...formData, AnhDaiDien: URL.createObjectURL(e.target.files[0]) });
+      setFormData({ ...formData, anhDaiDien: URL.createObjectURL(e.target.files[0]) });
     }
   };
 
@@ -62,8 +59,8 @@ const AddUserInfoPage: React.FC = () => {
       const now = new Date().toISOString();
       const payload = {
         ...formData,
-        NgayTao: now,
-        NguoiTao: nguoiDung?.tenNguoiDung ?? "",
+        ngayTao: now,
+        nguoiTao: nguoiDung?.tenNguoiDung ?? "",
       };
       // const payload = new FormData();
       // payload.append("code", formData.code);
@@ -106,22 +103,22 @@ const AddUserInfoPage: React.FC = () => {
           </div>
 
           <label>Mã</label>
-          <input type="text" name="code" value={formData.Ma} onChange={handleChange} required />
+          <input type="text" name="code" value={formData.ma} onChange={handleChange} required />
 
           <label>Tên Tài Khoản</label>
-          <input type="text" name="username" value={formData.TenNguoiDung} onChange={handleChange} required />
+          <input type="text" name="username" value={formData.tenNguoiDung} onChange={handleChange} required />
 
           <label>Tên Người Dùng</label>
-          <input type="text" name="fullname" value={formData.Ten} onChange={handleChange} required />
+          <input type="text" name="fullname" value={formData.ten} onChange={handleChange} required />
 
           {/* <label>Mật Khẩu</label>
           <input type="password" name="password" value={formData.password} onChange={handleChange} required /> */}
 
           <label>Email</label>
-          <input type="email" name="email" value={formData.Email} onChange={handleChange} required />
+          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
 
           <label>Vai Trò</label>
-          <select name="role" value={formData.VaiTro} onChange={handleChange}>
+          <select name="role" value={formData.vaiTro} onChange={handleChange}>
             <option value="admin">Quản trị viên</option>
             <option value="user">Người dùng</option>
             <option value="guest">Khách</option>
@@ -131,7 +128,7 @@ const AddUserInfoPage: React.FC = () => {
           <input
             type="checkbox"
             name="CapPhep"
-            checked={formData.CapPhep}
+            checked={formData.capPhep}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
@@ -151,9 +148,9 @@ const AddUserInfoPage: React.FC = () => {
 
           <label>Ảnh Đại Diện</label>
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
-          {formData.AnhDaiDien && (
+          {formData.anhDaiDien && (
             <img
-              src={formData.AnhDaiDien}
+              src={formData.anhDaiDien}
               alt="Avatar Preview"
               style={{ width: 80, marginTop: 10, borderRadius: 8 }}
             />

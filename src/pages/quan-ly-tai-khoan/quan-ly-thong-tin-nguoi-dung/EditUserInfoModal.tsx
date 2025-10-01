@@ -54,26 +54,26 @@ const EditUserInfoModal: React.FC<EditUserInfoModalProps> = ({ userId, onClose, 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
-      handleChange("AnhDaiDien", URL.createObjectURL(e.target.files[0]));
+      handleChange("anhDaiDien", URL.createObjectURL(e.target.files[0]));
     }
   };
 
 const handleSave = async () => {
-  if (!formData || !formData.Id) return; // đảm bảo formData hợp lệ
+  if (!formData || !formData.id) return; // đảm bảo formData hợp lệ
 
   setSaving(true);
   try {
     // 🔹 Chuẩn bị payload cập nhật
     const payload: UpdateNguoiDungRequest = {
-      Ma: formData.Ma,
-      Ten: formData.Ten,
-      TenNguoiDung: formData.TenNguoiDung,
-      Email: formData.Email,
-      VaiTro: formData.VaiTro,
-      CapPhep: formData.CapPhep,
-      AnhDaiDien: formData.AnhDaiDien,
-      NgayCapNhat: new Date().toISOString(),
-      NguoiCapNhat: formData.NguoiCapNhat || "", // nếu null/undefined, gửi chuỗi rỗng
+      ma: formData.ma,
+      ten: formData.ten,
+      tenNguoiDung: formData.tenNguoiDung,
+      email: formData.email,
+      vaiTro: formData.vaiTro,
+      capPhep: formData.capPhep,
+      anhDaiDien: formData.anhDaiDien,
+      ngayCapNhat: new Date().toISOString(),
+      nguoiCapNhat: formData.nguoiCapNhat || "", // nếu null/undefined, gửi chuỗi rỗng
     };
 
     // 🔹 Nếu có file avatar, dùng FormData
@@ -89,7 +89,7 @@ const handleSave = async () => {
 
     // 🔹 Gọi API update
     const updated: NguoiDungResponse = await updateData<typeof body, NguoiDungResponse>(
-      apiUrls.NguoiDung.update(formData.Id),
+      apiUrls.NguoiDung.update(formData.id),
       body
     );
 
@@ -116,19 +116,19 @@ const handleSave = async () => {
         <h3>Chỉnh sửa thông tin người dùng</h3>
         <div className="modal-content-scroll">
           <label>Mã</label>
-          <input value={formData.Ma} onChange={e => handleChange("Ma", e.target.value)} />
+          <input value={formData.ma} onChange={e => handleChange("ma", e.target.value)} />
 
           <label>Tên tài khoản</label>
-          <input value={formData.Ten} onChange={e => handleChange("Ten", e.target.value)} />
+          <input value={formData.ten} onChange={e => handleChange("ten", e.target.value)} />
 
           <label>Tên người dùng</label>
-          <input value={formData.TenNguoiDung} onChange={e => handleChange("TenNguoiDung", e.target.value)} />
+          <input value={formData.tenNguoiDung} onChange={e => handleChange("tenNguoiDung", e.target.value)} />
 
           <label>Email</label>
-          <input type="email" value={formData.Email} onChange={e => handleChange("Email", e.target.value)} />
+          <input type="email" value={formData.email} onChange={e => handleChange("email", e.target.value)} />
 
           <label>Vai trò</label>
-          <select value={formData.VaiTro} onChange={e => handleChange("VaiTro", e.target.value)}>
+          <select value={formData.vaiTro} onChange={e => handleChange("vaiTro", e.target.value)}>
             <option value="admin">Quản trị viên</option>
             <option value="user">Người dùng</option>
             <option value="guest">Khách</option>
@@ -136,19 +136,19 @@ const handleSave = async () => {
 
           <label>Ảnh đại diện</label>
           <input type="file" accept="image/*" onChange={handleAvatarChange} />
-          {formData.AnhDaiDien && <img src={formData.AnhDaiDien} alt="Avatar Preview" style={{ width: 80, borderRadius: 8, marginTop: 10 }} />}
+          {formData.anhDaiDien && <img src={formData.anhDaiDien} alt="Avatar Preview" style={{ width: 80, borderRadius: 8, marginTop: 10 }} />}
 
           <label>Ngày tạo</label>
-          <input value={formData.NgayTao} readOnly />
+          <input value={formData.ngayTao} readOnly />
 
           <label>Ngày cập nhật</label>
-          <input value={formData.NgayCapNhat} readOnly />
+          <input value={formData.ngayCapNhat} readOnly />
 
           <label>Người tạo</label>
-          <input value={formData.NguoiTao} readOnly />
+          <input value={formData.nguoiTao} readOnly />
 
           <label>Người cập nhật</label>
-          <input value={formData.NguoiCapNhat} readOnly />
+          <input value={formData.nguoiCapNhat} readOnly />
         </div>
 
         <div className="modal-actions">

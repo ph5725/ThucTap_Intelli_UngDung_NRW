@@ -6,12 +6,12 @@ import "src/styles/global.css";
 import "src/styles/tai-khoan/EditAccountModal.css"
 import "src/styles/ds-so-ngay-doc-so-billing-chi-tiet/DetailBillingReadingDetailModal.css";
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
-import { apiUrls } from "src/services/apiUrls";
+// import { createData, updateData, deleteData, getList } from "src/services/crudService";
+// import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+import {  DsNgayDocSoBillingChiTietResponse,  } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
 // text
-import { TextForms } from "src/constants/text";
+// import { TextForms } from "src/constants/text";
 
 interface Props {
   reading: DsNgayDocSoBillingChiTietResponse;
@@ -27,28 +27,28 @@ const DetailBillingReadingDetailModal: React.FC<Props> = ({ reading, onClose }) 
         </div>
       
         <label>Mã ngày số đọc</label>
-        <input type="text" value={reading.MaNgayDocSo} disabled />
+        <input type="text" value={reading.maNgayDocSo} disabled />
 
         <label>Năm</label>
-        <input type="number" value={reading.Nam} disabled />
+        <input type="number" value={reading.nam} disabled />
 
         <label>Kỳ</label>
-        <input type="text" value={reading.Ky} disabled />
+        <input type="text" value={reading.ky} disabled />
 
         <label>Đợt</label>
-        <input type="text" value={reading.Dot} disabled />
+        <input type="text" value={reading.dot} disabled />
 
         <label>Số ngày đọc</label>
-        <input type="number" value={reading.SoNgayDocSoDot} disabled />
+        <input type="number" value={reading.soNgayDocSoDot} disabled />
 
         <label>Ghi chú</label>
-        <textarea value={reading.GhiChu || ""} disabled />
+        <textarea value={reading.ghiChu || ""} disabled />
 
         <label>Người tạo</label>
-        <input type="text" value={reading.NgayTao || ""} disabled />
+        <input type="text" value={reading.nguoiTao || ""} disabled />
 
         <label>Ngày tạo</label>
-        <input type="date" value={reading.NgayTao.slice(0, 10)} disabled />
+        <input type="date" value={reading.ngayTao.slice(0, 10)} disabled />
 
         <div className="modal-actions">
           <button className="btn close" onClick={onClose}>Đóng</button>

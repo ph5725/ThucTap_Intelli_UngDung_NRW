@@ -9,10 +9,10 @@ import "src/styles/cau-hinh-dht/EditMeterConfigModal.css";
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "src/components/tabQLDH/Tabs";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { createData,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
+import { AddCauHinhDhtRequest, CauHinhDhtResponse,  } from "src/types/dong-ho-tong/cau-hinh-dht";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -23,11 +23,11 @@ const AddMeterConfigPage: React.FC = () => {
   // Dữ liệu người dùng nhập
   const [formData, setFormData] = useState<Omit<
     AddCauHinhDhtRequest,
-    | "NgayTao" | "NguoiTao"
+    | "ngayTao" | "nguoiTao"
   >>({
-    MaDoiTuong: 0,
-    MaDongHo: 0,
-    GhiChu: "",
+    maDoiTuong: 0,
+    maDongHo: "0",
+    ghiChu: "",
   });
 
   // Cập nhật formData khi người dùng nhập vào form
@@ -57,8 +57,9 @@ const AddMeterConfigPage: React.FC = () => {
       // Sinh metadata ở FE
       const payload = {
         ...formData,
-        NgayTao: new Date().toISOString(),
-        NguoiTao: nguoiDung?.id ?? 0,
+        ngayTao: new Date().toISOString(),
+        nguoiTao: (nguoiDung?.id ?? 0).toString(),
+
       };
 
       await createData<AddCauHinhDhtRequest, CauHinhDhtResponse>(
@@ -126,7 +127,7 @@ const AddMeterConfigPage: React.FC = () => {
           <label>Mã đối tượng</label>
           <input
             name="objectCode"
-            value={formData.MaDoiTuong}
+            value={formData.maDoiTuong}
             onChange={handleChange}
             required
           />
@@ -134,7 +135,7 @@ const AddMeterConfigPage: React.FC = () => {
           <label>Mã đồng hồ</label>
           <input
             name="meterCode"
-            value={formData.MaDongHo}
+            value={formData.maDongHo}
             onChange={handleChange}
             required
           />
@@ -150,7 +151,7 @@ const AddMeterConfigPage: React.FC = () => {
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.GhiChu}
+            value={formData.ghiChu}
             onChange={handleChange}
             rows={3}
           />

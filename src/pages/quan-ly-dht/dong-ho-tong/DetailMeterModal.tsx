@@ -4,12 +4,12 @@
 import React from "react";
 import "src/styles/global.css";
 import "src/styles/tai-khoan/EditAccountModal.css"
-import "src/styles/tai-khoan/DetailAccount.css"
+import "src/styles/dong-ho-tong/DetailMeterModal.css"
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
-import { apiUrls } from "src/services/apiUrls";
+
+// import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
+import {  DongHoTongResponse,  } from "src/types/dong-ho-tong/dong-ho-tong";
 // text
 import { TextForms } from "src/constants/text";
 
@@ -50,43 +50,43 @@ const DetailMeterModal: React.FC<DetailMeterModalProps> = ({ meter, onClose }) =
         {/* nội dung cuộn */}
         <div className="modal-content-scroll">
           <label>Mã đồng hồ</label>
-          <input type="text" value={meter.Ma} readOnly />
+          <input type="text" value={meter.ma} readOnly />
 
           <label>Tên</label>
-          <input type="text" value={meter.Ten} readOnly />
+          <input type="text" value={meter.ten} readOnly />
 
           <label>Sản lượng (m³)</label>
-          <input type="text" value={meter.SanLuong} readOnly />
+          <input type="text" value={meter.sanLuong} readOnly />
 
           {/* <label>Trạng thái</label>
           <input type="text" value={meter.status} readOnly /> */}
 
           <label>Ngày ghi</label>
-          <input type="text" value={meter.NgayGhi} readOnly />
+          <input type="text" value={meter.ngayGhi} readOnly />
 
           <label>Ngày chỉnh sửa</label>
-          <input type="text" value={meter.NgayChinhSua} readOnly />
+          <input type="text" value={meter.ngayChinhSua} readOnly />
 
           <label>Người chỉnh sửa</label>
-          <input type="text" value={meter.NguoiChinhSua} readOnly />
+          <input type="text" value={meter.nguoiChinhSua} readOnly />
 
           <label>Đánh dấu lỗi</label>
-          <input type="text" value={meter.DanhDauLoi ? "Có" : "Không"} readOnly />
+          <input type="text" value={meter.danhDauLoi ? "Có" : "Không"} readOnly />
 
           <label>Ngày tạo</label>
-          <input type="text" value={meter.NgayTao} readOnly />
+          <input type="text" value={meter.ngayTao} readOnly />
 
           <label>Ngày cập nhật</label>
-          <input type="text" value={meter.NgayCapNhat} readOnly />
+          <input type="text" value={meter.ngayCapNhat} readOnly />
 
           <label>Người tạo</label>
-          <input type="text" value={meter.NguoiTao} readOnly />
+          <input type="text" value={meter.nguoiTao} readOnly />
 
           <label>Người cập nhật</label>
-          <input type="text" value={meter.NguoiCapNhat} readOnly />
+          <input type="text" value={meter.nguoiCapNhat} readOnly />
 
           <label>Ghi chú</label>
-          <textarea value={meter.GhiChu} readOnly />
+          <textarea value={meter.ghiChu} readOnly />
         </div>
 
         {/* chỉ có nút Đóng */}

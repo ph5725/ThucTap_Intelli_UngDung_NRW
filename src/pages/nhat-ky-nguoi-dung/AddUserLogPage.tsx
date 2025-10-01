@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBookReader } from "react-icons/fa";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { createData,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
+import { AddNhatKySuDungRequest, NhatKySuDungResponse,  } from "src/types/nguoi-dung/nhat-ky-su-dung";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -16,13 +16,13 @@ const AddUserLogPage: React.FC = () => {
 
   const [formData, setFormData] = useState<Omit<
     AddNhatKySuDungRequest,
-    "NguoiTao" | "NgayTao"
+    "nguoiTao" | "ngayTao"
   >>({
-    TenNguoiDung: 0,
-    HanhDong: "",
-    TinhNang: "",
-    DuLieu: "",
-    GhiChu: "",
+    tenNguoiDung: 0,
+    hanhDong: "",
+    tinhNang: "",
+    duLieu: "",
+    ghiChu: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -45,8 +45,8 @@ const AddUserLogPage: React.FC = () => {
     // Tạo payload JSON với metadata
     const payload: AddNhatKySuDungRequest = {
       ...formData,
-      NgayTao: "FrontendUser",
-      NguoiTao: nguoiDung?.id ?? 0,
+      ngayTao: "FrontendUser",
+      nguoiTao: (nguoiDung?.id ?? 0).toString(),
     };
 
     try {
@@ -73,16 +73,16 @@ const AddUserLogPage: React.FC = () => {
       <form className="account-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Người dùng</label>
-          <input type="text" name="user" value={formData.TenNguoiDung} onChange={handleChange} required />
+          <input type="text" name="user" value={formData.tenNguoiDung} onChange={handleChange} required />
 
           <label>Hành động</label>
-          <input type="text" name="action" value={formData.HanhDong} onChange={handleChange} required />
+          <input type="text" name="action" value={formData.hanhDong} onChange={handleChange} required />
 
           <label>Tính năng</label>
-          <input type="text" name="feature" value={formData.TinhNang} onChange={handleChange} required />
+          <input type="text" name="feature" value={formData.tinhNang} onChange={handleChange} required />
 
           <label>Dữ liệu</label>
-          <input type="text" name="data" value={formData.DuLieu} onChange={handleChange} />
+          <input type="text" name="data" value={formData.duLieu} onChange={handleChange} />
 
           {/* <label>Trạng thái</label>
           <select name="status" value={formData.status} onChange={handleChange}>
@@ -92,7 +92,7 @@ const AddUserLogPage: React.FC = () => {
           </select> */}
 
           <label>Ghi chú</label>
-          <textarea name="note" value={formData.GhiChu} onChange={handleChange} />
+          <textarea name="note" value={formData.ghiChu} onChange={handleChange} />
         </div>
 
         <div className="form-actions">

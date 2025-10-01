@@ -7,10 +7,10 @@ import "src/styles/global.css";
 import "src/styles/cau-hinh-dht/EditMeterConfigModal.css"
 import "src/styles/cau-hinh-dht/DetailMeterConfigModal.css"
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
-import { apiUrls } from "src/services/apiUrls";
-// interface
-import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";;
+// import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+// import { apiUrls } from "src/services/apiUrls";
+// // interface
+import {  CauHinhDhtResponse  } from "src/types/dong-ho-tong/cau-hinh-dht";;
 // text
 import { TextForms } from "src/constants/text";
 
@@ -29,23 +29,23 @@ const DetailMeterConfigModal: React.FC<Props> = ({ config, onClose }) => {
 
         <div className="modal-content-scroll">
           <label>Mã đối tượng</label>
-          <input type="text" value={config.MaDoiTuong} readOnly />
+          <input type="text" value={config.maDoiTuong} readOnly />
 
           <label>Mã đồng hồ</label>
-          <input type="text" value={config.MaDongHo} readOnly />
+          <input type="text" value={config.maDongHo} readOnly />
 
           <label>Ghi chú</label>
-          <textarea value={config.GhiChu || ""} readOnly />
+          <textarea value={config.ghiChu || ""} readOnly />
 
           {/* Metadata readonly */}
           <label>Ngày tạo</label>
-          <input type="text" value={config.NgayTao} readOnly />
+          <input type="text" value={config.ngayTao} readOnly />
           <label>Người tạo</label>
-          <input type="text" value={config.NguoiTao} readOnly />
+          <input type="text" value={config.nguoiTao} readOnly />
           <label>Ngày cập nhật</label>
-          <input type="text" value={config.NgayCapNhat} readOnly />
+          <input type="text" value={config.ngayCapNhat} readOnly />
           <label>Người cập nhật</label>
-          <input type="text" value={config.NguoiCapNhat} readOnly />
+          <input type="text" value={config.nguoiCapNhat} readOnly />
         </div>
 
         <div className="modal-actions">

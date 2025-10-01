@@ -38,33 +38,33 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
 
 
   // Lấy danh sách
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      // if (useMock) {
-      //   setAccounts(mockUsers);
-      // } else {
-        try {
-          const data = await getList<NguoiDungResponse>(apiUrls.NguoiDung.list);
-          setAccounts(data.map(item => ({
-            ...item,
-            locked: item.CapPhep ?? false,
-          })));
-        } catch (error) {
-          console.error("Lỗi tải danh sách tài khoản:", error);
-          alert("Không thể tải danh sách tài khoản!");
-        }
-      // }
-    };
-    fetchAccounts();
-  }, [useMock]);
+useEffect(() => {
+  const fetchAccounts = async () => {
+    try {
+      // data đã là mảng NguoiDungResponse[]
+      const data = await getList<NguoiDungResponse>(apiUrls.NguoiDung.list);
+      console.log("Raw API:", data);
+
+      setAccounts(
+        data.map(item => ({
+          ...item,
+          locked: item.capPhep ?? false,
+        }))
+      );
+    } catch (error) {
+      console.error("Lỗi tải danh sách tài khoản:", error);
+    }
+  };
+  fetchAccounts();
+}, []);
 
   // Cập nhật dữ liệu
   const handleSave = async (updated: NguoiDungResponse) => {
     if (useMock) {
-      setAccounts(prev => prev.map(acc => (acc.Id === updated.Id ? updated : acc)));
+      setAccounts(prev => prev.map(acc => (acc.id === updated.id ? updated : acc)));
     } else {
       try {
-        setAccounts(prev => prev.map(acc => (acc.Id === updated.Id ? updated : acc)));
+        setAccounts(prev => prev.map(acc => (acc.id === updated.id ? updated : acc)));
       } catch (error) {
         console.error("Lỗi cập nhật:", error);
         alert("Cập nhật thất bại!");
@@ -75,17 +75,17 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
 
   // Xóa dữ liệu
   const handleDelete = async (id: number) => {
-    const acc = accounts.find(a => a.Id === id);
+    const acc = accounts.find(a => a.id === id);
     if (!acc) return;
-    if (!window.confirm(`${TextForms.thongBao.xacNhanXoa}"${acc.TenNguoiDung}"`)) return;
+    if (!window.confirm(`${TextForms.thongBao.xacNhanXoa}"${acc.tenNguoiDung}"`)) return;
 
     if (useMock) {
-      setAccounts(prev => prev.filter(a => a.Id !== id));
+      setAccounts(prev => prev.filter(a => a.id !== id));
       setMessage("Xóa tài khoản thành công!");
     } else {
       try {
         await deleteData(apiUrls.NguoiDung.delete(id));;
-        setAccounts(prev => prev.filter(a => a.Id !== id));
+        setAccounts(prev => prev.filter(a => a.id !== id));
         setMessage(TextForms.thongBao.xoaThanhCong);
       } catch (error) {
         console.error(TextForms.thongBao.loiXoa, error);
@@ -98,22 +98,26 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
 
   // Khóa/mở khóa
   const handleToggleLock = async (id: number) => {
-    const acc = accounts.find(a => a.Id === id);
+    const acc = accounts.find(a => a.id === id);
     if (!acc) return;
 
     if (useMock) {
-      setAccounts(prev => prev.map(a => (a.Id === id ? { ...a, locked: !a.CapPhep } : a)));
-      setMessage(acc.CapPhep ? "Mở khóa thành công!" : "Khóa thành công!");
+      setAccounts(prev => prev.map(a => (a.id === id ? { ...a, locked: !a.capPhep } : a)));
+      setMessage(acc.capPhep ? "Mở khóa thành công!" : "Khóa thành công!");
     } else {
       try {
-        const updated = { ...acc, locked: !acc.CapPhep };
+        const updated = {  capPhep: !acc.capPhep };
          const res = await updateData<UpdateCapPhepNguoiDungRequest, NguoiDungResponse>(
-          apiUrls.NguoiDung.update(updated.Id!),
+          apiUrls.NguoiDung.update(acc.id!),
           updated
         );
         // setAccounts(prev => prev.map(a => (a.Id === id ? res.data : a)));
-        setAccounts(prev => prev.map(acc => (acc.Id === updated.Id ? updated : acc)));
-        setMessage(res.CapPhep ? "Khóa thành công!" : "Mở khóa thành công!");
+        setAccounts((prev) =>
+          prev.map((item) =>
+            item.id === acc.id ? { ...item, capPhep: !acc.capPhep } : item
+          )
+        );
+        setMessage(res.capPhep ? "Khóa thành công!" : "Mở khóa thành công!");
       } catch (error) {
         console.error("Lỗi khóa/mở tài khoản:", error);
         alert("Thao tác thất bại!");
@@ -124,13 +128,13 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
 
   const filteredAccounts = accounts.filter(acc => {
     // const matchUsername = acc.TenNguoiDung.toLowerCase().includes(filterValues.username.toLowerCase());
-    const matchUsername = (acc?.TenNguoiDung || "").toLowerCase().includes(filterValues.username.toLowerCase())
+    const matchUsername = (acc?.tenNguoiDung || "").toLowerCase().includes(filterValues.username.toLowerCase())
     const matchRole =
-      filterValues.role === "Tất cả" || acc.VaiTro?.toLowerCase() === filterValues.role.toLowerCase();
+      filterValues.role === "Tất cả" || acc.vaiTro?.toLowerCase() === filterValues.role.toLowerCase();
     const matchStatus =
       filterValues.status === "Tất cả" ||
-      (filterValues.status === "Đang hoạt động" && !acc.CapPhep) ||
-      (filterValues.status === "Bị khóa" && acc.CapPhep);
+      (filterValues.status === "Đang hoạt động" && !acc.capPhep) ||
+      (filterValues.status === "Bị khóa" && acc.capPhep);
 
     return matchUsername && matchRole && matchStatus;
   });
@@ -166,11 +170,11 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
         </div>
         <div className="card green">
           <span>Đang hoạt động</span>
-          <h3>{accounts.filter(a => !a.CapPhep).length}</h3>
+          <h3>{accounts.filter(a => !a.capPhep).length}</h3>
         </div>
         <div className="card red">
           <span>Khóa</span>
-          <h3>{accounts.filter(a => a.CapPhep).length}</h3>
+          <h3>{accounts.filter(a => a.capPhep).length}</h3>
         </div>
       </div>
 
@@ -200,17 +204,16 @@ const AccountManagement: React.FC<AccountManagementProps> = ({ useMock = false }
             </tr>
           </thead>
           <tbody>
-            {currentAccounts.map(acc => (
-              <tr key={acc.Id} className={acc.CapPhep ? "locked-row" : ""}>
-                <td>{acc.Id}</td>
-                <td>{acc.TenNguoiDung}</td>
-                {/* <td>{"•".repeat(acc.password.length)}</td> */}
-                <td>{acc.VaiTro}</td>
+            {currentAccounts.map((acc, index) => (
+              <tr key={acc.id ?? `row-${index}`} className={acc.capPhep ? "locked-row" : ""}>
+                <td>{acc.id}</td>
+                <td>{acc.tenNguoiDung}</td>
+                <td>{acc.vaiTro}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedAccount(acc)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(acc.Id!)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(acc.id!)} />
                   <FaEye title="Chi Tiết" onClick={() => setDetailAccount(acc)} />
-                  <FaLock title="Khóa/Mở" onClick={() => handleToggleLock(acc.Id!)} />
+                  <FaLock title="Khóa/Mở" onClick={() => handleToggleLock(acc.id!)} />
                 </td>
               </tr>
             ))}

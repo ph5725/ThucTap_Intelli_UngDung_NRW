@@ -23,19 +23,19 @@ const DetailAccountModal: React.FC<DetailAccountModalProps> = ({
 
         {/* Tên tài khoản */}
         <label>Tên tài khoản</label>
-        <input type="text" value={account.Ten} readOnly disabled />
+        <input type="text" value={account.ten} readOnly disabled />
 
         {/* Họ tên */}
         <label>Họ tên</label>
-        <input type="text" value={account.TenNguoiDung} readOnly disabled />
+        <input type="text" value={account.tenNguoiDung} readOnly disabled />
 
         {/* Email */}
         <label>Email</label>
-        <input type="email" value={account.Email} readOnly disabled />
+        <input type="email" value={account.email} readOnly disabled />
 
         {/* Vai trò */}
         <label>Vai trò</label>
-        <select value={account.VaiTro} disabled>
+        <select value={account.vaiTro} disabled>
           <option value="admin">Quản trị viên</option>
           <option value="user">Người dùng</option>
         </select>

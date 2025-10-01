@@ -1,7 +1,4 @@
-// src/pages/quan-ly-dong-ho/MeterManagementPage.tsx
-// import { meterService, type Meter } from "../../../services/dong-ho-tong/meterService";
-//import { mockMeters } from "../../../config/mockData";
-// import "../../../styles/qldh/MeterManagementPage.css";
+// src/pages/qldh/MeterManagementPage.tsx
 import React, { useState, useEffect, useMemo } from "react";
 import {
   FaTachometerAlt,
@@ -16,14 +13,16 @@ import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterModal from "./EditMeterModal";
 import DetailMeterModal from "./DetailMeterModal";
-import MeterStats from "src/components/MeterStats";
-import "src/styles/dong-ho-tong/MeterManagementPage.css"
+import MeterStats, { Meter } from "src/components/MeterStats";
+import "src/styles/dong-ho-tong/MeterManagementPage.css";
+
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
+
 // interface
-import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
-import { ThongTinNguoiDung } from "src/types/authTypes";
+import { DongHoTongResponse } from "src/types/dong-ho-tong/dong-ho-tong";
+
 // text
 import { TextForms } from "src/constants/text";
 
@@ -38,7 +37,6 @@ const MeterManagementPage: React.FC = () => {
   const [selectedMeter, setSelectedMeter] = useState<DongHoTongResponse | null>(null);
   const [detailMeter, setDetailMeter] = useState<DongHoTongResponse | null>(null);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -46,13 +44,12 @@ const MeterManagementPage: React.FC = () => {
   useEffect(() => {
     const fetchMeters = async () => {
       try {
-        // const res = await meterService.getAll();
         const res = await getList<DongHoTongResponse>(apiUrls.DongHoTong.list);
         setMeters(res);
       } catch (error) {
         console.error("❌ Lỗi khi tải dữ liệu đồng hồ:", error);
         alert(TextForms.thongBao.khongTheTaiDuLieu);
-        setMeters([]); // show table rỗng nếu API lỗi
+        setMeters([]);
       } finally {
         setLoading(false);
       }
@@ -64,39 +61,36 @@ const MeterManagementPage: React.FC = () => {
   const handleDelete = async (id: number) => {
     if (!window.confirm(`Bạn có chắc muốn xóa đồng hồ ID ${id}?`)) return;
     try {
-      // await meterService.delete(id);
-      await deleteData(apiUrls.DongHoTong.delete(id));;
-      setMeters(meters.filter((m) => m.Id !== id));
+      await deleteData(apiUrls.DongHoTong.delete(id));
+      setMeters(meters.filter((m) => m.id !== id));
       setMessage(TextForms.thongBao.xoaThanhCong);
       alert(TextForms.thongBao.xoaThanhCong);
     } catch (error) {
       console.error("❌ Lỗi khi xóa đồng hồ:", error);
-      setMessage("Xóa thất bại!");
+      setMessage(TextForms.thongBao.loiXoa);
       alert(TextForms.thongBao.loiXoa);
     } finally {
       setTimeout(() => setMessage(null), 3000);
     }
   };
 
-  // 📌 Lưu chỉnh sửa
+  // Chuyển dữ liệu sang Meter cho MeterStats
+  const meterStatsData: Meter[] = useMemo(() => {
+    return meters.map(m => ({
+      code: m.ma,
+      volume: m.sanLuong,
+      status: m.danhDauLoi ? "Hoạt động" : "Lỗi", // boolean → string
+    }));
+  }, [meters]);
 
-  if (loading) return <div>{TextForms.thongBao.dangTaiDuLieu}</div>;
-
-  // Dữ liệu giả cho MeterPage
-  /* useEffect(() => {  
-    setMeters(mockMeters);       
-    setLoading(false);
-  }, []); */
-
-  // 📌 Lọc & tìm kiếm
+  // 📌 Lọc & tìm kiếm (luôn gọi hook trước return)
   const filteredMeters = useMemo(() => {
     return meters.filter(
       (m) =>
-      (m.Ma.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        m.Ten.toLowerCase().includes(searchTerm.toLowerCase()))
-      // &&(filterStatus === "" || m.status === filterStatus)
+        m.ma.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        m.ten.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [meters, searchTerm, filterStatus]);
+  }, [meters, searchTerm]);
 
   const totalPages = Math.ceil(filteredMeters.length / itemsPerPage);
   const currentMeters = filteredMeters.slice(
@@ -104,11 +98,10 @@ const MeterManagementPage: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  // Pagination
   const handlePrev = () => setCurrentPage((p) => Math.max(p - 1, 1));
   const handleNext = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
 
-
+  if (loading) return <div>{TextForms.thongBao.dangTaiDuLieu}</div>;
 
   return (
     <div className="meter-page">
@@ -121,7 +114,7 @@ const MeterManagementPage: React.FC = () => {
       </div>
 
       {/* KPI + Charts */}
-      {/* <MeterStats meters={meters} /> */}
+      <MeterStats meters={meterStatsData} />
 
       {/* Danh sách đồng hồ */}
       <div className="page-header">
@@ -166,15 +159,14 @@ const MeterManagementPage: React.FC = () => {
           </thead>
           <tbody>
             {currentMeters.map((m) => (
-              <tr key={m.Id}>
-                <td>{m.Id}</td>
-                <td>{m.Ma}</td>
-                <td>{m.Ten}</td>
-                <td>{m.SanLuong}</td>
-                {/* <td>{m.status}</td> */}
+              <tr key={m.id}>
+                <td>{m.id}</td>
+                <td>{m.ma}</td>
+                <td>{m.ten}</td>
+                <td>{m.sanLuong}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedMeter(m)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(m.Id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(m.id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailMeter(m)} />
                   <FaLock title="Khóa/Mở" />
                 </td>
@@ -229,12 +221,12 @@ const MeterManagementPage: React.FC = () => {
       {/* Modal Edit */}
       {selectedMeter && (
         <EditMeterModal
-          meterId={selectedMeter.Id}
-          useMock={false} // hoặc true nếu muốn dùng mock
+          meterId={selectedMeter.id}
+          useMock={false}
           onClose={() => setSelectedMeter(null)}
           onSave={(updatedMeter) => {
             setMeters(prev =>
-              prev.map(m => (m.Id === updatedMeter.Id ? updatedMeter : m))
+              prev.map(m => (m.id === updatedMeter.id ? updatedMeter : m))
             );
             setSelectedMeter(null);
           }}

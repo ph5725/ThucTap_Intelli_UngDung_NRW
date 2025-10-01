@@ -62,7 +62,7 @@ const UserGroupPage: React.FC = () => {
   const filteredGroups = useMemo(() => {
     return groups.filter(
       g =>
-        g.NhomNguoiDung1.toLowerCase().includes(filter.groupName.toLowerCase()) 
+        g.nhomNguoiDung1.toLowerCase().includes(filter.groupName.toLowerCase()) 
     );
   }, [groups, filter]);
 
@@ -74,12 +74,12 @@ const UserGroupPage: React.FC = () => {
 
   // 📌 Xóa nhóm
   const handleDelete = async (id: number) => {
-    const g = groups.find(x => x.Id === id);
+    const g = groups.find(x => x.id === id);
     if (!g) return;
-    if (window.confirm(`Bạn có chắc muốn xóa "${g.NhomNguoiDung1}" không?`)) {
+    if (window.confirm(`Bạn có chắc muốn xóa "${g.nhomNguoiDung1}" không?`)) {
       try {
         await deleteData(apiUrls.NhomNguoiDung.delete(id));;
-        setGroups(groups.filter(x => x.Id !== id));
+        setGroups(groups.filter(x => x.id !== id));
         setMessage("Xóa thành công!");
       } catch (err) {
         console.error("❌ Lỗi khi xóa:", err);
@@ -138,14 +138,14 @@ const UserGroupPage: React.FC = () => {
           </thead>
           <tbody>
             {currentGroups.map(g => (
-              <tr key={g.Id}>
-                <td>{g.Id}</td>
-                <td>{g.NhomNguoiDung1}</td>
-                <td>{g.ThanhVien}</td>
-                <td>{g.GhiChu}</td>
+              <tr key={g.id}>
+                <td>{g.id}</td>
+                <td>{g.nhomNguoiDung1}</td>
+                <td>{g.thanhVien}</td>
+                <td>{g.ghiChu}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setEditingGroup(g)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(g.Id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(g.id)} />
                   <FaEye
                     title="Xem"
                     onClick={() => {
@@ -203,8 +203,8 @@ const UserGroupPage: React.FC = () => {
         <EditUserGroupModal
           group={editingGroup}
           onClose={() => setEditingGroup(null)}
-          onSave={fetchData}  // ✅ gọi lại API để reload
-        />
+          onSave={fetchData} // ✅ gọi lại API để reload
+          userId={0}        />
       )}
 
       {/* Modal Detail */}
