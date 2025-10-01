@@ -18,19 +18,19 @@ const AddBillingReadingPage: React.FC = () => {
 
   const [formData, setFormData] = useState<Omit<
     AddDsNgayDocSoBillingRequest,
-    | "NgayTao" | "NguoiTao"
+    | "ngayTao" | "nguoiTao"
   >>({
-    Nam: new Date().getFullYear(),
-    Ky: 0,
-    SoNgayDocSoBilling: 30,
-    GhiChu: "",
+    nam: new Date().getFullYear(),
+    ky: 0,
+    soNgayDocSoBilling: 30,
+    ghiChu: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === "Nam" || name === "SoNgayDocSoBilling" || name === "Ky"  ? Number(value) : value,
+      [name]: name === "nam" || name === "soNgayDocSoBilling" || name === "ky"  ? Number(value) : value,
     }));
   };
 
@@ -49,8 +49,8 @@ const AddBillingReadingPage: React.FC = () => {
       // FE tự sinh metadata khi Add
       const newRecord: AddDsNgayDocSoBillingRequest = {
         ...formData,
-        NgayTao: new Date().toISOString(),
-        NguoiTao: nguoiDung?.id ?? 0,
+        ngayTao: new Date().toISOString(),
+        nguoiTao: nguoiDung?.id ?? 0,
       };
 
       // await billingReadingService.create(newRecord);
@@ -78,13 +78,13 @@ const AddBillingReadingPage: React.FC = () => {
       <form className="account-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Năm</label>
-          <input type="number" name="year" value={formData.Nam} onChange={handleChange} required />
+          <input type="number" name="year" value={formData.nam} onChange={handleChange} required />
 
           <label>Kỳ</label>
-          <input type="text" name="period" value={formData.Ky} onChange={handleChange} required />
+          <input type="text" name="period" value={formData.ky} onChange={handleChange} required />
 
           <label>Số ngày đọc</label>
-          <input type="number" name="daysCount" value={formData.SoNgayDocSoBilling} onChange={handleChange} required />
+          <input type="number" name="daysCount" value={formData.soNgayDocSoBilling} onChange={handleChange} required />
         </div>
 
         <div className="form-actions">

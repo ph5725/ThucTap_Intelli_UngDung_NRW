@@ -5,10 +5,10 @@
 import React, { useState, useEffect } from "react";
 import "src/styles/ds-so-ngay-doc-so-billing/EditBillingReadingModal.css";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  updateData,  getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
+import {  DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -30,13 +30,13 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
   // Dữ liệu người dùng nhập
   const [dataUpdate, setDataUpdate] = useState<Omit<
     UpdateDsNgayDocSoBillingRequest,
-    | "NgayCapNhat"
-    | "NguoiCapNhat"
+    | "ngayCapNhat"
+    | "nguoiCapNhat"
   >>({
-    Nam: 0,
-    Ky: 0,
-    SoNgayDocSoBilling: 0,
-    GhiChu: "",
+    nam: 0,
+    ky: 0,
+    soNgayDocSoBilling: 0,
+    ghiChu: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -133,13 +133,13 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
     // Chuẩn bị object update có metadata
     const updated: UpdateDsNgayDocSoBillingRequest = {
       ...dataUpdate,
-      NgayCapNhat: new Date().toISOString(),
-      NguoiCapNhat: nguoiDung?.id ?? 0, // TODO: thay bằng user login thật từ Auth
+      ngayCapNhat: new Date().toISOString(),
+      nguoiCapNhat: nguoiDung?.id ?? 0, // TODO: thay bằng user login thật từ Auth
     };
 
     try {
       const res = await updateData<UpdateDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse>(
-        apiUrls.NguoiDung.update(formData.Id!),
+        apiUrls.NguoiDung.update(formData.id!),
         updated
       );
       onSave(res);
@@ -184,7 +184,7 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
               <input
                 type="number"
                 name="year"
-                value={formData.Nam}
+                value={formData.nam}
                 onChange={handleChange}
                 required
               />
@@ -195,7 +195,7 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
               <input
                 type="text"
                 name="period"
-                value={formData.Ky}
+                value={formData.ky}
                 onChange={handleChange}
                 required
               />
@@ -203,22 +203,22 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
 
             <label>
               Ngày tạo:
-              <input type="text" value={formData.NgayTao} readOnly />
+              <input type="text" value={formData.ngayTao} readOnly />
             </label>
 
             <label>
               Ngày cập nhật:
-              <input type="text" value={formData.NgayCapNhat || ""} readOnly />
+              <input type="text" value={formData.ngayCapNhat || ""} readOnly />
             </label>
 
             <label>
               Người tạo:
-              <input type="text" value={formData.NguoiTao || ""} readOnly />
+              <input type="text" value={formData.nguoiTao || ""} readOnly />
             </label>
 
             <label>
               Người cập nhật:
-              <input type="text" value={formData.NguoiCapNhat || ""} readOnly />
+              <input type="text" value={formData.nguoiCapNhat || ""} readOnly />
             </label>
 
             <label>
@@ -226,7 +226,7 @@ const EditBillingReadingModal: React.FC<EditBillingReadingModalProps> = ({
               <input
                 type="number"
                 name="daysCount"
-                value={formData.SoNgayDocSoBilling}
+                value={formData.soNgayDocSoBilling}
                 onChange={handleChange}
                 required
               />

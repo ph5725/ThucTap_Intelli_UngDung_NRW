@@ -46,7 +46,7 @@ const BillingReadingPage: React.FC = () => {
       try {
         // await billingReadingService.delete(id);
         await deleteData(apiUrls.DSNgayDocSoBilling.delete(id));;
-        setReadings(prev => prev.filter(r => r.Id !== id));
+        setReadings(prev => prev.filter(r => r.id !== id));
         alert(TextForms.thongBao.xoaThanhCong);
       } catch (error) {
         console.error("❌ Lỗi xóa:", error);
@@ -64,11 +64,11 @@ const BillingReadingPage: React.FC = () => {
   const filteredReadings = useMemo(() => {
     return readings.filter(r => {
       const matchSearch =
-        r.Nam.toString().includes(searchTerm) ||
-        r.Ky.toString().includes(searchTerm);
+        r.nam.toString().includes(searchTerm) ||
+        r.ky.toString().includes(searchTerm);
 
-      const matchYear = filterYear ? r.Nam.toString() === filterYear : true;
-      const matchPeriod = filterPeriod ? r.Ky.toString() === filterPeriod : true;
+      const matchYear = filterYear ? r.nam.toString() === filterYear : true;
+      const matchPeriod = filterPeriod ? r.ky.toString() === filterPeriod : true;
 
       return matchSearch && matchYear && matchPeriod;
     });
@@ -87,7 +87,7 @@ const BillingReadingPage: React.FC = () => {
   const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
 
   const handleSave = (updated: DsNgayDocSoBillingResponse) => {
-    setReadings(prev => prev.map(r => (r.Id === updated.Id ? updated : r)));
+    setReadings(prev => prev.map(r => (r.id === updated.id ? updated : r)));
   };
 
   return (
@@ -132,15 +132,15 @@ const BillingReadingPage: React.FC = () => {
           </thead>
           <tbody>
             {currentReadings.map(r => (
-              <tr key={r.Id}>
-                <td>{r.Id}</td>
-                <td>{r.Nam}</td>
-                <td>{r.Ky}</td>
-                <td>{r.NgayCapNhat}</td>
-                <td>{r.NguoiCapNhat || "-"}</td>
+              <tr key={r.id}>
+                <td>{r.id}</td>
+                <td>{r.nam}</td>
+                <td>{r.ky}</td>
+                <td>{r.ngayTao}</td>
+                <td>{r.ngayCapNhat || "-"}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedReading(r)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(r.Id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(r.id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailReading(r)} />
                 </td>
               </tr>
@@ -177,7 +177,7 @@ const BillingReadingPage: React.FC = () => {
 
       {selectedReading && (
         <EditBillingReadingModal
-          readingId={selectedReading?.Id}
+          readingId={selectedReading?.id}
           onClose={() => setSelectedReading(null)}
           onSave={handleSave}
           useMock={false} // nếu muốn dùng mock

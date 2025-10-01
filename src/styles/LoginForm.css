@@ -25,7 +25,7 @@
   /* Vị trí tuyệt đối */
   position: absolute;
   top: calc(100% - 78%);   /* điều chỉnh cao thấp */
-  right: 150px;  /* cách cạnh phải */
+  right: calc(100% - 92%);  /* cách cạnh phải */
 }
 
 /* Icon khóa */

@@ -1,23 +1,30 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
-// Thêm dữ liệu
+// Thêm mới
 export interface AddPhanQuyenDuLieuRequest {
-  NhomNguoiDung?: number;
-  DuLieuNrwcongTy?: string;
-  DuLieuNrwdma?: string;
+  nhomNguoiDungId: number;
+  tenBang: string;
+  dieuKien: string;
+  ngayTao: string;
+  nguoiTao: number;
 }
 
-// Cập nhật dữ liệu
+// Cập nhật
 export interface UpdatePhanQuyenDuLieuRequest {
-  NhomNguoiDung?: number;
-  DuLieuNrwcongTy?: string;
-  DuLieuNrwdma?: string;
+  nhomNguoiDungId: number;
+  tenBang: string;
+  dieuKien: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: number;
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
-// Dữ liệu trả về
+/* ========== RESPONSE (API --> CLIENT) ========== */
 export interface PhanQuyenDuLieuResponse {
-  Id: number;
-  NhomNguoiDung?: string;
-  DuLieuNrwcongTy?: string;
-  DuLieuNrwdma?: string;
+  id: number;
+  nhomNguoiDungId: number;
+  tenBang: string;
+  dieuKien: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: number;
+  nguoiCapNhat?: number;
 }
