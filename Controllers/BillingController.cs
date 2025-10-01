@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models;
 using WebAPI_NRW.Models.Database;
@@ -9,7 +11,7 @@ using WebAPI_NRW.RequestModel.HeThongBilling;
 using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.HeThongBilling;
 using WebAPI_NRW.ResponeModel.PhanQuyen;
-//using static Grpc.Core.Metadata;
+using Dapper;
 
 namespace WebAPI_NRW.Controllers
 {
@@ -20,10 +22,12 @@ namespace WebAPI_NRW.Controllers
     public class BillingController : ControllerBase
     {
         private readonly DbNrwContext _context;
+        private readonly string _connectionString;
 
-        public BillingController(DbNrwContext dbcontext)
+        public BillingController(DbNrwContext dbcontext, IConfiguration configuration)
         {
             _context = dbcontext;
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         /// API Get all
@@ -54,6 +58,34 @@ namespace WebAPI_NRW.Controllers
 
             return Ok(entity.MapToResponse());
         }
+
+        /// API Get by ky, nam, maDoiTuong
+        [HttpPost("GetSanLuong")]
+        public async Task<IActionResult> GetSanLuong([FromBody] Billing_Model request)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+
+            string sql = @"
+            SELECT SanLuongTieuThu
+            FROM Billing
+            WHERE Ky = @Ky
+              AND Nam = @Nam
+              AND MaDoiTuong = @MaDoiTuong;
+        ";
+
+            var sanLuong = await db.QueryFirstOrDefaultAsync<decimal?>(sql, new
+            {
+                Ky = request.Ky,
+                Nam = request.Nam,
+                MaDoiTuong = request.MaDoiTuong
+            });
+
+            return Ok(new
+            {
+                SanLuong = sanLuong ?? 0
+            });
+        }
+
 
         /// API Add
         [HttpPost]

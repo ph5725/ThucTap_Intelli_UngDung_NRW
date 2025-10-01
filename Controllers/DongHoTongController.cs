@@ -1,15 +1,14 @@
-﻿using Azure.Messaging;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using WebAPI_NRW.MapToResponse;
-using WebAPI_NRW.Models;
 using WebAPI_NRW.Models.Database;
-using WebAPI_NRW.RequestModel.DanhSach;
 using WebAPI_NRW.RequestModel.DongHoTong;
-using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.DongHoTong;
 using WebAPI_NRW.Services;
+using Dapper;
 
 namespace WebAPI_NRW.Controllers
 {
@@ -22,12 +21,14 @@ namespace WebAPI_NRW.Controllers
         private readonly DbNrwContext _context;
         private readonly IPermissionService _permissionService;
         private readonly string _feature;
+        private readonly string _connectionString;
 
-        public DongHoTongController(DbNrwContext dbcontext, IPermissionService permissionService)
+        public DongHoTongController(DbNrwContext dbcontext, IPermissionService permissionService, IConfiguration configuration)
         {
             _context = dbcontext;
             _permissionService = permissionService;
             _feature = "donghotong";
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         /// API Get all
@@ -69,6 +70,85 @@ namespace WebAPI_NRW.Controllers
 
             return Ok(entity.MapToResponse());
         }
+
+        /// API Get TongSanLuong
+        [HttpPost("TongSanLuong")]
+        public async Task<IActionResult> TongSanLuong([FromBody] TongSanLuong_Model request)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+
+            string sql = @"
+        SELECT SUM(SanLuong) AS TongSanLuong
+        FROM (
+            SELECT DISTINCT dht.Ma, dht.NgayGhi, dht.SanLuong
+            FROM DongHoTong dht
+            INNER JOIN CauHinhDht ch
+                ON ch.MaDoiTuong = @MaDoiTuong
+                AND dht.Ma IN (
+                    SELECT dht2.Ma
+                    FROM DongHoTong dht2
+                    WHERE dht2.Id IN (
+                        SELECT MaDongHo 
+                        FROM CauHinhDht 
+                        WHERE MaDoiTuong = @MaDoiTuong
+                    )
+                )
+            WHERE dht.NgayGhi >= @TuNgay
+              AND dht.NgayGhi < DATEADD(DAY, 1, @DenNgay)
+        ) AS t;
+    ";
+
+            var result = await db.QueryFirstOrDefaultAsync<int?>(sql, new
+            {
+                TuNgay = request.TuNgay,
+                DenNgay = request.DenNgay,
+                MaDoiTuong = request.MaDoiTuong
+            });
+
+            return Ok(new
+            {
+                TongSanLuong = result ?? 0
+            });
+        }
+        //    [HttpGet("TongSanLuong")]
+        //    public async Task<IActionResult> TongSanLuong(
+        //   [FromQuery] DateTime tuNgay,
+        //   [FromQuery] DateTime denNgay,
+        //   [FromQuery] int maDoiTuong)
+        //    {
+        //        using (var db = new SqlConnection(_connectionString))
+        //        {
+        //            await db.OpenAsync(); // mở connection
+
+        //            string sql = @"
+        //    SELECT SUM(SanLuong) AS TongSanLuong
+        //    FROM (
+        //        SELECT DISTINCT dht.Ma, dht.NgayGhi, dht.SanLuong
+        //        FROM DongHoTong dht
+        //        INNER JOIN CauHinhDht ch
+        //            ON ch.MaDoiTuong = @MaDoiTuong
+        //            AND dht.Ma IN (
+        //                SELECT dht2.Ma
+        //                FROM DongHoTong dht2
+        //                WHERE dht2.Id IN (
+        //                    SELECT MaDongHo 
+        //                    FROM CauHinhDht 
+        //                    WHERE MaDoiTuong = @MaDoiTuong
+        //                )
+        //            )
+        //        WHERE dht.NgayGhi >= @TuNgay
+        //          AND dht.NgayGhi < DATEADD(DAY, 1, @DenNgay)
+        //    ) AS t;
+        //";
+
+        //            var result = await db.QueryFirstOrDefaultAsync<int?>(sql, new { TuNgay = tuNgay, DenNgay = denNgay, MaDoiTuong = maDoiTuong });
+
+        //            return Ok(new
+        //            {
+        //                TongSanLuong = result ?? 0
+        //            });
+        //        }
+        //    }
 
         /// API Add
         [HttpPost]

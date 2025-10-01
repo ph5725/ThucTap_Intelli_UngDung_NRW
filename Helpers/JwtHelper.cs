@@ -12,7 +12,7 @@ namespace WebAPI_NRW.Helpers
         private readonly string _audience;
         private readonly int _expirationInMinutes;
 
-        public JwtHelper(string secretKey, string issuer, string audience, int expirationInMinutes = 60)
+        public JwtHelper(string secretKey, string issuer, string audience, int expirationInMinutes = 1440)
         {
             _secretKey = secretKey;
             _issuer = issuer;
