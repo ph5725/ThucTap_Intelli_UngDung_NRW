@@ -10,10 +10,10 @@ import BillingDashboard from "../../../components/BillingDashboard";
 import EditBillingModal from "./EditBillingModal";
 import DetailBillingModal from "./DetailBillingModal";
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import {  deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+import {  BillingResponse,  } from "src/types/he-thong-billing/billing";
 // text
 import { TextForms } from "src/constants/text";
 
@@ -34,7 +34,6 @@ const BillingPage: React.FC = () => {
         // const res = await billingService.getAll();
         const res = await getList<BillingResponse>(apiUrls.Billing.list);
         setBillings(res); // giữ nguyên id: number
-        alert(TextForms.thongBao.xoaThanhCong);
       } catch (error) {
         console.error("❌ Lỗi khi lấy dữ liệu Billing:", error);
         alert(TextForms.thongBao.khongTheTaiDuLieu);
@@ -49,7 +48,8 @@ const BillingPage: React.FC = () => {
       try {
         // await billingService.delete(id);
         await deleteData(apiUrls.Billing.delete(id));;
-        setBillings((prev) => prev.filter((b) => b.Id !== id));
+        setBillings((prev) => prev.filter((b) => b.id !== id));
+        alert(TextForms.thongBao.xoaThanhCong);
       } catch (error) {
         console.error("❌ Lỗi khi xóa Billing:", error);
         alert(TextForms.thongBao.loiXoa);
@@ -66,9 +66,9 @@ const BillingPage: React.FC = () => {
   const filteredBillings = useMemo(() => {
     return billings.filter(
       (b) =>
-        b.MaDoiTuong.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        b.Ky.toString().includes(searchTerm) ||
-        b.Nam.toString().includes(searchTerm)
+        b.maDoiTuong.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        b.ky.toString().includes(searchTerm) ||
+        b.nam.toString().includes(searchTerm)
     );
   }, [billings, searchTerm]);
 
@@ -134,15 +134,15 @@ const BillingPage: React.FC = () => {
           </thead>
           <tbody>
             {currentBillings.map((b) => (
-              <tr key={b.Id}>
-                <td>{b.Id}</td>
-                <td>{b.SanLuongTieuThu} m³</td>
-                <td>{b.MaDoiTuong}</td>
-                <td>{b.Ky}</td>
-                <td>{b.Nam}</td>
+              <tr key={b.id}>
+                <td>{b.id}</td>
+                <td>{b.sanLuongTieuThu} m³</td>
+                <td>{b.maDoiTuong}</td>
+                <td>{b.ky}</td>
+                <td>{b.nam}</td>
                 <td className="actions">
                   <FaEdit title="Sửa" onClick={() => setSelectedBilling(b)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(b.Id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(b.id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailBilling(b)} />
                 </td>
               </tr>
@@ -194,11 +194,11 @@ const BillingPage: React.FC = () => {
                 /> */
 
         <EditBillingModal
-          billingId={selectedBilling?.Id}
+          billingId={selectedBilling?.id}
           useMock={false}
           onClose={() => setSelectedBilling(null)}
           onSave={(updated) =>
-            setBillings((prev) => prev.map((b) => (b.Id === updated.Id ? updated : b)))
+            setBillings((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
           }
         />
       )}

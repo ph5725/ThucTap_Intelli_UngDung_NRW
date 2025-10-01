@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { FaMoneyBill } from "react-icons/fa";
 import Tabs from "src/components/tabBilling/Tabs";
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { createData,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+import { AddBillingRequest, BillingResponse,  } from "src/types/he-thong-billing/billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -18,16 +18,16 @@ const AddBillingPage: React.FC = () => {
   // Dữ liệu người dùng nhập
   const [formData, setFormData] = useState<Omit<
     AddBillingRequest,
-    | "NgayTao" | "NguoiTao"
+    | "ngayTao" | "nguoiTao"
   >>({
-    SanLuongTieuThu: 0,
-    MaDoiTuong: "",
-    Ky: 0,
-    Nam: 0,
-    Dot: 0,
-    TuNgay: "",
-    DenNgay: "",
-    GhiChu: "",
+    sanLuongTieuThu: 0,
+    maDoiTuong: "",
+    ky: 0,
+    nam: 0,
+    dot: 0,
+    tuNgay: "",
+    denNgay: "",
+    ghiChu: "",
   });
 
   // Cập nhật formData khi người dùng nhập vào form
@@ -60,11 +60,13 @@ const AddBillingPage: React.FC = () => {
       // Sinh metadata ở FE
       const metadata = {
         NgayTao: new Date().toISOString(), // hoặc format theo BE yêu cầu
-        NguoiTao: nguoiDung?.id ?? 0,
+        NguoiTao: (nguoiDung?.id ?? 0).toString(),
       };
       const payload: AddBillingRequest = {
         ...formData,
         ...metadata,
+        ngayTao: "",
+        nguoiTao: ""
       };
 
       await createData<AddBillingRequest, BillingResponse>(
@@ -132,7 +134,7 @@ const AddBillingPage: React.FC = () => {
           <input
             type="number"
             name="consumption"
-            value={formData.SanLuongTieuThu}
+            value={formData.sanLuongTieuThu}
             onChange={handleChange}
             required
           />
@@ -141,7 +143,7 @@ const AddBillingPage: React.FC = () => {
           <input
             type="text"
             name="objectCode"
-            value={formData.MaDoiTuong}
+            value={formData.maDoiTuong}
             onChange={handleChange}
             required
           />
@@ -150,7 +152,7 @@ const AddBillingPage: React.FC = () => {
           <input
             type="text"
             name="period"
-            value={formData.Ky}
+            value={formData.ky}
             onChange={handleChange}
             required
           />
@@ -159,7 +161,7 @@ const AddBillingPage: React.FC = () => {
           <input
             type="number"
             name="year"
-            value={formData.Nam}
+            value={formData.nam}
             onChange={handleChange}
             required
           />
@@ -168,7 +170,7 @@ const AddBillingPage: React.FC = () => {
           <input
             type="text"
             name="batch"
-            value={formData.Dot}
+            value={formData.dot}
             onChange={handleChange}
           />
 
@@ -176,7 +178,7 @@ const AddBillingPage: React.FC = () => {
           <input
             type="date"
             name="fromDate"
-            value={formData.TuNgay}
+            value={formData.tuNgay}
             onChange={handleChange}
           />
 
@@ -184,14 +186,14 @@ const AddBillingPage: React.FC = () => {
           <input
             type="date"
             name="toDate"
-            value={formData.DenNgay}
+            value={formData.denNgay}
             onChange={handleChange}
           />
 
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.GhiChu}
+            value={formData.ghiChu}
             onChange={handleChange}
           />
         </div>

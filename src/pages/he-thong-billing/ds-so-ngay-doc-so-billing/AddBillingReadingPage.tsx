@@ -5,10 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { FaBookReader } from "react-icons/fa";
 import Tabs from "src/components/tabBilling/Tabs";
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { createData,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
+import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse,  } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";

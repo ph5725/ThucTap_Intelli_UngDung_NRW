@@ -1,43 +1,43 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
 // Thêm dữ liệu
 export interface AddDongHoTongRequest {
-  Ma: string;
-  Ten: string;
-  SanLuong: number;
-  NgayGhi: string;
-  DanhDauLoi: boolean;
-  GhiChu?: string;
-  NgayTao: string;
-  NguoiTao: number;
+  ma: string;
+  ten: string;
+  sanLuong: number;
+  ngayGhi: string;
+  danhDauLoi: boolean;
+  ghiChu?: string;
+  ngayTao: string;
+  nguoiTao: string; // BE trả về string, nên giữ string
 }
 
 // Cập nhật dữ liệu
 export interface UpdateDongHoTongRequest {
-  Ma: string;
-  Ten: string;
-  SanLuong: number;
-  NgayChinhSua?: string;
-  NguoiChinhSua?: number;
-  DanhDauLoi: boolean;
-  GhiChu?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: number;
+  ma: string;
+  ten: string;
+  sanLuong: number;
+  ngayChinhSua?: string;
+  nguoiChinhSua?: string; // BE trả về string
+  danhDauLoi: boolean;
+  ghiChu?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: string; // BE trả về string
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
+/* ========== RESPONSE (API --> CLIENT) ========== */
 // Dữ liệu trả về
 export interface DongHoTongResponse {
-  Id: number;
-  Ma: string;
-  Ten: string;
-  SanLuong: number;
-  NgayGhi: string;
-  NgayChinhSua?: string;
-  NguoiChinhSua?: string;
-  DanhDauLoi: boolean;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  ma: string;
+  ten: string;
+  sanLuong: number;
+  ngayGhi: string;
+  ngayChinhSua?: string;
+  nguoiChinhSua?: string;
+  danhDauLoi: boolean;
+  ghiChu?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

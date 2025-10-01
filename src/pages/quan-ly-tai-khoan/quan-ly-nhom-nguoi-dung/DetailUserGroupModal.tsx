@@ -2,17 +2,9 @@
 import React from "react";
 import "src/styles/global.css";
 import "src/styles/tai-khoan/EditAccountModal.css"
+import { NhomNguoiDungResponse } from "src/types/nguoi-dung/nhom-nguoi-dung";
 
-export interface NhomNguoiDungResponse {
-  Id: number;
-  NhomNguoiDung1: string;
-  ThanhVien?: string;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
-}
+
 
 interface DetailUserGroupModalProps {
   group: NhomNguoiDungResponse;
@@ -29,19 +21,25 @@ const DetailUserGroupModal: React.FC<DetailUserGroupModalProps> = ({ group, onCl
              </div>
 
         <label>Nhóm Người Dùng</label>
-        <input type="text" value={group.NhomNguoiDung1} readOnly />
+        <input type="text" value={group.nhomNguoiDung1} readOnly />
 
         <label>Thành Viên</label>
-        <input type="text" value={group.ThanhVien} readOnly />
+        <input type="text" value={group.thanhVien} readOnly />
 
         <label>Ngày Tạo</label>
-        <input type="date" value={group.NgayTao} readOnly />
+        <input type="date" value={group.ngayTao} readOnly />
 
         <label>Ngày Cập Nhật</label>
-        <input type="date" value={group.NgayCapNhat} readOnly />
+        <input type="date" value={group.ngayCapNhat} readOnly />
+
+        <label>Người Tạo</label>
+        <input type="date" value={group.nguoiTao} readOnly />
+
+        <label>Người Cập Nhật</label>
+        <input type="date" value={group.nguoiCapNhat} readOnly />
 
         <label>Ghi Chú</label>
-        <textarea value={group.GhiChu} readOnly rows={3} />
+        <textarea value={group.ghiChu} readOnly rows={3} />
 
         <div className="form-actions">
           <button className="btn close" onClick={onClose}>

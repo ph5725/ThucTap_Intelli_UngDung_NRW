@@ -1,49 +1,51 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
+
 // Thêm dữ liệu
 export interface AddNguoiDungRequest {
-  Ma: string;
-  Ten: string;
-  TenNguoiDung: string;
-  MatKhau: string;
-  Email: string;
-  VaiTro?: string;
-  CapPhep: boolean;
-  AnhDaiDien?: string;
-  NgayTao: string;
-  NguoiTao?: string;
+  ma: string;
+  ten: string;
+  tenNguoiDung: string;
+  matKhau: string;
+  email: string;
+  vaiTro?: string;
+  capPhep: boolean;
+  anhDaiDien?: string;
+  ngayTao: string;
+  nguoiTao?: string;
 }
 
 // Cập nhật dữ liệu
 export interface UpdateNguoiDungRequest {
-  Ma: string;
-  Ten: string;
-  TenNguoiDung: string;
-  Email: string;
-  VaiTro?: string;
-  CapPhep: boolean;
-  AnhDaiDien?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: string;
+  ma: string;
+  ten: string;
+  tenNguoiDung: string;
+  email: string;
+  vaiTro?: string;
+  capPhep: boolean;
+  anhDaiDien?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: string;
 }
 
 // Cập nhật cấp phép
 export interface UpdateCapPhepNguoiDungRequest {
-  CapPhep: boolean;
+  capPhep: boolean;
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
+/* ========== RESPONSE (API --> CLIENT) ========== */
+
 // Dữ liệu trả về
 export interface NguoiDungResponse {
-  Id: number;
-  Ma: string;
-  Ten: string;
-  TenNguoiDung: string;
-  Email: string;
-  VaiTro?: string;
-  CapPhep: boolean;
-  AnhDaiDien?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  ma: string;
+  ten: string;
+  tenNguoiDung: string;
+  email: string;
+  vaiTro?: string;
+  capPhep: boolean;
+  anhDaiDien?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

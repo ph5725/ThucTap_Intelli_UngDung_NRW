@@ -39,27 +39,27 @@ const DetailUserInfoModal: React.FC<DetailUserInfoModalProps> = ({ user, onClose
         {/* container cuộn */}
         <div className="modal-content-scroll">
           <label>Mã</label>
-          <input value={user.Ma} readOnly />
+          <input value={user.ma} readOnly />
 
           <label>Tên tài khoản</label>
-          <input value={user.Ten} readOnly />
+          <input value={user.ten} readOnly />
 
           <label>Tên người dùng</label>
-          <input value={user.TenNguoiDung} readOnly />
+          <input value={user.tenNguoiDung} readOnly />
 
           <label>Email</label>
-          <input type="email" value={user.Email} readOnly />
+          <input type="email" value={user.email} readOnly />
 
           <label>Vai trò</label>
-          <input type="text" value={user.VaiTro} readOnly />
+          <input type="text" value={user.vaiTro} readOnly />
 
           <label>Cấp phép</label>
-          <input type="text" value={user.CapPhep ? "Có" : "Không"} readOnly />
+          <input type="text" value={user.capPhep ? "Có" : "Không"} readOnly />
 
           <label>Ảnh đại diện</label>
-          {user.AnhDaiDien ? (
+          {user.anhDaiDien ? (
             <img
-              src={user.AnhDaiDien}
+              src={user.anhDaiDien}
               alt="Avatar"
               style={{ width: "80px", marginTop: "10px", borderRadius: "8px" }}
             />
@@ -68,16 +68,16 @@ const DetailUserInfoModal: React.FC<DetailUserInfoModalProps> = ({ user, onClose
           )}
 
           <label>Ngày tạo</label>
-          <input type="text" value={user.NgayTao} readOnly />
+          <input type="text" value={user.ngayTao} readOnly />
 
           <label>Ngày cập nhật</label>
-          <input type="text" value={user.NgayCapNhat} readOnly />
+          <input type="text" value={user.ngayCapNhat} readOnly />
 
           <label>Người tạo</label>
-          <input type="text" value={user.NguoiTao} readOnly />
+          <input type="text" value={user.nguoiTao} readOnly />
 
           <label>Người cập nhật</label>
-          <input type="text" value={user.NguoiCapNhat} readOnly />
+          <input type="text" value={user.nguoiCapNhat} readOnly />
         </div>
 
         {/* nút đóng */}

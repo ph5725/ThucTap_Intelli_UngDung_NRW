@@ -1,40 +1,39 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
 // Thêm dữ liệu
 export interface AddDsNgayDocSoBillingChiTietRequest {
-  MaNgayDocSo?: number;
-  Nam: number;
-  Ky: number;
-  Dot: number;
-  SoNgayDocSoDot: number;
-  GhiChu?: string;
-  NgayTao: string;
-  NguoiTao: number;
+  maNgayDocSo?: string;  // string, giống BE
+  nam: number;
+  ky: number;
+  dot: number;
+  soNgayDocSoDot: number;
+  ghiChu?: string;
+  ngayTao: string;
+  nguoiTao: string;      // string, giống BE
 }
 
 // Cập nhật dữ liệu
 export interface UpdateDsNgayDocSoBillingChiTietRequest {
-  MaNgayDocSo?: number;
-  Nam: number;
-  Ky: number;
-  Dot: number;
-  SoNgayDocSoDot: number;
-  GhiChu?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: number;
+  maNgayDocSo?: string;  // string, giống BE
+  nam: number;
+  ky: number;
+  dot: number;
+  soNgayDocSoDot: number;
+  ghiChu?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: string; // string, giống BE
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
-// Dữ liệu trả về
+/* ========== RESPONSE (API --> CLIENT) ========== */
 export interface DsNgayDocSoBillingChiTietResponse {
-  Id: number;
-  MaNgayDocSo?: string;
-  Nam: number;
-  Ky: number;
-  Dot: number;
-  SoNgayDocSoDot: number;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  maNgayDocSo?: string;
+  nam: number;
+  ky: number;
+  dot: number;
+  soNgayDocSoDot: number;
+  ghiChu?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

@@ -16,6 +16,7 @@ import { apiUrls } from "src/services/apiUrls";
 import { TextForms } from "src/constants/text";
 
 const AddUserGroupPage: React.FC = () => {
+  
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -35,11 +36,11 @@ const handleSubmit = async (e: React.FormEvent) => {
     const now = new Date().toISOString();
     const currentUserId = Number(localStorage.getItem("userId") || 0);
     const payload: AddNhomNguoiDungRequest = {
-      NhomNguoiDung1: formData.groupName,
-      ThanhVien: formData.members,
-      GhiChu: formData.note,
-      NgayTao: now,
-      NguoiTao: currentUserId,
+      nhomNguoiDung1: formData.groupName,
+      thanhVien: formData.members,
+      ghiChu: formData.note,
+      ngayTao: now,
+      nguoiTao: currentUserId.toString(),
     };
 
     // Gọi API tạo mới

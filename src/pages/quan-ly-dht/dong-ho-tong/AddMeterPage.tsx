@@ -8,10 +8,10 @@ import "src/styles/tai-khoan/EditAccountModal.css"
 import { FaTachometerAlt } from "react-icons/fa";
 import Tabs from "../../../components/tabQLDH/Tabs";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import { createData } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
+import { AddDongHoTongRequest, DongHoTongResponse } from "src/types/dong-ho-tong/dong-ho-tong";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -32,13 +32,13 @@ const AddMeterPage: React.FC = () => {
   // Dữ liệu người dùng nhập
   const [formData, setFormData] = useState<Omit<
     AddDongHoTongRequest,
-    "NgayGhi" | "NgayTao" | "NguoiTao"
+    "ngayGhi" | "ngayTao" | "nguoiTao"
   >>({
-    Ma: "",
-    Ten: "",
-    SanLuong: 0,
-    DanhDauLoi: false,
-    GhiChu: "",
+    ma: "",
+    ten: "",
+    sanLuong: 0,
+    danhDauLoi: false,
+    ghiChu: "",
   });
 
   // Cập nhật formData khi người dùng nhập vào form
@@ -62,6 +62,7 @@ const AddMeterPage: React.FC = () => {
 
     try {
       // Lấy thông tin người dùng từ localStorage
+    
       const nguoiDungStr = localStorage.getItem("nguoiDung");
       let nguoiDung: ThongTinNguoiDung | null = null;
 
@@ -73,9 +74,9 @@ const AddMeterPage: React.FC = () => {
       // Sinh metadata ở FE
       const payload = {
         ...formData,
-        NgayTao: new Date().toISOString(),
-        NgayGhi: new Date().toISOString(),
-        NguoiTao: nguoiDung?.id ?? 0,
+        ngayTao: new Date().toISOString(),
+        ngayGhi: new Date().toISOString(),
+        nguoiTao: (nguoiDung?.id ?? 0).toString(),
       };
 
       await createData<AddDongHoTongRequest, DongHoTongResponse>(
@@ -91,6 +92,7 @@ const AddMeterPage: React.FC = () => {
       setLoading(false);
     }
   };
+
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
   //   setLoading(true);
@@ -148,7 +150,7 @@ const AddMeterPage: React.FC = () => {
           <input
             type="text"
             name="code"
-            value={formData.Ma}
+            value={formData.ma}
             onChange={handleChange}
             required
           />
@@ -157,7 +159,7 @@ const AddMeterPage: React.FC = () => {
           <input
             type="text"
             name="name"
-            value={formData.Ten}
+            value={formData.ten}
             onChange={handleChange}
             required
           />
@@ -166,7 +168,7 @@ const AddMeterPage: React.FC = () => {
           <input
             type="number"
             name="volume"
-            value={formData.SanLuong}
+            value={formData.sanLuong}
             onChange={handleChange}
             required
           />
@@ -183,7 +185,7 @@ const AddMeterPage: React.FC = () => {
             <input
               type="checkbox"
               name="errorFlag"
-              checked={formData.DanhDauLoi}
+              checked={formData.danhDauLoi}
               onChange={handleChange}
             />
             Đánh dấu lỗi
@@ -192,7 +194,7 @@ const AddMeterPage: React.FC = () => {
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.GhiChu}
+            value={formData.ghiChu}
             onChange={handleChange}
           ></textarea>
         </div>

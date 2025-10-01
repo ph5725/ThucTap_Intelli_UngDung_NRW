@@ -12,10 +12,10 @@ import "src/styles/tai-khoan/EditAccountModal.css";
 import "src/styles/ds-so-ngay-doc-so-billing-chi-tiet/EditBillingReadingDetailModal.css";
 import { FaBookReader } from "react-icons/fa";
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
+import { createData,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse,  } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -27,16 +27,16 @@ const AddBillingReadingDetailPage: React.FC = () => {
   const [formData, setFormData] = useState<
     Omit<
       AddDsNgayDocSoBillingChiTietRequest,
-      | "NgayTao"
-      | "NguoiTao"
+      | "ngayTao"
+      | "nguoiTao"
     >
   >({
-    MaNgayDocSo: 0,
-    Nam: 0,
-    Ky: 0,
-    Dot: 0,
-    SoNgayDocSoDot: 0,
-    GhiChu: "",
+    maNgayDocSo: "0",
+    nam: 0,
+    ky: 0,
+    dot: 0,
+    soNgayDocSoDot: 0,
+    ghiChu: "",
   });
 
   const handleChange = (
@@ -62,15 +62,18 @@ const AddBillingReadingDetailPage: React.FC = () => {
       }
 
       // FE tự thêm metadata khi tạo mới
-      const metadata = {
-        ...formData,
-        NgayTao: new Date().toISOString(),
-        NguoiTao: nguoiDung?.id ?? 0,
+      const metadata: AddDsNgayDocSoBillingChiTietRequest = {
+      ...formData,
+        ngayTao: new Date().toISOString(),                  // viết thường
+        nguoiTao: (nguoiDung?.id ?? 0).toString(),         // string nếu backend yêu cầu
       };
 
-      await createData<AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse>(
+      await createData<
+        AddDsNgayDocSoBillingChiTietRequest,
+        DsNgayDocSoBillingChiTietResponse
+      >(
         apiUrls.DSNgayDocSoBillingChiTiet.create, // URL endpoint
-        metadata               // dữ liệu gửi đi
+        metadata                                  // dữ liệu gửi đi
       );
 
       alert(TextForms.thongBao.themMoiThanhCong);
@@ -100,7 +103,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             </label>
             <input
               name="code"
-              value={formData.MaNgayDocSo}
+              value={formData.maNgayDocSo}
               onChange={handleChange}
               required
             />
@@ -113,7 +116,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             <input
               type="number"
               name="year"
-              value={formData.Nam}
+              value={formData.nam}
               onChange={handleChange}
               required
             />
@@ -125,7 +128,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             </label>
             <input
               name="period"
-              value={formData.Ky}
+              value={formData.ky}
               onChange={handleChange}
               required
             />
@@ -133,7 +136,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
 
           <div className="form-group">
             <label>Đợt</label>
-            <input name="batch" value={formData.Dot} onChange={handleChange} />
+            <input name="batch" value={formData.dot} onChange={handleChange} />
           </div>
 
           <div className="form-group">
@@ -143,7 +146,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             <input
               type="number"
               name="daysCount"
-              value={formData.SoNgayDocSoDot}
+              value={formData.soNgayDocSoDot}
               onChange={handleChange}
               required
             />
@@ -153,7 +156,7 @@ const AddBillingReadingDetailPage: React.FC = () => {
             <label>Ghi chú</label>
             <textarea
               name="note"
-              value={formData.GhiChu}
+              value={formData.ghiChu}
               onChange={handleChange}
             />
           </div>

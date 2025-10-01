@@ -1,46 +1,45 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
 // Thêm dữ liệu
 export interface AddBillingRequest {
-  SanLuongTieuThu: number;
-  MaDoiTuong: string;
-  Ky: number;
-  Nam: number;
-  Dot?: number;
-  TuNgay?: string;
-  DenNgay?: string;
-  GhiChu?: string;
-  NgayTao: string;
-  NguoiTao: number;
+  sanLuongTieuThu: number;
+  maDoiTuong: string;
+  ky: number;
+  nam: number;
+  dot?: number;
+  tuNgay?: string;
+  denNgay?: string;
+  ghiChu?: string;
+  ngayTao: string;
+  nguoiTao: string;   // string, giống BE
 }
 
 // Cập nhật dữ liệu
 export interface UpdateBillingRequest {
-  SanLuongTieuThu: number;
-  MaDoiTuong: string;
-  Ky: number;
-  Nam: number;
-  Dot?: number;
-  TuNgay?: string;
-  DenNgay?: string;
-  GhiChu?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: number;
+  sanLuongTieuThu: number;
+  maDoiTuong: string;
+  ky: number;
+  nam: number;
+  dot?: number;
+  tuNgay?: string;
+  denNgay?: string;
+  ghiChu?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: string;  // string, giống BE
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
-// Dữ liệu trả về
+/* ========== RESPONSE (API --> CLIENT) ========== */
 export interface BillingResponse {
-  Id: number;
-  SanLuongTieuThu: number;
-  MaDoiTuong: string;
-  Ky: number;
-  Nam: number;
-  Dot?: number;
-  TuNgay?: string;
-  DenNgay?: string;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  sanLuongTieuThu: number;
+  maDoiTuong: string;
+  ky: number;
+  nam: number;
+  dot?: number;
+  tuNgay?: string;
+  denNgay?: string;
+  ghiChu?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

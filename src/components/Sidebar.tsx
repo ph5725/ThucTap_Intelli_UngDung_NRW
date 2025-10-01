@@ -33,17 +33,17 @@ const Sidebar: React.FC = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/account" className={({ isActive }) => (isActive ? "active" : "")}>
+          <NavLink to="/accounts" className={({ isActive }) => (isActive ? "active" : "")}>
             <FaUser className="icon" /> Quản Lý Tài Khoản
           </NavLink>
         </li>
         <li>
-          <NavLink to="/permission" className={({ isActive }) => (isActive ? "active" : "")}>
+          <NavLink to="/permissions" className={({ isActive }) => (isActive ? "active" : "")}>
             <FaShieldAlt className="icon" /> Phân Quyền
           </NavLink>
         </li>
         <li>
-          <NavLink to="/donghotong" className={({ isActive }) => (isActive ? "active" : "")}>
+          <NavLink to="/meters" className={({ isActive }) => (isActive ? "active" : "")}>
             <FaClock className="icon" /> Đồng Hồ Tổng
           </NavLink>
         </li>
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/log" className={({ isActive }) => (isActive ? "active" : "")}>
+          <NavLink to="/user-log" className={({ isActive }) => (isActive ? "active" : "")}>
             <FaClipboardList className="icon" /> Nhật Ký
           </NavLink>
         </li>

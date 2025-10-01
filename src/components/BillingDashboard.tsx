@@ -18,11 +18,11 @@ import Papa from "papaparse"; // 👉 thêm thư viện để export CSV
 import "../styles/BillingDashboard.css";
 
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
-import { apiUrls } from "src/services/apiUrls";
+// import { createData, updateData, deleteData, getList } from "src/services/crudService";
+// import { apiUrls } from "src/services/apiUrls";
 
 // interface
-import { AddBillingRequest, BillingResponse, UpdateBillingRequest } from "src/types/he-thong-billing/billing";
+import {  BillingResponse,  } from "src/types/he-thong-billing/billing";
 
 // text
 import { TextForms } from "src/constants/text";
@@ -42,21 +42,21 @@ interface BillingDashboardProps {
 const BillingDashboard: React.FC<BillingDashboardProps> = ({ data }) => {
   // ----- KPI -----
   const totalRecords = data.length;
-  const currentConsumption = data[totalRecords - 1]?.SanLuongTieuThu || 0;
+  const currentConsumption = data[totalRecords - 1]?.sanLuongTieuThu || 0;
 
   const avgConsumption =
     totalRecords > 0
-      ? data.reduce((sum, row) => sum + row.SanLuongTieuThu, 0) / totalRecords
+      ? data.reduce((sum, row) => sum + row.sanLuongTieuThu, 0) / totalRecords
       : 0;
 
   const abnormalCount = data.filter(
-    (row) => row.SanLuongTieuThu === 0 || row.SanLuongTieuThu < 500
+    (row) => row.sanLuongTieuThu === 0 || row.sanLuongTieuThu < 500
   ).length;
 
   // ----- Chart Line -----
   const lineData = data.map((row) => ({
-    name: row.Ky,
-    value: row.SanLuongTieuThu,
+    name: row.ky,
+    value: row.sanLuongTieuThu,
   }));
 
   // ----- Chart Pie -----

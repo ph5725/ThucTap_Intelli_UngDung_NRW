@@ -5,6 +5,7 @@ import { apiUrls } from "src/services/apiUrls";
 import { TextForms } from "src/constants/text";
 
 interface EditUserGroupModalProps {
+  userId: number;
   group: NhomNguoiDungResponse; // <-- dùng NhomNguoiDungResponse
   onClose: () => void;
   onSave: (updated: NhomNguoiDungResponse) => void;
@@ -18,20 +19,21 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
   };
 
   const handleSave = async () => {
-    if (!formData?.Id) return;
+    if (!formData?.id) return;
 
     try {
       // Tạo payload gửi lên backend
+      const userId = localStorage.getItem("userId"); 
       const payload: UpdateNhomNguoiDungRequest = {
-        NhomNguoiDung1: formData.NhomNguoiDung1,
-        ThanhVien: formData.ThanhVien,
-        GhiChu: formData.GhiChu,
-        NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: formData.NguoiCapNhat ? Number(formData.NguoiCapNhat) : undefined,
+        nhomNguoiDung1: formData.nhomNguoiDung1,
+        thanhVien: formData.thanhVien,
+        ghiChu: formData.ghiChu,
+        ngayCapNhat: new Date().toISOString(),
+        nguoiCapNhat: String(userId),
       };
 
       // URL update dựa vào Id
-      const url = apiUrls.NhomNguoiDung.update(formData.Id);
+      const url = apiUrls.NhomNguoiDung.update(formData.id);
 
       // Gọi API
       const updated: NhomNguoiDungResponse = await updateData<UpdateNhomNguoiDungRequest, NhomNguoiDungResponse>(
@@ -52,15 +54,20 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
       <div className="modal">
         <h3>Chỉnh Sửa Nhóm Người Dùng</h3>
         <label>Nhóm Người Dùng</label>
-        <input value={formData.NhomNguoiDung1} onChange={e => handleChange("NhomNguoiDung1", e.target.value)} />
+        <input value={formData.nhomNguoiDung1} onChange={e => handleChange("nhomNguoiDung1", e.target.value)} />
         <label>Thành Viên</label>
-        <input value={formData.ThanhVien} onChange={e => handleChange("ThanhVien", e.target.value)} />
+        <input value={formData.thanhVien} onChange={e => handleChange("thanhVien", e.target.value)} />
         <label>Ghi Chú</label>
-        <textarea value={formData.GhiChu} onChange={e => handleChange("GhiChu", e.target.value)} rows={3} />
+        <textarea value={formData.ghiChu} onChange={e => handleChange("ghiChu", e.target.value)} rows={3} />
+
+        <label>Ngày Tạo</label>
+        <input type="text" value={formData.ngayTao} readOnly />
         <label>Ngày Cập Nhật</label>
-        <input type="text" value={formData.NgayCapNhat} readOnly />
+        <input type="text" value={formData.ngayCapNhat} readOnly />
+        <label>Ngày Tao</label>
+        <input type="text" value={formData.nguoiTao} readOnly />
         <label>Người Cập Nhật</label>
-        <input type="text" value={formData.NguoiCapNhat} readOnly />
+        <input type="text" value={formData.nguoiCapNhat} readOnly />
         <div className="form-actions">
           <button className="btn save" onClick={handleSave}>{TextForms.nut.luu}</button>
           <button className="btn close" onClick={onClose}>{TextForms.nut.huyBo}</button>

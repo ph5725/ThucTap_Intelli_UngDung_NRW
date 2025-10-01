@@ -5,10 +5,10 @@ import React, { useState, useEffect } from "react";
 import "src/styles/global.css";
 import "src/styles/nhat-ky/EditUserLogModal.css";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  updateData,  getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddNhatKySuDungRequest, NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
+import {  NhatKySuDungResponse, UpdateNhatKySuDungRequest } from "src/types/nguoi-dung/nhat-ky-su-dung";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -38,14 +38,14 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
   // });
   const [form, setForm] = useState<NhatKySuDungResponse | null>(null);
   // Dữ liệu người dùng nhập
-  const [dataUpdate, setDataUpdate] = useState<Omit<
+  const [dataUpdate, ] = useState<Omit<
     UpdateNhatKySuDungRequest,
-    "NguoiCapNhat" | "NgayCapNhat">>({
-      TenNguoiDung: 0,
-      HanhDong: "",
-      TinhNang: "",
-      DuLieu: "",
-      GhiChu: "",
+    "nguoiCapNhat" | "ngayCapNhat">>({
+      tenNguoiDung: 0,
+      hanhDong: "",
+      tinhNang: "",
+      duLieu: "",
+      ghiChu: "",
     });
 
   const [loadingApi, setLoadingApi] = useState(false);
@@ -58,7 +58,6 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
       try {
         // const res = await userLogService.getById(logId);
         const res = await getById<NhatKySuDungResponse>(apiUrls.NhatKySuDung.detail(logId));;
-        const log = res;
         setForm(res);
       } catch (err) {
         console.error("❌ Lỗi tải UserLog:", err);
@@ -75,7 +74,7 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
+    const {  value } = e.target;
     // setForm(prev => ({ ...prev, [name]: value }));
     setForm(prev => prev ? { ...prev, TenNguoiDung: value } : prev);
   };
@@ -100,13 +99,13 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
 
       const payload: UpdateNhatKySuDungRequest = {
         ...dataUpdate,
-        NgayCapNhat: now,
-        NguoiCapNhat: currentUser,
+        ngayCapNhat: now,
+        nguoiCapNhat: currentUser.toString(),
       };
 
       //  const res = await userLogService.update(logId, form);
       const res = await updateData<UpdateNhatKySuDungRequest, NhatKySuDungResponse>(
-        apiUrls.NhatKySuDung.update(form.Id!),
+        apiUrls.NhatKySuDung.update(form.id!),
         payload
       );
 
@@ -207,16 +206,16 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
         <h3>Chỉnh Sửa Nhật Ký</h3>
         <div className="modal-content-scroll">
           <label>Người dùng</label>
-          <input name="user" value={form?.TenNguoiDung} onChange={handleChange} required />
+          <input name="user" value={form?.tenNguoiDung} onChange={handleChange} required />
 
           <label>Hành động</label>
-          <input name="action" value={form?.HanhDong} onChange={handleChange} required />
+          <input name="action" value={form?.hanhDong} onChange={handleChange} required />
 
           <label>Tính năng</label>
-          <input name="feature" value={form?.TinhNang} onChange={handleChange} required />
+          <input name="feature" value={form?.tinhNang} onChange={handleChange} required />
 
           <label>Dữ liệu</label>
-          <input name="data" value={form?.DuLieu} onChange={handleChange} />
+          <input name="data" value={form?.duLieu} onChange={handleChange} />
 
           {/* <label>Trạng thái</label>
           <select name="status" value={form.status} onChange={handleChange}>
@@ -226,13 +225,13 @@ const EditUserLogModal: React.FC<EditUserLogModalProps> = ({ logId, onClose, onS
           </select> */}
 
           <label>Ghi chú</label>
-          <textarea name="note" value={form?.GhiChu} onChange={handleChange} />
+          <textarea name="note" value={form?.ghiChu} onChange={handleChange} />
 
           {/* Metadata read-only */}
           <label>Người cập nhật</label>
-          <input type="text" value={form?.NguoiCapNhat} readOnly />
+          <input type="text" value={form?.nguoiCapNhat} readOnly />
           <label>Ngày cập nhật</label>
-          <input type="text" value={form?.NgayCapNhat} readOnly />
+          <input type="text" value={form?.ngayCapNhat} readOnly />
 
           <div className="modal-actions">
             <button className="btn save" onClick={handleSave} disabled={saving}>

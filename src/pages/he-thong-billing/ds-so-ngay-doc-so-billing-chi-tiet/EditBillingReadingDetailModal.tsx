@@ -11,10 +11,10 @@ import "src/styles/global.css";
 import "src/styles/ds-so-ngay-doc-so-billing-chi-tiet/EditBillingReadingDetailModal.css";
 import "src/styles/tai-khoan/EditAccountModal.css";
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  updateData,  getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
+import {  DsNgayDocSoBillingChiTietResponse, UpdateDsNgayDocSoBillingChiTietRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing-chi-tiet";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -36,15 +36,15 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
   // Dữ liệu người dùng nhập
   const [dataUpdate, setDataUpdate] = useState<Omit<
     UpdateDsNgayDocSoBillingChiTietRequest,
-    | "NgayCapNhat"
-    | "NguoiCapNhat"
+    | "ngayCapNhat"
+    | "nguoiCapNhat"
   >>({
-    MaNgayDocSo: 0,
-    Nam: 0,
-    Ky: 0,
-    Dot: 0,
-    SoNgayDocSoDot: 0,
-    GhiChu: "",
+    maNgayDocSo: "0",
+    nam: 0,
+    ky: 0,
+    dot: 0,
+    soNgayDocSoDot: 0,
+    ghiChu: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -128,12 +128,12 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
 
       const payload: UpdateDsNgayDocSoBillingChiTietRequest = {
         ...dataUpdate,
-        NgayCapNhat: now,
-        NguoiCapNhat: currentUser,
+        ngayCapNhat: now,
+        nguoiCapNhat: currentUser.toString(),
       };
 
       const res = await updateData<UpdateDsNgayDocSoBillingChiTietRequest, DsNgayDocSoBillingChiTietResponse>(
-        apiUrls.NguoiDung.update(formData.Id!),
+        apiUrls.NguoiDung.update(formData.id!),
         payload
       );
       onSave(res);
@@ -173,7 +173,7 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <label>Mã ngày số đọc</label>
           <input
             name="code"
-            value={formData.MaNgayDocSo}
+            value={formData.maNgayDocSo}
             onChange={handleChange}
             required
           />
@@ -182,7 +182,7 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <input
             type="number"
             name="year"
-            value={formData.Nam}
+            value={formData.nam}
             onChange={handleChange}
             required
           />
@@ -190,19 +190,19 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <label>Kỳ</label>
           <input
             name="period"
-            value={formData.Ky}
+            value={formData.ky}
             onChange={handleChange}
             required
           />
 
           <label>Đợt</label>
-          <input name="batch" value={formData.Dot} onChange={handleChange} />
+          <input name="batch" value={formData.dot} onChange={handleChange} />
 
           <label>Số ngày đọc</label>
           <input
             type="number"
             name="daysCount"
-            value={formData.SoNgayDocSoDot}
+            value={formData.soNgayDocSoDot}
             onChange={handleChange}
             required
           />
@@ -210,19 +210,19 @@ const EditBillingReadingDetailModal: React.FC<Props> = ({
           <label>Ghi chú</label>
           <textarea
             name="note"
-            value={formData.GhiChu || ""}
+            value={formData.ghiChu || ""}
             onChange={handleChange}
           />
 
           {/* Metadata hiển thị */}
           <label>Ngày tạo:</label>
-          <input type="text" value={formData.NgayTao} readOnly />
+          <input type="text" value={formData.ngayTao} readOnly />
           <label>Người tạo:</label>
-          <input type="text" value={formData.NguoiTao || ""} readOnly />
+          <input type="text" value={formData.nguoiTao || ""} readOnly />
           <label>Ngày cập nhật:</label>
-          <input type="text" value={formData.NgayCapNhat || ""} readOnly />
+          <input type="text" value={formData.ngayCapNhat || ""} readOnly />
           <label>Người cập nhật:</label>
-          <input type="text" value={formData.NguoiCapNhat || ""} readOnly />
+          <input type="text" value={formData.nguoiCapNhat || ""} readOnly />
 
           <div className="modal-actions">
             <button type="submit" className="btn save">

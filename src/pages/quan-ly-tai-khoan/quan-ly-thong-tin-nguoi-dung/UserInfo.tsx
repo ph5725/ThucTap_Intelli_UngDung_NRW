@@ -62,10 +62,10 @@ const UserInfoPage: React.FC<UserInfoPageProps> = ({ useMock = false }) => {
   // 📌 Lọc dữ liệu
   const filteredUsers = useMemo(() =>
     users.filter(u =>
-      u.Ma.toLowerCase().includes(filter.code.toLowerCase()) &&
-      u.Ten.toLowerCase().includes(filter.username.toLowerCase()) &&
-      u.TenNguoiDung.toLowerCase().includes(filter.fullname.toLowerCase()) &&
-      u.Email.toLowerCase().includes(filter.email.toLowerCase())
+      u.ma.toLowerCase().includes(filter.code.toLowerCase()) &&
+      u.ten.toLowerCase().includes(filter.username.toLowerCase()) &&
+      u.tenNguoiDung.toLowerCase().includes(filter.fullname.toLowerCase()) &&
+      u.email.toLowerCase().includes(filter.email.toLowerCase())
     ), [users, filter]
   );
 
@@ -75,17 +75,17 @@ const UserInfoPage: React.FC<UserInfoPageProps> = ({ useMock = false }) => {
 
   // 📌 Xóa người dùng
   const handleDelete = async (id: number) => {
-      const acc = users.find(a => a.Id === id);
+      const acc = users.find(a => a.id === id);
       if (!acc) return;
-      if (!window.confirm(`Bạn có chắc muốn xóa tài khoản "${acc.TenNguoiDung}" không?`)) return;
+      if (!window.confirm(`Bạn có chắc muốn xóa tài khoản "${acc.tenNguoiDung}" không?`)) return;
   
       if (useMock) {
-        setUsers(prev => prev.filter(a => a.Id !== id));
+        setUsers(prev => prev.filter(a => a.id !== id));
         setMessage("Xóa tài khoản thành công!");
       } else {
         try {
           await deleteData(apiUrls.NguoiDung.delete(id));;
-          setUsers(prev => prev.filter(a => a.Id !== id));
+          setUsers(prev => prev.filter(a => a.id !== id));
           setMessage("Xóa tài khoản thành công!");
         } catch (error) {
           console.error("Lỗi xóa tài khoản:", error);
@@ -144,15 +144,15 @@ const UserInfoPage: React.FC<UserInfoPageProps> = ({ useMock = false }) => {
           </thead>
           <tbody>
             {currentUsers.map(u => (
-              <tr key={u.Id}>
-                <td>{u.Id}</td>
-                <td>{u.Ma}</td>
-                <td>{u.Ten}</td>
-                <td>{u.TenNguoiDung}</td>
-                <td>{u.Email}</td>
+              <tr key={u.id}>
+                <td>{u.id}</td>
+                <td>{u.ma}</td>
+                <td>{u.tenNguoiDung}</td>
+                <td>{u.ten}</td>
+                <td>{u.email}</td>
                 <td className="actions">
-                  <FaEdit onClick={() => u.Id !== undefined && setEditingUser(u)} title="Sửa" />
-                  <FaTrash onClick={() => handleDelete(u.Id!)} title="Xóa" />
+                  <FaEdit onClick={() => u.id !== undefined && setEditingUser(u)} title="Sửa" />
+                  <FaTrash onClick={() => handleDelete(u.id!)} title="Xóa" />
                   <FaEye onClick={() => setDetailUser(u)} title="Chi tiết" />
                 </td>
               </tr>
@@ -186,13 +186,13 @@ const UserInfoPage: React.FC<UserInfoPageProps> = ({ useMock = false }) => {
       )}
 
       {/* Modal Edit */}
-      {editingUser?.Id !== undefined && (
+      {editingUser?.id !== undefined && (
         <EditUserInfoModal
-          userId={editingUser.Id}
+          userId={editingUser.id}
           onClose={() => setEditingUser(null)}
           onSave={(updated) => {
             setUsers(prev =>
-              prev.map(u => (u.Id === updated.Id ? { ...u, ...updated } : u))
+              prev.map(u => (u.id === updated.id ? { ...u, ...updated } : u))
             );
           }}
         />

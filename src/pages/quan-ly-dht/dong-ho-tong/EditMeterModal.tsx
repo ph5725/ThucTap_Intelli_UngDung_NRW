@@ -5,10 +5,10 @@ import React, { useState, useEffect } from "react";
 import "src/styles/global.css";
 import "src/styles/dong-ho-tong/EditMeterModal.css"
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  updateData,  getById } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddDongHoTongRequest, DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
+import {  DongHoTongResponse, UpdateDongHoTongRequest } from "src/types/dong-ho-tong/dong-ho-tong";
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from "src/constants/text";
@@ -23,15 +23,15 @@ interface EditMeterModalProps {
 const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSave, useMock = false }) => {
   const [formData, setFormData] = useState<DongHoTongResponse | null>(null);
   // Dữ liệu người dùng nhập
-  const [dataUpdate, setDataUpdate] = useState<Omit<
+  const [, setDataUpdate] = useState<Omit<
     UpdateDongHoTongRequest,
     "NgayChinhSua" | "NgayCapNhat" | "NguoiCapNhat" | "NguoiChinhSua"
   >>({
-    Ma: "",
-    Ten: "",
-    SanLuong: 0,
-    DanhDauLoi: false,
-    GhiChu: "",
+    ma: "",
+    ten: "",
+    sanLuong: 0,
+    danhDauLoi: false,
+    ghiChu: "",
   });
   const [originalData, setOriginalData] = useState<DongHoTongResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -106,7 +106,7 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
       };
 
       const res = await updateData<UpdateDongHoTongRequest, DongHoTongResponse>(
-        apiUrls.NguoiDung.update(formData.Id!),
+        apiUrls.NguoiDung.update(formData.id!),
         payload
       );
       alert(TextForms.thongBao.capNhatThanhCong);
@@ -202,24 +202,24 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
 
         <form onSubmit={handleSubmit}>
           <label>Mã đồng hồ</label>
-          <input value={formData.Ma}
+          <input value={formData.ma}
             onChange={handleChange} required />
 
           <label>Tên đồng hồ</label>
-          <input value={formData.Ten} onChange={handleChange} required />
+          <input value={formData.ten} onChange={handleChange} required />
 
           <label>Sản lượng (m³)</label>
-          <input type="number" value={formData.SanLuong} onChange={handleChange}  required />
+          <input type="number" value={formData.sanLuong} onChange={handleChange}  required />
 
           {/* Metadata sản lượng */}
           <label>Ngày ghi</label>
-          <input type="date" value={formData.NgayGhi} onChange={handleChange}  />
+          <input type="date" value={formData.ngayGhi} onChange={handleChange}  />
 
           <label>Ngày chỉnh sửa sản lượng</label>
-          <input type="text" value={formData.NgayChinhSua || ""} readOnly />
+          <input type="text" value={formData.ngayChinhSua || ""} readOnly />
 
           <label>Người chỉnh sửa sản lượng</label>
-          <input type="text" value={formData.NguoiChinhSua || ""} readOnly />
+          <input type="text" value={formData.nguoiChinhSua || ""} readOnly />
 
           {/* <label>Trạng thái</label>
           <select
@@ -234,7 +234,7 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
           <label>Đánh dấu lỗi</label>
           <select
             name="DanhDauLoi"
-            value={formData.DanhDauLoi ? "Có" : "Không"}
+            value={formData.danhDauLoi ? "Có" : "Không"}
             onChange={handleChange}
           >
             <option value="Không">Không</option>
@@ -250,17 +250,17 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
           </select> */}
 
           <label>Ghi chú</label>
-          <textarea value={formData.GhiChu || ""} onChange={handleChange}  />
+          <textarea value={formData.ghiChu || ""} onChange={handleChange}  />
 
           {/* Metadata chung */}
           <label>Ngày tạo</label>
-          <input type="text" value={formData.NgayTao} readOnly />
+          <input type="text" value={formData.ngayTao} readOnly />
           <label>Người tạo</label>
-          <input type="text" value={formData.NguoiTao} readOnly />
+          <input type="text" value={formData.nguoiTao} readOnly />
           <label>Ngày cập nhật</label>
-          <input type="text" value={formData.NgayCapNhat} readOnly />
+          <input type="text" value={formData.ngayCapNhat} readOnly />
           <label>Người cập nhật</label>
-          <input type="text" value={formData.NgayCapNhat} readOnly />
+          <input type="text" value={formData.ngayCapNhat} readOnly />
 
           <div className="modal-actions">
             <button type="submit" className="btn save" disabled={loading}>

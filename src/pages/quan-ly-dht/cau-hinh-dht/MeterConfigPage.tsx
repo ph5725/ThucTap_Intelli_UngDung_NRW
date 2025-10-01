@@ -2,17 +2,17 @@
 // import "../../../styles/qldh/MeterManagementPage.css";
 //import { mockMeterConfigs } from "../../../config/mockData";
 import React, { useState, useMemo, useEffect } from "react";
-import { FaTachometerAlt, FaEdit, FaTrash, FaEye, FaLock, FaPlus, FaFilter } from "react-icons/fa";
+import { FaTachometerAlt, FaEdit, FaTrash, FaEye,  FaPlus, FaFilter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Tabs from "../../../components/tabQLDH/Tabs";
 import EditMeterConfigModal from "./EditMeterConfigModal";
 import DetailMeterConfigModal from "./DetailMeterConfigModal";
 import "src/styles/dong-ho-tong/MeterManagementPage.css"
 // service
-import { createData, updateData, deleteData, getList, getById } from "src/services/crudService";
+import {  deleteData, getList,  } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { AddCauHinhDhtRequest, CauHinhDhtResponse, UpdateCauHinhDhtRequest } from "src/types/dong-ho-tong/cau-hinh-dht";
+import {  CauHinhDhtResponse } from "src/types/dong-ho-tong/cau-hinh-dht";
 // text
 import { TextForms } from "src/constants/text";
 
@@ -49,7 +49,7 @@ const MeterConfigPage: React.FC = () => {
     try {
       // await meterConfigService.delete(id);
       await deleteData(apiUrls.CauHinhDHT.delete(id));;
-      setConfigs(prev => prev.filter(c => c.Id !== id));
+      setConfigs(prev => prev.filter(c => c.id !== id));
       alert(TextForms.thongBao.xoaThanhCong);
     } catch (error) {
       console.error("Lỗi khi xóa API:", error);
@@ -66,8 +66,8 @@ const MeterConfigPage: React.FC = () => {
   const filteredConfigs = useMemo(() => {
     return configs.filter(
       (c) =>
-        (c.MaDoiTuong?.toString()?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
-        (c.MaDongHo?.toLowerCase() ?? "").includes(searchTerm.toLowerCase())
+        (c.maDoiTuong?.toString()?.toLowerCase() ?? "").includes(searchTerm.toLowerCase()) ||
+        (c.maDongHo?.toLowerCase() ?? "").includes(searchTerm.toLowerCase())
     );
   }, [configs, searchTerm]);
 
@@ -105,8 +105,8 @@ const MeterConfigPage: React.FC = () => {
 
   // KPI
   const totalConfigs = configs.length;
-  // const lockedConfigs = configs.filter(c => c.locked).length;
-  // const activeConfigs = configs.filter(c => !c.locked).length;
+   const lockedConfigs = configs.filter(c => c.locked).length;
+   const activeConfigs = configs.filter(c => !c.locked).length;
 
   return (
     <div className="meter-page">
@@ -123,14 +123,14 @@ const MeterConfigPage: React.FC = () => {
           <span>Tổng số cấu hình</span>
           <p>{totalConfigs}</p>
         </div>
-        {/* <div className="card red">
+        <div className="card red">
           <span>Đang khóa</span>
           <h3>{lockedConfigs}</h3>
         </div>
         <div className="card green">
           <span>Đang hoạt động</span>
           <h3>{activeConfigs}</h3>
-        </div> */}
+        </div> 
       </div>
 
       {/* Toolbar */}
@@ -168,14 +168,14 @@ const MeterConfigPage: React.FC = () => {
           <tbody>
             {currentConfigs.map(c => (
               // <tr key={c.Id} className={c.locked ? "locked-row" : ""}>
-              <tr key={c.Id}>
-                <td>{c.Id}</td>
-                <td>{c.MaDoiTuong}</td>
-                <td>{c.MaDongHo}</td>
-                <td>{c.NgayTao}</td>
+              <tr key={c.id}>
+                <td>{c.id}</td>
+                <td>{c.maDoiTuong}</td>
+                <td>{c.maDongHo}</td>
+                <td>{c.ngayTao}</td>
                 <td className="actions">
-                  <FaEdit title="Sửa" onClick={() => handleEdit(c.Id)} />
-                  <FaTrash title="Xóa" onClick={() => handleDelete(c.Id)} />
+                  <FaEdit title="Sửa" onClick={() => handleEdit(c.id)} />
+                  <FaTrash title="Xóa" onClick={() => handleDelete(c.id)} />
                   <FaEye title="Chi tiết" onClick={() => setDetailConfig(c)} />
                   {/* <FaLock title="Khóa/Mở" onClick={() => handleToggleLock(c)} /> */}
                 </td>
@@ -216,7 +216,7 @@ const MeterConfigPage: React.FC = () => {
           useMock={false} // đổi false nếu muốn dùng API thật
           onClose={() => setSelectedId(null)}
           onSave={(updated) => {
-            setConfigs(prev => prev.map(c => (c.Id === updated.Id ? updated : c)));
+            setConfigs(prev => prev.map(c => (c.id === updated.id ? updated : c)));
             setSelectedId(null);
           }}
         />
