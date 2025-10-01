@@ -1,228 +1,112 @@
-// // src/pages/quan-ly-phan-quyen/PermissionDataPage.tsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { FaShieldAlt } from "react-icons/fa";
 import Tabs from "../../components/tabPQ/Tabs";
-import { getList, updateData } from "../../services/crudService";
-import { apiUrls } from "../../services/apiUrls";
 import {
   PhanQuyenDuLieuResponse,
   UpdatePhanQuyenDuLieuRequest,
 } from "../../types/phan-quyen/phan-quyen-du-lieu";
+import { NhomNguoiDungResponse } from "../../types/nguoi-dung/nhom-nguoi-dung";
+import { getList, updateData } from "../../services/crudService";
+import { apiUrls } from "../../services/apiUrls";
 
-// const PermissionDataPage: React.FC = () => {
-//   // Roles cố định
-//   const [roles] = useState<Role[]>([
-//     { id: 1, name: "Quản Lý" },
-//     { id: 2, name: "Tổ Trưởng" },
-//     { id: 3, name: "Caretaker" },
-//     { id: 4, name: "Người Dùng" },
-//   ]);
-
-//   const [dataItems, setDataItems] = useState<DataItem[]>([]);
-//   const [matrix, setMatrix] = useState<boolean[][][]>([]);
-
-//   // Load dữ liệu và quyền hiện tại
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const [dataRes, permissionsRes] = await Promise.all([
-//           permissionDataService.getDataItems(),
-//           permissionDataService.getPermissions(),
-//         ]);
-
-//         setDataItems(dataRes.data);
-
-//         // Khởi tạo ma trận [data][action][role]
-//         const tempMatrix = dataRes.data.map(() =>
-//           actions.map(() => roles.map(() => false))
-//         );
-
-//         // Gán quyền hiện tại từ backend
-//         permissionsRes.data.forEach((p) => {
-//           const dIdx = dataRes.data.findIndex((d) => d.id === p.dataId);
-//           const rIdx = roles.findIndex((r) => r.id === p.roleId);
-//           if (dIdx !== -1 && rIdx !== -1) {
-//             tempMatrix[dIdx][0][rIdx] = p.permissions.view;
-//             tempMatrix[dIdx][1][rIdx] = p.permissions.create;
-//             tempMatrix[dIdx][2][rIdx] = p.permissions.update;
-//             tempMatrix[dIdx][3][rIdx] = p.permissions.delete;
-//           }
-//         });
-
-//         setMatrix(tempMatrix);
-//       } catch (error) {
-//         console.error("Lỗi load data/permissions:", error);
-//       }
-//     };
-
-//     fetchData();
-//   }, [roles]);
-
-//   // Toggle checkbox
-//   const toggleCheck = (dIdx: number, aIdx: number, rIdx: number) => {
-//     setMatrix((prev) => {
-//       const copy = prev.map((d) => d.map((a) => [...a]));
-//       copy[dIdx][aIdx][rIdx] = !copy[dIdx][aIdx][rIdx];
-//       return copy;
-//     });
-//   };
-
-//   // Áp dụng quyền
-//   const handleApply = async () => {
-//     const payload: PermissionPayload[] = dataItems
-//       .map((item, dIdx) =>
-//         roles.map((role, rIdx) => ({
-//           roleId: role.id,
-//           dataId: item.id,
-//           permissions: {
-//             view: matrix[dIdx][0][rIdx],
-//             create: matrix[dIdx][1][rIdx],
-//             update: matrix[dIdx][2][rIdx],
-//             delete: matrix[dIdx][3][rIdx],
-//           },
-//         }))
-//       )
-//       .flat();
-
-//     try {
-//       await permissionDataService.applyPermissions(payload);
-//       alert("Áp dụng quyền dữ liệu thành công!");
-//     } catch (err) {
-//       console.error(err);
-//       alert("Có lỗi xảy ra khi áp dụng quyền!");
-//     }
-//   };
-
-//   return (
-//     <div className="permission-page">
-//       {/* Header */}
-//       <div className="page-header">
-//         <FaShieldAlt className="page-icon" />
-//         <h2 className="page-title">PHÂN QUYỀN DỮ LIỆU</h2>
-//       </div>
-
-//       <Tabs />
-
-//       {/* Nút Áp Dụng */}
-//       <div className="apply-btn-wrapper">
-//         <button className="btn apply" onClick={handleApply}>
-//           Áp Dụng
-//         </button>
-//       </div>
-
-//       {/* Ma trận phân quyền */}
-//       <div className="permission-matrix">
-//         <table className="permission-matrix-table">
-//           <thead>
-//             <tr>
-//               <th>Dữ liệu / Hành động</th>
-//               {roles.map((r) => (
-//                 <th key={r.id}>{r.name}</th>
-//               ))}
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {dataItems.map((item, dIdx) =>
-//               actions.map((action, aIdx) => (
-//                 <tr key={`${dIdx}-${aIdx}`}>
-//                   <td>
-//                     {item.name} - <b>{action}</b>
-//                   </td>
-//                   {roles.map((role, rIdx) => (
-//                     <td key={role.id}>
-//                       <input
-//                         type="checkbox"
-//                         checked={matrix[dIdx]?.[aIdx]?.[rIdx] || false}
-//                         onChange={() => toggleCheck(dIdx, aIdx, rIdx)}
-//                       />
-//                     </td>
-//                   ))}
-//                 </tr>
-//               ))
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-import "src/styles/phan-quyen/PermissionPage.css"
 const PermissionDataPage: React.FC = () => {
-  const [data, setData] = useState<PhanQuyenDuLieuResponse[]>([]);
+  const [roles, setRoles] = useState<NhomNguoiDungResponse[]>([]);
+  const [, setData] = useState<PhanQuyenDuLieuResponse[]>([]);
   const [matrix, setMatrix] = useState<
-    Record<number, { DuLieuNrwcongTy: boolean; DuLieuNrwdma: boolean }>
+    Record<number, { DuLieuNRWCongTy: boolean; DuLieuNRWDMA: boolean }>
   >({});
 
-  // Load danh sách phân quyền dữ liệu
+  // Load nhóm người dùng
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getList<PhanQuyenDuLieuResponse>(
-          apiUrls.PhanQuyenDuLieu.list
-        );
+    getList<NhomNguoiDungResponse>(apiUrls.NhomNguoiDung.list)
+      .then(setRoles)
+      .catch((err) => console.error("Lỗi load nhóm người dùng:", err));
+  }, []);
 
+  // Load phân quyền dữ liệu
+  useEffect(() => {
+    getList<PhanQuyenDuLieuResponse>(apiUrls.PhanQuyenDuLieu.list)
+      .then((res) => {
         setData(res);
 
-        // map ra matrix boolean
         const temp: Record<
           number,
-          { DuLieuNrwcongTy: boolean; DuLieuNrwdma: boolean }
+          { DuLieuNRWCongTy: boolean; DuLieuNRWDMA: boolean }
         > = {};
+
+        // Khởi tạo default
+        roles.forEach((r) => {
+          temp[r.id] = { DuLieuNRWCongTy: false, DuLieuNRWDMA: false };
+        });
+
+        // Đổ dữ liệu từ API
         res.forEach((item) => {
-          temp[item.Id] = {
-            DuLieuNrwcongTy: item.DuLieuNrwcongTy === "1",
-            DuLieuNrwdma: item.DuLieuNrwdma === "1",
-          };
+          if (!temp[item.nhomNguoiDungId]) {
+            temp[item.nhomNguoiDungId] = {
+              DuLieuNRWCongTy: false,
+              DuLieuNRWDMA: false,
+            };
+          }
+          if (item.tenBang === "DuLieuNRWCongTy") {
+            temp[item.nhomNguoiDungId].DuLieuNRWCongTy = item.dieuKien === "1";
+          }
+          if (item.tenBang === "DuLieuNRWDMA") {
+            temp[item.nhomNguoiDungId].DuLieuNRWDMA = item.dieuKien === "1";
+          }
         });
 
         setMatrix(temp);
-      } catch (err) {
-        console.error("Lỗi load phân quyền dữ liệu:", err);
-      }
-    };
+      })
+      .catch((err) => console.error("Lỗi load phân quyền dữ liệu:", err));
+  }, [roles]);
 
-    fetchData();
-  }, []);
-
-  // Toggle check
-  const toggleCheck = (id: number, field: "DuLieuNrwcongTy" | "DuLieuNrwdma") => {
+  const toggleCheck = (
+    roleId: number,
+    field: "DuLieuNRWCongTy" | "DuLieuNRWDMA"
+  ) => {
     setMatrix((prev) => ({
       ...prev,
-      [id]: {
-        ...prev[id],
-        [field]: !prev[id][field],
+      [roleId]: {
+        ...prev[roleId],
+        [field]: !prev[roleId][field],
       },
     }));
   };
 
-  // Áp dụng quyền
   const handleApply = async () => {
     try {
-      for (const item of data) {
-        const state = matrix[item.Id];
-        const payload: UpdatePhanQuyenDuLieuRequest = {
-          NhomNguoiDung: Number(item.Id), // hoặc dùng id nhóm thật sự
-          DuLieuNrwcongTy: state.DuLieuNrwcongTy ? "1" : "0",
-          DuLieuNrwdma: state.DuLieuNrwdma ? "1" : "0",
-        };
+      for (const role of roles) {
+        const state = matrix[role.id];
 
-        await updateData<
-          UpdatePhanQuyenDuLieuRequest,
-          PhanQuyenDuLieuResponse
-        >(apiUrls.PhanQuyenDuLieu.update(item.Id), payload);
+        const updates: UpdatePhanQuyenDuLieuRequest[] = [
+          {
+            nhomNguoiDungId: role.id,
+            tenBang: "DuLieuNRWCongTy",
+            dieuKien: state.DuLieuNRWCongTy ? "1" : "0",
+          },
+          {
+            nhomNguoiDungId: role.id,
+            tenBang: "DuLieuNRWDMA",
+            dieuKien: state.DuLieuNRWDMA ? "1" : "0",
+          },
+        ];
+
+        for (const payload of updates) {
+          await updateData<
+            UpdatePhanQuyenDuLieuRequest,
+            PhanQuyenDuLieuResponse
+          >(apiUrls.PhanQuyenDuLieu.update(role.id), payload);
+        }
       }
-
       alert("Áp dụng quyền dữ liệu thành công!");
     } catch (err) {
-      console.error("Lỗi áp dụng quyền dữ liệu:", err);
+      console.error("Lỗi áp dụng quyền:", err);
       alert("Có lỗi xảy ra khi áp dụng quyền!");
     }
   };
 
   return (
     <div className="permission-page">
-      {/* Header */}
       <div className="page-header">
         <FaShieldAlt className="page-icon" />
         <h2 className="page-title">PHÂN QUYỀN DỮ LIỆU</h2>
@@ -230,39 +114,37 @@ const PermissionDataPage: React.FC = () => {
 
       <Tabs />
 
-      {/* Nút Apply */}
       <div className="apply-btn-wrapper">
         <button className="btn apply" onClick={handleApply}>
           Áp Dụng
         </button>
       </div>
 
-      {/* Bảng phân quyền */}
       <div className="permission-matrix">
         <table className="permission-matrix-table">
           <thead>
             <tr>
               <th>Nhóm người dùng</th>
-              <th>NrwCongTy</th>
-              <th>NrwDma</th>
+              <th>NRW Công Ty</th>
+              <th>NRW DMA</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
-              <tr key={item.Id}>
-                <td>{item.NhomNguoiDung}</td>
+            {roles.map((role) => (
+              <tr key={role.id}>
+                <td>{role.nhomNguoiDung1}</td>
                 <td>
                   <input
                     type="checkbox"
-                    checked={matrix[item.Id]?.DuLieuNrwcongTy || false}
-                    onChange={() => toggleCheck(item.Id, "DuLieuNrwcongTy")}
+                    checked={matrix[role.id]?.DuLieuNRWCongTy || false}
+                    onChange={() => toggleCheck(role.id, "DuLieuNRWCongTy")}
                   />
                 </td>
                 <td>
                   <input
                     type="checkbox"
-                    checked={matrix[item.Id]?.DuLieuNrwdma || false}
-                    onChange={() => toggleCheck(item.Id, "DuLieuNrwdma")}
+                    checked={matrix[role.id]?.DuLieuNRWDMA || false}
+                    onChange={() => toggleCheck(role.id, "DuLieuNRWDMA")}
                   />
                 </td>
               </tr>

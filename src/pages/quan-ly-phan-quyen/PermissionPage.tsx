@@ -9,98 +9,115 @@ import {
   PhanQuyenTinhNangResponse,
   UpdatePhanQuyenTinhNangRequest,
 } from "../../types/phan-quyen/phan-quyen-tinh-nang";
+import { NhomNguoiDungResponse } from "../../types/nguoi-dung/nhom-nguoi-dung"; // 👈 import type nhóm người dùng
 
 const actions = ["Add", "Edit", "View", "Delete"];
 
 const PermissionPage: React.FC = () => {
-  const [roles, setRoles] = useState<{ id: number; name: string }[]>([]);
+  const [roles, setRoles] = useState<NhomNguoiDungResponse[]>([]);
   const [features, setFeatures] = useState<string[]>([]);
-  const [matrix, setMatrix] = useState<
-    Record<string, Record<string, boolean[]>>
-  >({});
+  const [matrix, setMatrix] = useState<Record<string, boolean[]>>({});
+  const [selectedRole, setSelectedRole] = useState<string>("");
 
+  // Lấy danh sách nhóm người dùng từ BE
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchRoles = async () => {
+      try {
+        const roleData = await getList<NhomNguoiDungResponse>(
+          apiUrls.NhomNguoiDung.list
+        );
+        setRoles(roleData);
+
+        if (roleData.length > 0) {
+          setSelectedRole(roleData[0].nhomNguoiDung1); // default chọn nhóm đầu tiên
+        }
+      } catch (err) {
+        console.error("Lỗi load nhóm người dùng:", err);
+      }
+    };
+
+    fetchRoles();
+  }, []);
+
+  // Lấy phân quyền tính năng theo nhóm được chọn
+  useEffect(() => {
+    const fetchPermissions = async () => {
+      if (!selectedRole) return;
       try {
         const data = await getList<PhanQuyenTinhNangResponse>(
           apiUrls.PhanQuyenTinhNang.list
         );
 
-        // Lấy danh sách role kèm Id
-        const roleList = data.map((item) => ({
-          id: item.Id,
-          name: String(item.NhomNguoiDung),
-        }));
-        setRoles(roleList);
-
-        // Loại bỏ field không phải là tính năng
+        // Các module (features)
         const exclude = [
-          "Id",
-          "NhomNguoiDung",
-          "NgayTao",
-          "NgayCapNhat",
-          "NguoiTao",
-          "NguoiCapNhat",
-          "NrwCongTy", // dành cho phân quyền dữ liệu
-          "NrwDma", // dành cho phân quyền dữ liệu
+          "id",
+          "nhomNguoiDung",
+          "ngayTao",
+          "ngayCapNhat",
+          "nguoiTao",
+          "nguoiCapNhat",
+          "nrwCongTy",
+          "nrwDma",
         ];
-
         const featureNames = Object.keys(data[0]).filter(
           (k) => !exclude.includes(k)
         );
         setFeatures(featureNames);
 
-        // Tạo ma trận quyền
-        const temp: Record<string, Record<string, boolean[]>> = {};
-        data.forEach((item) => {
-          const role = String(item.NhomNguoiDung);
-          temp[role] = {};
-          featureNames.forEach((f) => {   
-            const perms = (item as unknown as Record<string, unknown>)[f] as string | undefined;
+        // Quyền theo nhóm
+        const roleData = data.find((d) => d.nhomNguoiDung === selectedRole);
+        if (roleData) {
+          const temp: Record<string, boolean[]> = {};
+          featureNames.forEach((f) => {
+            const key = f as keyof PhanQuyenTinhNangResponse;
+            const perms = roleData[key] as string | undefined;
             const permsArr = perms ? perms.split(",") : [];
-            temp[role][f] = actions.map((a) => permsArr.includes(a));
+            temp[f] = actions.map((a) => permsArr.includes(a));
           });
-        });
-        setMatrix(temp);
+          setMatrix(temp);
+        }
       } catch (err) {
         console.error("Lỗi load phân quyền:", err);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchPermissions();
+  }, [selectedRole]);
 
   // Toggle checkbox
-  const toggleCheck = (role: string, feature: string, actionIdx: number) => {
+  const toggleCheck = (feature: string, actionIdx: number) => {
     setMatrix((prev) => {
       const copy = { ...prev };
-      copy[role] = { ...copy[role] };
-      copy[role][feature] = [...copy[role][feature]];
-      copy[role][feature][actionIdx] = !copy[role][feature][actionIdx];
+      copy[feature] = [...(copy[feature] || [false, false, false, false])];
+      copy[feature][actionIdx] = !copy[feature][actionIdx];
       return copy;
     });
   };
 
-  // Áp dụng quyền
+  // Lưu quyền
   const handleApply = async () => {
     try {
-      for (const r of roles) {
-        const payload: UpdatePhanQuyenTinhNangRequest = {};
-        features.forEach((f) => {
-          const selected = matrix[r.name][f]
-            .map((val, idx) => (val ? actions[idx] : null))
-            .filter(Boolean);
-          payload[f] = selected.join(",");
-        });
+      const role = roles.find((r) => r.nhomNguoiDung1 === selectedRole);
+      if (!role) return;
 
-        // Gọi API update với Id thực tế
-        await updateData<
-          UpdatePhanQuyenTinhNangRequest,
-          PhanQuyenTinhNangResponse
-        >(apiUrls.PhanQuyenTinhNang.update(r.id), payload);
-      }
+      const payload: UpdatePhanQuyenTinhNangRequest = {
+        nguoiCapNhat: "1", // TODO: lấy từ context/localStorage
+        ngayCapNhat: new Date().toISOString(),
+      };
 
-      alert("Áp dụng quyền tính năng thành công!");
+      features.forEach((f) => {
+        const selected = matrix[f]
+          ?.map((val, idx) => (val ? actions[idx] : null))
+          .filter(Boolean);
+        payload[f] = selected?.join(",") || "";
+      });
+
+      await updateData<
+        UpdatePhanQuyenTinhNangRequest,
+        PhanQuyenTinhNangResponse
+      >(apiUrls.PhanQuyenTinhNang.update(role.id), payload);
+
+      alert("Áp dụng quyền thành công!");
     } catch (err) {
       console.error("Lỗi áp dụng quyền:", err);
       alert("Có lỗi xảy ra khi áp dụng quyền!");
@@ -117,6 +134,23 @@ const PermissionPage: React.FC = () => {
 
       <Tabs />
 
+      {/* Dropdown chọn nhóm */}
+      <div className="filter-role">
+        <label className="filter-label">Nhóm người dùng:</label>
+        <div className="custom-dropdown">
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+          >
+            {roles.map((r) => (
+              <option key={r.id} value={r.nhomNguoiDung1}>
+                {r.nhomNguoiDung1}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       {/* Button Apply */}
       <div className="apply-btn-wrapper">
         <button className="btn apply" onClick={handleApply}>
@@ -129,31 +163,27 @@ const PermissionPage: React.FC = () => {
         <table className="permission-matrix-table">
           <thead>
             <tr>
-              <th>Tính năng / Hành động</th>
-              {roles.map((r) => (
-                <th key={r.id}>{r.name}</th>
+              <th>Module</th>
+              {actions.map((a) => (
+                <th key={a}>{a}</th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {features.map((feature) =>
-              actions.map((action, aIdx) => (
-                <tr key={`${feature}-${action}`}>
-                  <td>
-                    {feature} - <b>{action}</b>
+            {features.map((feature) => (
+              <tr key={feature}>
+                <td>{feature}</td>
+                {actions.map((action, aIdx) => (
+                  <td key={action}>
+                    <input
+                      type="checkbox"
+                      checked={matrix[feature]?.[aIdx] || false}
+                      onChange={() => toggleCheck(feature, aIdx)}
+                    />
                   </td>
-                  {roles.map((r) => (
-                    <td key={r.id}>
-                      <input
-                        type="checkbox"
-                        checked={matrix[r.name]?.[feature]?.[aIdx] || false}
-                        onChange={() => toggleCheck(r.name, feature, aIdx)}
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

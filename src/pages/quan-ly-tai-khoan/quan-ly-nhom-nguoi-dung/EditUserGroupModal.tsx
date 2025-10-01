@@ -29,7 +29,8 @@ const EditUserGroupModal: React.FC<EditUserGroupModalProps> = ({ group, onClose,
         thanhVien: formData.thanhVien,
         ghiChu: formData.ghiChu,
         ngayCapNhat: new Date().toISOString(),
-        nguoiCapNhat: String(userId),
+        nguoiCapNhat: Number(userId),
+        
       };
 
       // URL update dựa vào Id

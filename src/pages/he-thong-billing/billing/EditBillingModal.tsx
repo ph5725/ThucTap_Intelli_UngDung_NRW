@@ -2,6 +2,7 @@
 // import { billingService, type Billing, type UpdateBillingDTO } from "../../../services/he-thong-billing/billingService";
 // import { mockBillings } from "../../../config/mockData";
 import React, { useState, useEffect } from "react";
+import "../../../styles/billing/EditBillingModal.css"
 import "src/styles/global.css";
 // service
 import {  updateData,  getById } from "src/services/crudService";
@@ -92,12 +93,12 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
     const { name, value } = e.target;
     setForm(prev => ({
       ...prev!,
-      [name]: name === "Nam" || name === "SanLuongTieuThu" || name === "Ky" || name === "Dot" ? Number(value) : value,
+      [name]: name === "nam" || name === "sanLuongTieuThu" || name === "ky" || name === "dot" ? Number(value) : value,
     }));
 
     setDataUpdate((prev) => ({
       ...prev,
-      [name]: name === "SanLuongTieuThu" || name === "Ky" || name === "Nam" || name === "Dot"
+      [name]: name === "sanLuongTieuThu" || name === "ky" || name === "nam" || name === "dot"
         ? Number(value) // ép kiểu số cho các field numeric
         : value,
     }));
@@ -120,11 +121,12 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
       const payload: UpdateBillingRequest = {
         ...dataUpdate,
         ngayCapNhat: new Date().toISOString(),
-        nguoiCapNhat: (nguoiDung?.id ?? 0).toString(), // FE sinh
+        nguoiCapNhat: String(nguoiDung?.id ?? ""), // FE sinh
       };
-
+      
+      console.log("Payload UpdateBillingRequest:", payload);
       const res = await updateData<UpdateBillingRequest, BillingResponse>(
-        apiUrls.NguoiDung.update(form.id!),
+        apiUrls.Billing.update(form.id!),
         payload
       );
       onSave(res);
@@ -198,28 +200,28 @@ const EditBillingModal: React.FC<EditBillingModalProps> = ({
 
         <form onSubmit={handleSubmit}>
           <label>Mã đối tượng:</label>
-          <input name="objectCode" value={form.maDoiTuong} onChange={handleChange} required />
+          <input name="maDoiTuong" value={form.maDoiTuong} onChange={handleChange} required />
 
           <label>Sản lượng tiêu thụ:</label>
-          <input type="number" name="consumption" value={form.sanLuongTieuThu} onChange={handleChange} required />
+          <input type="number" name="sanLuongTieuThu" value={form.sanLuongTieuThu} onChange={handleChange} required />
 
           <label>Kỳ:</label>
-          <input name="period" value={form.ky} onChange={handleChange} required />
+          <input name="ky" value={form.ky} onChange={handleChange} required />
 
           <label>Năm:</label>
-          <input type="number" name="year" value={form.nam} onChange={handleChange} required />
+          <input type="number" name="nam" value={form.nam} onChange={handleChange} required />
 
           <label>Đợt:</label>
-          <input name="batch" value={form.dot} onChange={handleChange} />
+          <input name="dot" value={form.dot} onChange={handleChange} />
 
           <label>Từ ngày:</label>
-          <input type="date" name="fromDate" value={form.tuNgay} onChange={handleChange} />
+          <input type="fromDateate" name="fromDate" value={form.tuNgay} onChange={handleChange} />
 
           <label>Đến ngày:</label>
-          <input type="date" name="toDate" value={form.denNgay} onChange={handleChange} />
+          <input type="toDate" name="toDate" value={form.denNgay} onChange={handleChange} />
 
           <label>Ghi chú:</label>
-          <textarea name="note" value={form.ghiChu} onChange={handleChange} />
+          <textarea name="ghiChu" value={form.ghiChu} onChange={handleChange} />
 
           {/* Metadata hiển thị chỉ đọc */}
 

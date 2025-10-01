@@ -25,7 +25,7 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
   // Dữ liệu người dùng nhập
   const [, setDataUpdate] = useState<Omit<
     UpdateDongHoTongRequest,
-    "NgayChinhSua" | "NgayCapNhat" | "NguoiCapNhat" | "NguoiChinhSua"
+    "ngayChinhSua" | "ngayCapNhat" | "nguoiCapNhat" | "nguoiChinhSua"
   >>({
     ma: "",
     ten: "",
@@ -98,15 +98,18 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
       }
 
       const payload = {
-        ...formData,
-        NgayChinhSua: new Date().toISOString(),
-        NguoiChinhSua: nguoiDung?.id ?? 0, // có thể lấy từ context/token
-        NgayCapNhat: new Date().toISOString(),
-        NguoiCapNhat: nguoiDung?.id ?? 0, // có thể lấy từ context/token
+         id: formData.id,                // phải có id khi update
+          ma: formData.ma,
+          ten: formData.ten,
+          sanLuong: formData.sanLuong,
+          danhDauLoi: formData.danhDauLoi,
+          ghiChu: formData.ghiChu,
+          ngayCapNhat: new Date().toISOString(),
+          nguoiCapNhat: 0,
       };
 
       const res = await updateData<UpdateDongHoTongRequest, DongHoTongResponse>(
-        apiUrls.NguoiDung.update(formData.id!),
+        apiUrls.DongHoTong.update(formData.id!),
         payload
       );
       alert(TextForms.thongBao.capNhatThanhCong);
@@ -202,18 +205,22 @@ const EditMeterModal: React.FC<EditMeterModalProps> = ({ meterId, onClose, onSav
 
         <form onSubmit={handleSubmit}>
           <label>Mã đồng hồ</label>
-          <input value={formData.ma}
+          <input name="ma"
+          value={formData.ma}
             onChange={handleChange} required />
 
           <label>Tên đồng hồ</label>
-          <input value={formData.ten} onChange={handleChange} required />
+          <input name="ten"
+          value={formData.ten} onChange={handleChange} required />
 
           <label>Sản lượng (m³)</label>
-          <input type="number" value={formData.sanLuong} onChange={handleChange}  required />
+          <input name="sanLuong"
+          type="number" value={formData.sanLuong} onChange={handleChange}  required />
 
           {/* Metadata sản lượng */}
           <label>Ngày ghi</label>
-          <input type="date" value={formData.ngayGhi} onChange={handleChange}  />
+          <input name="ngayGhi"
+          type="date" value={formData.ngayGhi} onChange={handleChange}  />
 
           <label>Ngày chỉnh sửa sản lượng</label>
           <input type="text" value={formData.ngayChinhSua || ""} readOnly />

@@ -2,10 +2,11 @@
 import React from "react";
 import "src/styles/global.css";
 // service
-import { createData, updateData, deleteData, getList } from "src/services/crudService";
-import { apiUrls } from "src/services/apiUrls";
+// import { createData, updateData, deleteData, getList } from "src/services/crudService";
+// import { apiUrls } from "src/services/apiUrls";
+// 
 // interface
-import { AddDsNgayDocSoBillingRequest, DsNgayDocSoBillingResponse, UpdateDsNgayDocSoBillingRequest } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
+import { DsNgayDocSoBillingResponse,  } from "src/types/he-thong-billing/ds-ngay-doc-so-billing";
 // text
 import { TextForms } from "src/constants/text";
 
@@ -23,31 +24,31 @@ const DetailBillingReadingModal: React.FC<DetailBillingReadingModalProps> = ({ r
         <div className="modal-content-scroll">
           <form>
             <label>Năm:
-              <input type="number" value={reading.Nam} disabled />
+              <input type="number" value={reading.nam} disabled />
             </label>
 
             <label>Kỳ:
-              <input type="text" value={reading.Ky} disabled />
+              <input type="text" value={reading.ky} disabled />
             </label>
 
             <label>Ngày tạo:
-              <input type="text" value={reading.NgayTao} disabled />
+              <input type="text" value={reading.ngayTao} disabled />
             </label>
 
             <label>Ngày cập nhật:
-              <input type="text" value={reading.NgayCapNhat || "-"} disabled />
+              <input type="text" value={reading.ngayCapNhat || "-"} disabled />
             </label>
 
             <label>Người tạo:
-              <input type="text" value={reading.NguoiTao || "-"} disabled />
+              <input type="text" value={reading.nguoiTao || "-"} disabled />
             </label>
 
             <label>Người cập nhật:
-              <input type="text" value={reading.NguoiCapNhat || "-"} disabled />
+              <input type="text" value={reading.nguoiCapNhat || "-"} disabled />
             </label>
 
             <label>Số ngày đọc:
-              <input type="number" value={reading.SoNgayDocSoBilling} disabled />
+              <input type="number" value={reading.soNgayDocSoBilling} disabled />
             </label>
 
             <div className="modal-actions">

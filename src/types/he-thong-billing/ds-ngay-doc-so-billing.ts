@@ -1,34 +1,33 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
 // Thêm dữ liệu
 export interface AddDsNgayDocSoBillingRequest {
-  Nam: number;
-  Ky: number;
-  SoNgayDocSoBilling: number;
-  GhiChu?: string;
-  NgayTao: string;
-  NguoiTao: number;
+  nam: number;
+  ky: number;
+  soNgayDocSoBilling: number;
+  ghiChu?: string;
+  ngayTao: string;
+  nguoiTao: number;
 }
 
 // Cập nhật dữ liệu
 export interface UpdateDsNgayDocSoBillingRequest {
-  Nam: number;
-  Ky: number;
-  SoNgayDocSoBilling: number;
-  GhiChu?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: number;
+  nam: number;
+  ky: number;
+  soNgayDocSoBilling: number;
+  ghiChu?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: number;
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
-// Dữ liệu trả về
+/* ========== RESPONSE (API --> CLIENT) ========== */
 export interface DsNgayDocSoBillingResponse {
-  Id: number;
-  Nam: number;
-  Ky: number;
-  SoNgayDocSoBilling: number;
-  GhiChu?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  nam: number;
+  ky: number;
+  soNgayDocSoBilling: number;
+  ghiChu?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

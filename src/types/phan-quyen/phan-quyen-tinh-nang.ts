@@ -1,57 +1,58 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
 // Thêm dữ liệu
 export interface AddPhanQuyenTinhNangRequest {
-  NhomNguoiDung?: number;
-  DongHoTong?: string;
-  CauHinhDht?: string;
-  Dsdma?: string;
-  NrwcongTy?: string;
-  Nrwdma?: string;
-  DsngayDocSoBilling?: string;
-  NguoiDung?: string;
-  NhomNguoiDungTinhNang?: string;
-  NhatKySuDung?: string;
-  PhanQuyen?: string;
-  NgayTao: string;
-  NguoiTao: number;
+  nhomNguoiDung?: number;
+  dongHoTong?: string;
+  cauHinhDht?: string;
+  dsdma?: string;
+  nrwCongTy?: string;
+  nrwDma?: string;
+  dsngayDocSoBilling?: string;
+  nguoiDung?: string;
+  nhomNguoiDungTinhNang?: string;
+  nhatKySuDung?: string;
+  phanQuyen?: string;
+  ngayTao: string;
+  nguoiTao: number;
 }
 
 // Cập nhật dữ liệu
 export interface UpdatePhanQuyenTinhNangRequest {
-  NhomNguoiDung?: number;
-  DongHoTong?: string;
-  CauHinhDht?: string;
-  Dsdma?: string;
-  NrwcongTy?: string;
-  Nrwdma?: string;
-  DsngayDocSoBilling?: string;
-  NguoiDung?: string;
-  NhomNguoiDungTinhNang?: string;
-  NhatKySuDung?: string;
-  PhanQuyen?: string;
-  NgayCapNhat?: string;
-  NguoiCapNhat?: number;
-   // 👇 Cho phép key động
+  nhomNguoiDung?: number;
+  dongHoTong?: string;
+  cauHinhDht?: string;
+  dsdma?: string;
+  nrwCongTy?: string;
+  nrwDma?: string;
+  dsngayDocSoBilling?: string;
+  nguoiDung?: string;
+  nhomNguoiDungTinhNang?: string;
+  nhatKySuDung?: string;
+  phanQuyen?: string;
+  ngayCapNhat?: string;
+  nguoiCapNhat?: string;
+
+  // 👇 Cho phép key động
   [key: string]: string | number | undefined;
 }
 
-/* ========== RESPONE (API --> CLIENT) ========== */
+/* ========== RESPONSE (API --> CLIENT) ========== */
 // Dữ liệu trả về
 export interface PhanQuyenTinhNangResponse {
-  Id: number;
-  NhomNguoiDung?: string;
-  DongHoTong?: string;
-  CauHinhDht?: string;
-  Dsdma?: string;
-  NrwcongTy?: string;
-  Nrwdma?: string;
-  DsngayDocSoBilling?: string;
-  NguoiDung?: string;
-  NhomNguoiDungTinhNang?: string;
-  NhatKySuDung?: string;
-  PhanQuyen?: string;
-  NgayTao: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  nhomNguoiDung?: string;
+  dongHoTong?: string;
+  cauHinhDht?: string;
+  dsdma?: string;
+  nrwCongTy?: string;
+  nrwDma?: string;
+  dsngayDocSoBilling?: string;
+  nguoiDung?: string;
+  nhomNguoiDungTinhNang?: string;
+  nhatKySuDung?: string;
+  phanQuyen?: string;
+  ngayTao: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }
