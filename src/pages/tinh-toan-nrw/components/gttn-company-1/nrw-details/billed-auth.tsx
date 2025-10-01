@@ -14,11 +14,13 @@
 // }
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { Box, Button, Tooltip } from '@mui/material';
-import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Add as AddIcon, Delete as DeleteIcon, Details as DetailsIcon } from '@mui/icons-material';
 import { MaterialReactTable, useMaterialReactTable, type MRT_TableInstance, type MRT_ColumnDef } from 'material-react-table';
 import { useSnackbar } from 'notistack';
-// Material React Table Custom
-import { MaterialReactTableConfig } from '../../../../theme/style_table';
+//style
+import { THEME_COLORS } from "src/theme/theme_color";
+import { MaterialReactTableConfig } from 'src/theme/style_table';
+import "src/styles/global.css";
 // service
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
@@ -27,26 +29,6 @@ import { AddNrwCongTyRequest, NrwCongTyResponse, UpdateNrwCongTyRequest } from "
 // text
 import { TextForms } from "src/constants/text";
 
-// Nếu có file màu thì import, tạm định nghĩa cho chạy
-const THEME_COLORS = {
-  primary: '#1976d2',
-  primaryLight: '#42a5f5',
-  text: { secondary: '#6c757d' },
-};
-
-// Định nghĩa type cho dữ liệu NRW
-// interface NRWData {
-//   id: number;
-//   sanLuongVao: number;
-//   sanLuongRa: number;
-//   luongNuocThatThoat: number;
-//   tyLeThatThoat?: number;
-//   ky: string;
-//   nam: number;
-//   tuNgay: string;
-//   denNgay: string;
-//   soNgay: number;
-// }
 
 interface NRWDataResponse {
   data: {
@@ -56,7 +38,7 @@ interface NRWDataResponse {
   message: string;
 }
 
-export default function NrwDetail() {
+export default function BilledAuth() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [openAddPeriod, setOpenAddPeriod] = useState(false);
@@ -135,19 +117,19 @@ export default function NrwDetail() {
       {
         accessorKey: 'sanLuongTieuThu',
         header: TextForms.nrw.sanLuongBanRa,
-        size: 150,
+        size: 140,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
         accessorKey: 'luongNuocThatThoat',
         header: TextForms.nrw.luongNuocThatThoat,
-        size: 200,
+        size: 150,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
         accessorKey: 'tyLeThatThoat',
         header: TextForms.nrw.tyLeThatThoat,
-        size: 150,
+        size: 120,
         Cell: ({ row }) => {
           const sanLuongVao = row.original.sanLuongDauVao;
           const tyLeThatThoat = row.original.tyLeThatThoatChuan1 ?? 0;
@@ -195,10 +177,12 @@ export default function NrwDetail() {
       {
         accessorKey: 'soNgayDocSoDht',
         header: TextForms.nrw.soNgayDocSoDht,
+        size: 160,
       },
        {
         accessorKey: 'soNgayDocSoBilling',
         header: TextForms.nrw.soNgayDocSoBilling,
+        size: 140,
       },
     ],
     [],
@@ -227,15 +211,25 @@ export default function NrwDetail() {
     pageCount: totalPage,
     // getRowId: (row) => row.id.toString(),
     renderRowActions: ({ row }) => (
-      <Box sx={{ display: 'flex', gap: 1 }}>
+      <Box sx={{ display: 'box', gap: 1 }}>
         <Tooltip title={TextForms.nut.xoa}>
           <Button
             size="small"
             color="error"
-            onClick={() => console.log("Xóa row", row.original)}
+            onClick={() => console.log("Xóa", row.original)}
             sx={{ minWidth: 28, p: 0.5 }}
           >
             <DeleteIcon fontSize="small" />
+          </Button>
+        </Tooltip>
+        <Tooltip title={TextForms.nut.xoa}>
+          <Button
+            size="small"
+            color="error"
+            onClick={() => console.log("Xem chi tiết", row.original)}
+            sx={{ minWidth: 28, p: 0.5 }}
+          >
+            <DetailsIcon fontSize="small" />
           </Button>
         </Tooltip>
       </Box>
@@ -244,27 +238,6 @@ export default function NrwDetail() {
       <Box sx={{ p: 2, textAlign: 'center', color: THEME_COLORS.text.secondary }}>
         {TextForms.thongBao.khongCoDuLieu}
       </Box>
-    ),
-    renderTopToolbarCustomActions: () => (
-      <Button
-        onClick={() => setOpenAddPeriod(true)}
-        variant="contained"
-        startIcon={<AddIcon />}
-        sx={{
-          backgroundColor: THEME_COLORS.primary,
-          color: 'white',
-          textTransform: 'none',
-          borderRadius: 1,
-          px: 2,
-          py: 1,
-          fontSize: '14px',
-          '&:hover': {
-            backgroundColor: THEME_COLORS.primaryLight,
-          },
-        }}
-      >
-        {TextForms.nut.themKyMoi}
-      </Button>
     ),
     muiSearchTextFieldProps: {
       placeholder: TextForms.tieuDe.timKiem + '...',
@@ -277,4 +250,3 @@ export default function NrwDetail() {
     </Box>
   );
 }
-

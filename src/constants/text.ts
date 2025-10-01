@@ -12,7 +12,7 @@ export const TextForms = {
         billing: "Sản lượng tiêu thụ hệ thống Billing",
         dsNgayDocSoBilling: "Danh sách ngày đọc số Billing",
         dsNgayDocSoBillingChiTiet: "Danh sách ngày đọc số Billing chi tiết",
-        
+
         nrwCongTy: "Tính toán thất thoát nước cấp công ty",
         nrwCongTyDauVaoChiTiet: "NRW công ty đầu vào chi tiết",
         nrwCongTyTieuThuChiTiet: "NRW công ty tiêu thụ chi tiết",
@@ -40,12 +40,12 @@ export const TextForms = {
         nhatKy: "Nhật ký",
     },
     thongBao: {
-       // Xác nhận
+        // Xác nhận
         xacNhanXoa: "Bạn có chắc chắn muốn xóa mục này không?",
         xacNhanLuu: "Bạn có chắc chắn muốn lưu thay đổi không?",
         xacNhanDangXuat: "Bạn có chắc chắn muốn đăng xuất không?",
         xacNhanCapNhat: "Bạn có chắc chắn muốn cập nhật không?",
-        
+
         // Dữ liệu
         taiDuLieuThanhCong: "Tải dữ liệu thành công",
         themMoiThanhCong: "Thêm mới thành công",
@@ -78,6 +78,7 @@ export const TextForms = {
         dong: "Đóng",
         loc: "Lọc",
         capNhat: "Cập nhật",
+        chiTiet: "Xem chi tiết",
 
         themKyMoi: "Thêm kỳ mới",
 
@@ -90,7 +91,7 @@ export const TextForms = {
     tab: {
         tinhNrwCapCongTy: "Tính NRW cấp công ty",
         tinhNrwCapDma: "Tính NRW cấp DMA",
-        
+
         thongTinTaiKhoan: "Thông tin tài khoản",
         thongTinNguoiDung: "Thông tin người dùng",
         nhomNguoiDung: "Nhóm người dùng",
@@ -104,15 +105,29 @@ export const TextForms = {
         quyen: "Quyền",
     },
     nrw: {
+        ma: "Mã",
+        ky: "Kỳ",
+        nam: "Năm",
+
         sanLuongMuaVao: "Sản lượng mua vào (m³)",
         sanLuongBanRa: "Sản lượng bán ra (m³)",
         luongNuocThatThoat: "Lượng nước thất thoát (m³)",
         tyLeThatThoat: "Tỷ lệ thất thoát (%)",
-        ky: "Kỳ",
-        nam: "Năm",
+
         tuNgay: "Từ ngày",
         denNgay: "Đến ngày",
         soNgayDocSoDht: "Số ngày đọc số đồng hồ tổng",
-        soNgayDocSoBilling: "Số ngày đọc số billing"
-    }
+        soNgayDocSoBilling: "Số ngày đọc số billing",
+
+        nguyenNhan: "Nguyên nhân",
+        ghiChu: "Ghi chú",
+
+        ngayTao: "Ngày tạo",
+        nguoiTao: "Người tạo",
+        ngayCapNhat: "Ngày cập nhật",
+        nguoiCapNhat: "Người cập nhật",
+    },
+    thang: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",],
+    ky: ["Kỳ 1", "Kỳ 2", "Kỳ 3", "Kỳ 4", "Kỳ 5", "Kỳ 6", "Kỳ 7", "Kỳ 8", "Kỳ 9", "Kỳ 10", "Kỳ 11", "Kỳ 12",],
+    kySo: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",],
 };

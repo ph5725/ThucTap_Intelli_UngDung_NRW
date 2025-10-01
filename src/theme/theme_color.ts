@@ -6,9 +6,11 @@ export const THEME_COLORS = {
     tableFooter: '#f5f5f5',
     // tableHeader: '#ff0000ff',
     border: '#e0e0e059',
+    borderHeader: '#ffffffb0',
     text: {
         primary: '#1e293b',
-        secondary: '#505050ff',
+        secondary: '#000000ff',
+        hearder: '#ffffffff'
     },
 };
 

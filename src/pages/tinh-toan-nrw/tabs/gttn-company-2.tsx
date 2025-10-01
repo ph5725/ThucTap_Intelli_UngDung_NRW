@@ -6,8 +6,7 @@ export default function GttnCompany1() {
     return (
         <ThemePanelProvider
             left={<>
-                Danh sách NRW
-                Công ty - chuẩn 2
+                <strong>Danh sách NRW Công ty - chuẩn 2</strong>
                 <ListNrw />
             </>}
             right={<>

@@ -6,8 +6,7 @@ export default function GttnDma() {
     return (
         <ThemePanelProvider
             left={<>
-                Danh sách NRW
-                Dma
+                <strong>Danh sách NRW DMA</strong>
                 <ListNrw />
             </>}
             right={<>

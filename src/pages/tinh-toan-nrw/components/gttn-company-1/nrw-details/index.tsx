@@ -2,12 +2,10 @@ import { useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { Tabs, Tab, Box, Typography } from "@mui/material";
 
-import GttnDma from "./tabs/gttn-dma";
-import GttnCompany1 from "./tabs/gttn-company-1";
-import GttnCompany2 from "./tabs/gttn-company-2";
+import SysInput from "./sys-input";
+import BilledAuth from "./billed-auth";
 import { height } from "@mui/system";
 // theme
-// import { appTheme } from "src/theme/theme";
 import { THEME_COLORS } from "src/theme/theme_color";
 
 interface TabPanelProps {
@@ -74,18 +72,14 @@ export default function TinhNRW() {
           },
         }}
       >
-        <Tab label="Tính GTTN Công ty chuẩn 1" id="tab-0" />
-        <Tab label="Tính GTTN Công ty chuẩn 2" id="tab-1" />
-        <Tab label="Tính GTTN DMA" id="tab-2" />
+        <Tab label="Sản lượng đầu vào" id="tab-0" />
+        <Tab label="Sản lượng tiêu thụ" id="tab-1" />
       </Tabs>
       <TabPanel value={value} index={0}>
-        <GttnCompany1 />
+        <SysInput />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <GttnCompany2 />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <GttnDma />
+        <BilledAuth />
       </TabPanel>
     </Box>
   );

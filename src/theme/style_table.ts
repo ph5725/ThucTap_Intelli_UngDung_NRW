@@ -1,6 +1,7 @@
 import { MRT_Localization_VI } from 'material-react-table/locales/vi';
 import { THEME_COLORS } from "./theme_color";
 import 'src/styles/global.css'
+import { color, minWidth } from '@mui/system';
 
 export const MaterialReactTableConfig = (containerWidth: number | undefined) => ({
     localization: MRT_Localization_VI,
@@ -15,7 +16,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
     enablePagination: true,       // Bật phân trang (kết hợp với muiPaginationProps)
     enableSorting: true,          // Cho phép sắp xếp dữ liệu theo cột (click header để sort ASC/DESC)
     enableRowActions: true,       // Hiển thị cột hành động (edit/delete/...)
-    positionActionsColumn: "first" as const,
+    positionActionsColumn: "last" as const,
     // editDisplayMode: 'row',
 
     enableColumnActions: false,   // Menu 3 chấm trên cột (ẩn/hiện filter, sort…)
@@ -66,8 +67,8 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
             minHeight: '100%',
 
             width: '100%',
-            minWidth: '100%',
-            maxWidth: '100%',
+            minWidth: '150px',
+            maxWidth: '100vww',
 
             border: 'none',
             borderRadius: 0,
@@ -91,13 +92,13 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
         align: "center" as const,
         sx: {
             backgroundColor: THEME_COLORS.tableHeader,
-            border: `1px solid ${THEME_COLORS.border}`,
-            // fontWeight: 400,
-            fontSize: '12px',
-            color: THEME_COLORS.text.secondary,
+            border: `1px solid ${THEME_COLORS.borderHeader}`,
+            fontWeight: 500,
+            fontSize: '14px',
+            color: THEME_COLORS.text.hearder,
             verticalAlign: 'middle',
             py: 1,
-            minHeight: '40px',
+            minHeight: '10px',
 
             // Sort label (sắp xếp)
             '& .MuiTableSortLabel-root': {
@@ -107,7 +108,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
                 },
             },
             '& .MuiTableSortLabel-icon': {
-                color: THEME_COLORS.text.secondary,
+                color: THEME_COLORS.text.hearder,
                 fontSize: '16px',
             },
 
@@ -144,6 +145,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
             with: '100%',
             height: '40px',
             minHeight: '40px',
+            minWidth: '10px',
             border: `1px solid ${THEME_COLORS.border}`,
             fontSize: '13px',
             fontWeight: 'normal',
@@ -157,6 +159,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
             borderRadius: '0px',
             flexShrink: 0,
             backgroundColor: THEME_COLORS.tableFooter,
+            color: THEME_COLORS.text.primary,
             py: 1,
             px: 2,
             '& .MuiTablePagination-root': {
