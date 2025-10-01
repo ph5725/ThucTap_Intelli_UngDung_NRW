@@ -112,6 +112,7 @@ export const TextForms = {
         nam: "Năm",
         tuNgay: "Từ ngày",
         denNgay: "Đến ngày",
-        soNgay: "Số ngày",
+        soNgayDocSoDht: "Số ngày đọc số đồng hồ tổng",
+        soNgayDocSoBilling: "Số ngày đọc số billing"
     }
 };

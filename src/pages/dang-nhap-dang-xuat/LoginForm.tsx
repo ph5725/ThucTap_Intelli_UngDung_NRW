@@ -113,6 +113,9 @@ import { login } from "src/services/authService";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { DangNhapRequest } from "src/types/authTypes";
+//Text
+import { TextForms } from "src/constants/text.ts";
+import { AppConfig } from "src/config/app-config";
 
 interface LoginFormProps {
   onLogin: () => void; // 👈 thêm khai báo này
@@ -140,7 +143,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
       navigate("/accounts");
     } catch (error: any) {
-      const msg = error.response?.data?.message || "Đăng nhập thất bại";
+      const msg = error.response?.data?.message || TextForms.thongBao.dangNhapThatBai;
       setErrorMessage(msg);
     }
   };
@@ -159,7 +162,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-
           <div className="password-container">
             <input
               type={showPassword ? "text" : "password"}
@@ -176,7 +178,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             </span>
           </div>
 
-          <div className="remember-me">
+          {/* <div className="remember-me">
             <input
               type="checkbox"
               id="remember"
@@ -184,7 +186,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
               onChange={(e) => setRememberMe(e.target.checked)}
             />
             <label htmlFor="remember">Lưu người dùng</label>
-          </div>
+          </div> */}
 
           <button type="submit">Đăng nhập</button>
 
@@ -192,9 +194,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
             <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>
           )}
         </form>
-        <p className="signup-text">Bạn đã có tài khoản chưa?</p>
+        {/* <p className="signup-text">Bạn đã có tài khoản chưa?</p> */}
       </div>
-      <div className="welcome-text">CHÀO MỪNG ĐẾN VỚI GIS</div>
+      <div className="welcome-text">{AppConfig.appName}</div>
     </div>
   );
 };

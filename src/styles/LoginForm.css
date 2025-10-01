@@ -24,7 +24,7 @@
 
   /* Vị trí tuyệt đối */
   position: absolute;
-  top: 100px;   /* điều chỉnh cao thấp */
+  top: calc(100% - 78%);   /* điều chỉnh cao thấp */
   right: 150px;  /* cách cạnh phải */
 }
 
