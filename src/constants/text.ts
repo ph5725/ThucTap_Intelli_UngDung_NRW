@@ -107,6 +107,7 @@ export const TextForms = {
     },
     nrw: {
         ma: "Mã",
+        maDma: "Mã DMA",
         ky: "Kỳ",
         nam: "Năm",
 
@@ -114,6 +115,11 @@ export const TextForms = {
         sanLuongBanRa: "Sản lượng bán ra (m³)",
         luongNuocThatThoat: "Lượng nước thất thoát (m³)",
         tyLeThatThoat: "Tỷ lệ thất thoát (%)",
+
+        luongNuocVao: "Lượng nước vào (m³)",
+        luongNuocTieuThu: "Lượng nước tiêu thụ (m³)",
+        tyLeThatThoatKyTruoc: "Tỷ lệ thất thoát trước",
+        luongNuocSucXa: "Lượng nước súc xả",
 
         tuNgay: "Từ ngày",
         denNgay: "Đến ngày",

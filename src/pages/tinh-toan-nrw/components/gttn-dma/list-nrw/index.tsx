@@ -45,7 +45,7 @@ export default function ListNrw() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getList<NrwDmaResponse>(apiUrls.NRWCongTy.list);
+        const res = await getList<NrwDmaResponse>(apiUrls.NRWDMA.list);
         setData(res);
         console.log("NRW Data: ", data)
       } catch (error) {
@@ -97,65 +97,72 @@ export default function ListNrw() {
     }
   };
 
-  // Định nghĩa columns
+ // Định nghĩa columns
   const columns = useMemo<MRT_ColumnDef<NrwDmaResponse>[]>(
     () => [
       {
-        accessorKey: "id", header: "ID", size: 0,
-        enableHiding: true, enableColumnFilter: false, enableSorting: false,
+        accessorKey: "id",
+        header: "ID",
+        size: 0,
+        enableHiding: true,
+        enableColumnFilter: false,
+        enableSorting: false,
       },
       {
-        accessorKey: 'sanLuongDauVao', header: TextForms.nrw.sanLuongMuaVao, size: 150,
+        accessorKey: 'maDma',
+        header: TextForms.nrw.maDma,
+        size: 100,
+        Cell: ({ cell }) => cell.getValue<string>() ?? '-',
+      },
+      {
+        accessorKey: 'ky',
+        header: TextForms.nrw.ky,
+        size: 80,
+      },
+      {
+        accessorKey: 'nam',
+        header: TextForms.nrw.nam,
+        size: 80,
+      },
+      {
+        accessorKey: 'luongNuocVao',
+        header: TextForms.nrw.luongNuocVao,
+        size: 150,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'sanLuongTieuThu', header: TextForms.nrw.sanLuongBanRa, size: 140,
+        accessorKey: 'luongNuocTieuThu',
+        header: TextForms.nrw.luongNuocTieuThu,
+        size: 150,
         Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'luongNuocThatThoat', header: TextForms.nrw.luongNuocThatThoat, size: 150,
-        Cell: ({ cell }) => {
-          const val = cell.getValue<number>();
-          return val != null ? formatNumber(val) : '-';
-        }
+        accessorKey: 'luongNuocSucXa',
+        header: TextForms.nrw.luongNuocSucXa,
+        size: 150,
+        Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'tyLeThatThoatChuan1', header: TextForms.nrw.tyLeThatThoat, size: 120,
-        Cell: ({ cell }) => {
-          const val = cell.getValue<number>();
-          return val != null ? formatPercentage(val) : '-';
-        }
-      },
-      { accessorKey: 'ky', header: TextForms.nrw.ky, size: 20, },
-      { accessorKey: 'nam', header: TextForms.nrw.nam, size: 20, },
-      {
-        accessorKey: 'tuNgay', header: TextForms.nrw.tuNgay, size: 40,
-        Cell: ({ cell }) => {
-          const date = new Date(cell.getValue<string>());
-          return date.toLocaleDateString('vi-VN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          });
-        },
+        accessorKey: 'luongNuocThatThoat',
+        header: TextForms.nrw.luongNuocThatThoat,
+        size: 150,
+        Cell: ({ cell }) => formatNumber(cell.getValue<number>()),
       },
       {
-        accessorKey: 'denNgay', header: TextForms.nrw.denNgay, size: 40,
-        Cell: ({ cell }) => {
-          const date = new Date(cell.getValue<string>());
-          return date.toLocaleDateString('vi-VN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          });
-        },
+        accessorKey: 'tyLeThatThoatKyTruoc',
+        header: TextForms.nrw.tyLeThatThoatKyTruoc,
+        size: 150,
+        Cell: ({ cell }) => formatPercentage(cell.getValue<number>()),
       },
-      { accessorKey: 'soNgayDocSoDht', header: TextForms.nrw.soNgayDocSoDht, size: 160, },
-      { accessorKey: 'soNgayDocSoBilling', header: TextForms.nrw.soNgayDocSoBilling, size: 140, },
+      {
+        accessorKey: 'tyLeThatThoat',
+        header: TextForms.nrw.tyLeThatThoat,
+        size: 150,
+        Cell: ({ cell }) => formatPercentage(cell.getValue<number>()),
+      },
     ],
     [],
   );
-
   const table = useMaterialReactTable({
     ...MaterialReactTableConfig(0),
     state: {
