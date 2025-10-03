@@ -101,6 +101,11 @@
   background: #dc2626;
 }
 
+.btn.export {
+  background: #1976D2;
+  color: #ffffff;
+}
+
 /* Icon hành động trong table */
 .actions {
   display: flex;

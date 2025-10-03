@@ -13,71 +13,39 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
-import type { UserLog } from "../pages/nhat-ky-nguoi-dung/UserLogPage";
+import type { NhatKySuDungResponse } from "../types/nguoi-dung/nhat-ky-su-dung";
 import "../styles/LogStats.css";
 
 interface Props {
-  logs: UserLog[];
+  logs: NhatKySuDungResponse[];
 }
-
-// Hàm lọc logs tách riêng
-const filterLogs = (
-  logs: UserLog[],
-  filters: {
-    user?: string;
-    action?: string;
-    status?: string;
-    startDate?: string;
-    endDate?: string;
-  }
-) => {
-  return logs.filter((log) => {
-    const matchUser = filters.user
-      ? log.user.toLowerCase().includes(filters.user.toLowerCase())
-      : true;
-
-    const matchAction = filters.action
-      ? log.action.toLowerCase().includes(filters.action.toLowerCase())
-      : true;
-
-    const matchStatus = filters.status ? log.status === filters.status : true;
-
-    const logDate = new Date(log.timestamp);
-
-    const matchStart = filters.startDate
-      ? logDate >= new Date(filters.startDate)
-      : true;
-
-    const matchEnd = filters.endDate
-      ? logDate <= new Date(filters.endDate)
-      : true;
-
-    return matchUser && matchAction && matchStatus && matchStart && matchEnd;
-  });
-};
 
 const LogStats: React.FC<Props> = ({ logs }) => {
   const [searchUser, setSearchUser] = useState("");
   const [searchAction, setSearchAction] = useState("");
-  const [searchStatus, setSearchStatus] = useState(""); // "Thành công", "Thất bại", ""
+  const [searchStatus, setSearchStatus] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const filteredLogs = useMemo(
-    () =>
-      filterLogs(logs, {
-        user: searchUser,
-        action: searchAction,
-        status: searchStatus,
-        startDate,
-        endDate,
-      }),
-    [logs, searchUser, searchAction, searchStatus, startDate, endDate]
-  );
+  const filteredLogs = useMemo(() => {
+    return logs.filter((log) => {
+      const matchUser = searchUser
+        ? log.tenNguoiDung.toLowerCase().includes(searchUser.toLowerCase())
+        : true;
+      const matchAction = searchAction
+        ? log.hanhDong.toLowerCase().includes(searchAction.toLowerCase())
+        : true;
+      const matchStatus = searchStatus ? log.tinhNang === searchStatus : true;
+      const logDate = new Date(log.ngayTao);
+      const matchStart = startDate ? logDate >= new Date(startDate) : true;
+      const matchEnd = endDate ? logDate <= new Date(endDate) : true;
+      return matchUser && matchAction && matchStatus && matchStart && matchEnd;
+    });
+  }, [logs, searchUser, searchAction, searchStatus, startDate, endDate]);
 
   const totalLogs = filteredLogs.length;
-  const successCount = filteredLogs.filter((l) => l.status === "Thành công").length;
-  const failCount = filteredLogs.filter((l) => l.status === "Thất bại").length;
+  const successCount = filteredLogs.filter((l) => l.tinhNang === "Thành công").length;
+  const failCount = filteredLogs.filter((l) => l.tinhNang === "Thất bại").length;
 
   const pieData = [
     { name: "Thành công", value: successCount, color: "#28a745" },
@@ -87,31 +55,16 @@ const LogStats: React.FC<Props> = ({ logs }) => {
   const barData = useMemo(() => {
     const grouped: Record<string, { date: string; count: number }> = {};
     filteredLogs.forEach((l) => {
-      const date = l.timestamp.split(" ")[0];
+      const date = l.ngayTao.split("T")[0];
       if (!grouped[date]) grouped[date] = { date, count: 0 };
       grouped[date].count++;
     });
     return Object.values(grouped);
   }, [filteredLogs]);
 
-  const handleExportCSV = () => {
-    const header = "ID,Người dùng,Hành động,Trạng thái,Thời gian\n";
-    const rows = filteredLogs
-      .map((l) => `${l.id},${l.user},${l.action},${l.status},${l.timestamp}`)
-      .join("\n");
-    const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "user_logs.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
     <div className="log-stats-dashboard">
-      {/* Hàng input + filter */}
+      {/* Bộ lọc nhỏ */}
       <div className="filter-row">
         <input
           type="text"
@@ -125,27 +78,13 @@ const LogStats: React.FC<Props> = ({ logs }) => {
           value={searchAction}
           onChange={(e) => setSearchAction(e.target.value)}
         />
-        <select
-          value={searchStatus}
-          onChange={(e) => setSearchStatus(e.target.value)}
-        >
+        <select value={searchStatus} onChange={(e) => setSearchStatus(e.target.value)}>
           <option value="">Tất cả trạng thái</option>
           <option value="Thành công">Thành công</option>
           <option value="Thất bại">Thất bại</option>
         </select>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-        />
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-        />
-        <button className="btn-export" onClick={handleExportCSV}>
-          Xuất CSV
-        </button>
+        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
       </div>
 
       {/* KPI */}
