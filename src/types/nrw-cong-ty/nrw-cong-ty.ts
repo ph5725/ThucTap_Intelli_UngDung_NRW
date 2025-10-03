@@ -1,4 +1,24 @@
 /* ========== REQUEST (CLIENT --> API) ========== */
+// Lấy tổng sản lượng
+export interface TongSanLuongRequest {
+  TuNgay: string;
+  DenNgay: string;
+  MaDoiTuong: number;
+}
+
+// Lấy sản lượng tiêu thụ
+export interface SanLuongTieuThuRequest {
+  Ky: number;
+  Nam: number;
+  MaDoiTuong: number;
+}
+
+// Lấy sản lượng tiêu thụ
+export interface SoNgayDocSoBillingRequest {
+  Ky: number;
+  Nam: number;
+}
+
 // Thêm dữ liệu
 export interface AddNrwCongTyRequest {
   Ma: string;
@@ -61,4 +81,19 @@ export interface NrwCongTyResponse {
   ngayCapNhat?: string;
   nguoiTao?: string;
   nguoiCapNhat?: string;
+}
+
+// Lấy tổng sản lượng
+export interface TongSanLuongRespone {
+  tongSanLuong: number;
+}
+
+// Lấy sản lượng tiêu thụ
+export interface SanLuongTieuThuRespone {
+  sanLuong: number;
+}
+
+// Lấy số ngày đọc số Billing
+export interface SoNgayDocSoBillingRespone {
+  soNgayDocSoBilling: number;
 }

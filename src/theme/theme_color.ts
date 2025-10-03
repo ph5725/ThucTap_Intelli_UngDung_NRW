@@ -1,5 +1,7 @@
+import { Title } from "@mui/icons-material";
+
 export const THEME_COLORS = {
-    primary: '#1e40af',
+    primary: '#1976D2',
     primaryLight: '#1976D2',
     background: '#f8fafc',
     tableHeader: '#1976D2',
@@ -9,8 +11,9 @@ export const THEME_COLORS = {
     borderHeader: '#ffffffb0',
     text: {
         primary: '#1e293b',
-        secondary: '#000000ff',
-        hearder: '#ffffffff'
+        secondary: '#2e2e2eff',
+        hearder: '#ffffffff',
+        title: '#1d3ba0ff'
     },
 };
 

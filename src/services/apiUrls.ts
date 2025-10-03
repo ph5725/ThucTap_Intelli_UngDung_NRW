@@ -64,6 +64,7 @@ export const apiUrls = {
         detail: (id: number) => `/dongHoTong/${id}`,       // GET theo id
         update: (id: number) => `/dongHoTong/${id}`,       // PUT theo id
         delete: (id: number) => `/dongHoTong/${id}`,       // DELETE theo id
+        tongSanLuong: "/DongHoTong/TongSanLuong", // POST tổng sản lượng
     },
     // 8. Cấu hình đồng hồ tổng
     CauHinhDHT: {
@@ -82,6 +83,7 @@ export const apiUrls = {
         detail: (id: number) => `/billing/${id}`,       // GET theo id
         update: (id: number) => `/billing/${id}`,       // PUT theo id
         delete: (id: number) => `/billing/${id}`,       // DELETE theo id
+        sanLuongTieuThu: "/Billing/GetSanLuong", // POST sản lượng tiêu thụ
     },
     // 10. DS Ngày đọc số Billing
     DSNgayDocSoBilling: {
@@ -90,6 +92,7 @@ export const apiUrls = {
         detail: (id: number) => `/dsNgayDocSoBilling/${id}`,       // GET theo id
         update: (id: number) => `/dsNgayDocSoBilling/${id}`,       // PUT theo id
         delete: (id: number) => `/dsNgayDocSoBilling/${id}`,       // DELETE theo id
+        soNgayDocSo: "/DsNgayDocSoBilling/GetSoNgayDocSo", // POST sản lượng tiêu thụ
     },
     //11. DS Ngày đọc số Billing chi tiết
     DSNgayDocSoBillingChiTiet: {
@@ -113,9 +116,11 @@ export const apiUrls = {
     NRWCongTyDauVaoChiTiet: {
         list: "/nrwCongTyDauVaoChiTiet",                // GET tất cả
         create: "/nrwCongTyDauVaoChiTiet",                             // POST thêm mới
-        detail: (id: number) => `/nrwCongTyDauVaoChiTiet/${id}`,       // GET theo id
+        detail: (id: number) => `/NrwCongTyDauVaoChiTiet/by-id/${id}`,       // GET theo id
         update: (id: number) => `/nrwCongTyDauVaoChiTiet/${id}`,       // PUT theo id
         delete: (id: number) => `/nrwCongTyDauVaoChiTiet/${id}`,       // DELETE theo id
+        byMaDauVao: (maDauVao: number) => `/NrwCongTyDauVaoChiTiet/by-ma/${maDauVao}`,    
+        deleteByMaDauVao: (maDauVao: number) => `NrwCongTyDauVaoChiTiet/by-maDauVao/${maDauVao}`,    // GET theo maDauVao
     },
     // 14. NRW Công ty tiêu thụ chi tiết
     NRWCongTyTieuThuChiTiet: {
@@ -124,6 +129,8 @@ export const apiUrls = {
         detail: (id: number) => `/nrwCongTyTieuThuChiTiet/${id}`,       // GET theo id
         update: (id: number) => `/nrwCongTyTieuThuChiTiet/${id}`,       // PUT theo id
         delete: (id: number) => `/nrwCongTyTieuThuChiTiet/${id}`,       // DELETE theo id
+        byMaTieuThu: (maTieuThu: number) => `/NrwCongTyTieuThuChiTiet/by-ma/${maTieuThu}`,       // GET theo maTieuThu
+        deleteByMaTieuThu: (maTieuThu: number) => `NrwCongTyTieuThuChiTiet/by-maTieuThu/${maTieuThu}`,  
     },
 
     // TÍNH TOÁN THẤT THOÁT NƯỚC CẤP DMA

@@ -43,7 +43,6 @@ useEffect(() => {
     try {
       // data đã là mảng NguoiDungResponse[]
       const data = await getList<NguoiDungResponse>(apiUrls.NguoiDung.list);
-      console.log("Raw API:", data);
 
       setAccounts(
         data.map(item => ({

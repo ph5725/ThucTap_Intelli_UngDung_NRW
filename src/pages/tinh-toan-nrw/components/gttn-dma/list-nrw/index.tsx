@@ -6,7 +6,6 @@ import { useSnackbar } from 'notistack';
 import { useThemePanel } from "src/components/layout/ThemePanelProvider";
 import NrwDetailDialog from "./nrw-detail-dialog"
 import AddNrwDialog from "./add-nrw-dialog"
-import SysInput from "../nrw-details/sys-input"
 //style
 import { THEME_COLORS } from "src/theme/theme_color";
 import { MaterialReactTableConfig } from 'src/theme/style_table';
@@ -15,13 +14,13 @@ import "src/styles/global.css";
 import { createData, updateData, deleteData, getList } from "src/services/crudService";
 import { apiUrls } from "src/services/apiUrls";
 // interface
-import { NrwCongTyResponse } from "src/types/nrw-cong-ty/nrw-cong-ty";
+import { NrwDmaResponse } from "src/types/nrw-dma/nrw-dma";
 // text
 import { TextForms } from "src/constants/text";
 
 export default function ListNrw() {
   const { enqueueSnackbar } = useSnackbar();
-  const [data, setData] = useState<NrwCongTyResponse[]>([]);
+  const [data, setData] = useState<NrwDmaResponse[]>([]);
   const { maDoiTuong, setMaDoiTuong } = useThemePanel();
   const [maDauVao, setMaDauVao] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +28,7 @@ export default function ListNrw() {
   const [openAdd, setOpenAdd] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [openInfo, setOpenInfo] = useState(false);
-  const [selectedRow, setSelectedRow] = useState<NrwCongTyResponse | null>(null);
+  const [selectedRow, setSelectedRow] = useState<NrwDmaResponse | null>(null);
 
   // Định dạng phần trăm
   const formatPercentage = (num: number | undefined | null): string => {
@@ -46,7 +45,7 @@ export default function ListNrw() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await getList<NrwCongTyResponse>(apiUrls.NRWCongTy.list);
+        const res = await getList<NrwDmaResponse>(apiUrls.NRWCongTy.list);
         setData(res);
         console.log("NRW Data: ", data)
       } catch (error) {
@@ -65,7 +64,7 @@ export default function ListNrw() {
   }, [data]);
 
   // Handle save from NrwDetailDialog
-  const handleSave = (updatedRow: NrwCongTyResponse) => {
+  const handleSave = (updatedRow: NrwDmaResponse) => {
     setData((prev) =>
       prev.map((item) => (item.id === updatedRow.id ? updatedRow : item))
     );
@@ -74,7 +73,7 @@ export default function ListNrw() {
   };
 
   // Handle add from AddNrwDialog
-  const handleAdd = (newRow: NrwCongTyResponse) => {
+  const handleAdd = (newRow: NrwDmaResponse) => {
     setData((prev) => [...prev, newRow]);
     setMaDoiTuong(newRow.id); // Set maDoiTuong to the id of the newly added row
     setOpenAdd(false);
@@ -99,7 +98,7 @@ export default function ListNrw() {
   };
 
   // Định nghĩa columns
-  const columns = useMemo<MRT_ColumnDef<NrwCongTyResponse>[]>(
+  const columns = useMemo<MRT_ColumnDef<NrwDmaResponse>[]>(
     () => [
       {
         accessorKey: "id", header: "ID", size: 0,

@@ -60,6 +60,7 @@ export const TextForms = {
         loiThem: "Thêm dữ liệu thất bại",
         loiCapNhat: "Cập nhật dữ liệu thất bại",
         loiXoa: "Xóa dữ liệu thất bại",
+        khongDuDuLieu: "Vui lòng nhập đủ các thông tin bắt buộc",
 
         // Tài khoản
         dangNhapThanhCong: "Đăng nhập thành công",
@@ -126,8 +127,9 @@ export const TextForms = {
         nguoiTao: "Người tạo",
         ngayCapNhat: "Ngày cập nhật",
         nguoiCapNhat: "Người cập nhật",
+
+        ketQua: "Kết quả tính",
+        tongDauVao: "Tổng sản lượng mua vào (m³)",
+        tongTieuThu: "Tổng bán ra mua vào (m³)",
     },
-    thang: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",],
-    ky: ["Kỳ 1", "Kỳ 2", "Kỳ 3", "Kỳ 4", "Kỳ 5", "Kỳ 6", "Kỳ 7", "Kỳ 8", "Kỳ 9", "Kỳ 10", "Kỳ 11", "Kỳ 12",],
-    kySo: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12",],
 };

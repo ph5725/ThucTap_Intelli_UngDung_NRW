@@ -36,20 +36,20 @@ export interface UpdateNrwDmaRequest {
 /* ========== RESPONE (API --> CLIENT) ========== */
 // Dữ liệu trả về
 export interface NrwDmaResponse {
-  Id: number;
-  MaDma?: string;
-  Ky: number;
-  Nam: number;
-  LuongNuocVao: number;
-  LuongNuocTieuThu: number;
-  LuongNuocSucXa?: number;
-  LuongNuocThatThoat?: number;
-  TyLeThatThoatKyTruoc?: number;
-  TyLeThatThoat?: number;
-  NguyenNhan?: string;
-  GhiChu?: string;
-  NgayTao?: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  maDma?: string;
+  ky: number;
+  nam: number;
+  luongNuocVao: number;
+  luongNuocTieuThu: number;
+  luongNuocSucXa?: number;
+  luongNuocThatThoat?: number;
+  tyLeThatThoatKyTruoc?: number;
+  tyLeThatThoat?: number;
+  nguyenNhan?: string;
+  ghiChu?: string;
+  ngayTao?: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

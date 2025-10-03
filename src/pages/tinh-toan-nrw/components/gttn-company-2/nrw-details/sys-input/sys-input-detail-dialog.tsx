@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Typography, TextField, Button, MenuItem, Select } from '@mui/material';
+import { Box, Grid, Typography, TextField, Button, MenuItem, Select, IconButton } from '@mui/material';
+import { RemoveCircleTwoTone as RemoveIcon, AddCircleTwoTone as AddCircleIcon } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -9,22 +10,25 @@ import { useSnackbar } from 'notistack';
 import { updateData } from 'src/services/crudService';
 import { apiUrls } from 'src/services/apiUrls';
 // type
-import { NrwCongTyResponse, UpdateNrwCongTyRequest } from 'src/types/nrw-cong-ty/nrw-cong-ty';
+import { NrwCongTyDauVaoChiTietResponse, UpdateNrwCongTyDauVaoChiTietRequest } from 'src/types/nrw-cong-ty/nrw-cong-ty-dau-vao-chi-tiet';
 import { ThongTinNguoiDung } from "src/types/authTypes";
 // text
 import { TextForms } from 'src/constants/text';
 // option
 import { KY_SO } from 'src/constants/options';
 
-interface NrwDetailDialogProps {
-  row: NrwCongTyResponse | null;
-  onSave?: (updatedRow: NrwCongTyResponse) => void; // Callback to handle save
-  onClose?: () => void; // Callback to handle close
+interface SysInputDetailDialogProps {
+  row: NrwCongTyDauVaoChiTietResponse | null;
+  onSave?: (updatedRow: NrwCongTyDauVaoChiTietResponse) => void; // Callback to handle save
+  onClose?: () => void;
+  maDauVao?: number;
+  ky: number;
+  nam: number;
 }
 
-const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose }) => {
+const SysInputDetailDialog: React.FC<SysInputDetailDialogProps> = ({ row, onSave, onClose, maDauVao }) => {
   // Initialize state with the row data or defaults
-  const [formData, setFormData] = useState<NrwCongTyResponse | null>(row);
+  const [formData, setFormData] = useState<NrwCongTyDauVaoChiTietResponse | null>(row);
   const [isDataChanged, setIsDataChanged] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -32,7 +36,7 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
   useEffect(() => {
     if (!row || !formData) return;
     const isChanged = Object.keys(formData).some((key) => {
-      const field = key as keyof NrwCongTyResponse;
+      const field = key as keyof NrwCongTyDauVaoChiTietResponse;
       // Skip non-editable fields
       if (['nguoiTao', 'ngayTao', 'nguoiCapNhat', 'ngayCapNhat'].includes(field)) return false;
       return formData[field] !== row[field];
@@ -40,7 +44,7 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
     setIsDataChanged(isChanged);
   }, [formData, row]);
 
-  const handleChange = (field: keyof NrwCongTyResponse, value: string | number) => {
+  const handleChange = (field: keyof NrwCongTyDauVaoChiTietResponse, value: string | number) => {
     setFormData((prev) => {
       if (!prev) return prev;
       // Convert value to string for consistency
@@ -49,7 +53,7 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
     });
   };
 
-  const handleNumberChange = (field: keyof NrwCongTyResponse, value: string) => {
+  const handleNumberChange = (field: keyof NrwCongTyDauVaoChiTietResponse, value: string) => {
     const numValue = value === '' ? null : Number(value.replace(/[^0-9.-]+/g, '')); // Handle number input
     setFormData((prev) => {
       if (!prev) return prev;
@@ -57,7 +61,7 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
     });
   };
 
-  const handleDateChange = (field: keyof NrwCongTyResponse, value: Date | null) => {
+  const handleDateChange = (field: keyof NrwCongTyDauVaoChiTietResponse, value: Date | null) => {
     setFormData((prev) => {
       if (!prev) return prev;
       // Format date to YYYY-MM-DD string or null if invalid
@@ -66,7 +70,7 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
     });
   };
 
-  const handleYearChange = (field: keyof NrwCongTyResponse, value: Date | null) => {
+  const handleYearChange = (field: keyof NrwCongTyDauVaoChiTietResponse, value: Date | null) => {
     setFormData((prev) => {
       if (!prev) return prev;
       // Store only the year as a string
@@ -78,7 +82,7 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
   const handleSave = async () => {
     if (!formData || !onSave) return;
 
-    // Lấy thông tin người dùng từ localStorage
+    // Get user info from localStorage
     const nguoiDungStr = localStorage.getItem("nguoiDung");
     let nguoiDung: ThongTinNguoiDung | null = null;
 
@@ -87,36 +91,49 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
     }
 
     try {
-      // Transform formData to match UpdateNrwCongTyRequest
-      const payload: UpdateNrwCongTyRequest = {
-        Ma: formData.ma ?? '',
-        Ky: Number(formData.ky) || 0, // Convert string to number
-        Nam: Number(formData.nam) || 0, // Convert string to number
-        SanLuongDauVao: formData.sanLuongDauVao ?? 0,
-        SanLuongTieuThu: formData.sanLuongTieuThu ?? 0,
-        LuongNuocThatThoat: formData.luongNuocThatThoat ?? 0,
-        TyLeThatThoatChuan1: formData.tyLeThatThoatChuan1 ?? 0,
-        TyLeThatThoatChuan2: undefined, // Not present in formData, set as undefined
-        TuNgay: formData.tuNgay ?? '',
-        DenNgay: formData.denNgay ?? '',
-        SoNgayDocSoDht: formData.soNgayDocSoDht ?? undefined,
-        SoNgayDocSoBilling: formData.soNgayDocSoBilling ?? undefined,
-        NguyenNhan: formData.nguyenNhan ?? undefined,
-        GhiChu: formData.ghiChu ?? undefined,
+      // Transform formData to match UpdateNrwCongTyDauVaoChiTietRequest
+      const payload: UpdateNrwCongTyDauVaoChiTietRequest = {
+        MaDauVao: maDauVao,
+        Ky: Number(formData.ky)!,
+        Nam: Number(formData.nam)!,
+        Nguon: formData.nguon,
+        ToanTu: formData.toanTu as "plus" | "minus",
+        GiaTri: Number(formData.giaTri)!,
+        ThuTuHienThi: Number(formData.thuTuHienThi)!,
+        GhiChu: formData.ghiChu || undefined,
         NguoiCapNhat: nguoiDung?.id ?? 1,
         NgayCapNhat: formData.ngayCapNhat ?? undefined,
       };
 
+      console.log("Payload gửi lên:", payload);
+
       // Call updateData API
-      const updatedData = await updateData<UpdateNrwCongTyRequest, NrwCongTyResponse>(
-        apiUrls.NRWCongTy.update(formData.id!), // Assuming id exists in formData
+      const updatedData = await updateData<UpdateNrwCongTyDauVaoChiTietRequest, NrwCongTyDauVaoChiTietResponse>(
+        apiUrls.NRWCongTyDauVaoChiTiet.update(formData.id!),
         payload
       );
 
+      // Transform API response to match NrwCongTyDauVaoChiTietResponse
+      const transformedData: NrwCongTyDauVaoChiTietResponse = {
+        id: updatedData.id,
+        // maDauVao: updatedData.maDauVao ? String(updatedData.maDauVao) : undefined,
+        ky: updatedData.ky,
+        nam: updatedData.nam,
+        nguon: updatedData.nguon,
+        toanTu: updatedData.toanTu,
+        giaTri: updatedData.giaTri,
+        thuTuHienThi: updatedData.thuTuHienThi,
+        ghiChu: updatedData.ghiChu,
+        ngayTao: updatedData.ngayTao,
+        ngayCapNhat: updatedData.ngayCapNhat,
+        nguoiTao: updatedData.nguoiTao,
+        nguoiCapNhat: updatedData.nguoiCapNhat,
+      };
+
       // Update local state via onSave callback
-      onSave(updatedData);
+      onSave(transformedData);
       enqueueSnackbar(TextForms.thongBao.capNhatThanhCong, { variant: 'success' });
-      onClose?.(); // Close dialog after successful save
+      onClose?.();
     } catch (error) {
       console.error('Lỗi khi cập nhật dữ liệu:', error);
       enqueueSnackbar(TextForms.thongBao.loiCapNhat, { variant: 'error' });
@@ -130,15 +147,17 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
       <Box sx={{ p: 2 }}>
         <Grid container spacing={2}>
           {/* Mã, Kỳ, Năm */}
-          <Grid size={{ xs: 4 }}>
-            <Typography fontWeight="bold">Mã:</Typography>
+          {/* <Grid size={{ xs: 4 }}>
+            <Typography fontWeight="bold">Mã đầu vào:</Typography>
             <TextField
               fullWidth
-              value={formData.ma ?? ''}
-              onChange={(e) => handleChange('ma', e.target.value)}
+              value={maDauVao ?? ''}
+              onChange={(e) => handleChange('maDauVao', e.target.value)}
               size="small"
+              required
+              disabled
             />
-          </Grid>
+          </Grid> */}
           <Grid size={{ xs: 4 }}>
             <Typography fontWeight="bold">Kỳ:</Typography>
             <Select
@@ -146,6 +165,8 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
               value={formData.ky ?? ''}
               onChange={(e) => handleChange('ky', e.target.value)}
               size="small"
+              required
+              disabled
             >
               {KY_SO.map((ky) => (
                 <MenuItem key={ky} value={ky}>
@@ -162,104 +183,64 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
               onChange={(date) => handleYearChange('nam', date)}
               slotProps={{ textField: { fullWidth: true, size: 'small' } }}
               format="yyyy"
+              disabled
             />
           </Grid>
 
           {/* Sản lượng, Lượng nước */}
           <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Sản lượng mua vào (m³):</Typography>
+            <Typography fontWeight="bold">Nguồn:</Typography>
             <TextField
               fullWidth
-              value={formData.sanLuongDauVao ?? ''}
-              onChange={(e) => handleNumberChange('sanLuongDauVao', e.target.value)}
+              value={formData.nguon ?? ''}
+              onChange={(e) => handleChange('nguon', e.target.value)}
+              size="small"
+            />
+          </Grid>
+          <Grid container spacing={0}>
+            <Grid size={{ xs: 6, md: 8}}>
+              <Typography fontWeight="bold" sx={{ mb: 0 }}>
+                Toán tử:
+              </Typography>
+            </Grid>
+            <div style={{ display: "flex", gap: "0px", justifyContent: "center" }}>
+              <IconButton
+                color={formData.toanTu === "plus" ? "success" : "default"}
+                onClick={() => handleChange("toanTu", "plus")}
+              >
+                <AddCircleIcon />
+              </IconButton>
+              <IconButton
+                color={formData.toanTu === "minus" ? "error" : "default"}
+                onClick={() => handleChange("toanTu", "minus")}
+              >
+                <RemoveIcon />
+              </IconButton>
+            </div>
+          </Grid>
+          <Grid size={{ xs: 6 }}>
+            <Typography fontWeight="bold">Giá trị:</Typography>
+            <TextField
+              fullWidth
+              value={formData.giaTri ?? ''}
+              onChange={(e) => handleNumberChange('giaTri', e.target.value)}
               size="small"
               type="number"
             />
           </Grid>
           <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Sản lượng bán ra (m³):</Typography>
+            <Typography fontWeight="bold">Thứ tự hiển thị:</Typography>
             <TextField
               fullWidth
-              value={formData.sanLuongTieuThu ?? ''}
-              onChange={(e) => handleNumberChange('sanLuongTieuThu', e.target.value)}
-              size="small"
-              type="number"
-            />
-          </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Lượng nước thất thoát (m³):</Typography>
-            <TextField
-              fullWidth
-              value={formData.luongNuocThatThoat ?? ''}
-              onChange={(e) => handleNumberChange('luongNuocThatThoat', e.target.value)}
-              size="small"
-              type="number"
-            />
-          </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Tỷ lệ thất thoát (%):</Typography>
-            <TextField
-              fullWidth
-              value={formData.tyLeThatThoatChuan1 ?? ''}
-              onChange={(e) => handleNumberChange('tyLeThatThoatChuan1', e.target.value)}
-              size="small"
-              type="number"
-            />
-          </Grid>
-
-          {/* Ngày */}
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Từ ngày:</Typography>
-            <DatePicker
-              value={formData.tuNgay ? new Date(formData.tuNgay) : null}
-              onChange={(date) => handleDateChange('tuNgay', date)}
-              slotProps={{ textField: { fullWidth: true, size: 'small' } }}
-              format="dd/MM/yyyy"
-            />
-          </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Đến ngày:</Typography>
-            <DatePicker
-              value={formData.denNgay ? new Date(formData.denNgay) : null}
-              onChange={(date) => handleDateChange('denNgay', date)}
-              slotProps={{ textField: { fullWidth: true, size: 'small' } }}
-              format="dd/MM/yyyy"
-            />
-          </Grid>
-
-          {/* Số ngày */}
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Số ngày đọc số đồng hồ tổng:</Typography>
-            <TextField
-              fullWidth
-              value={formData.soNgayDocSoDht ?? ''}
-              onChange={(e) => handleNumberChange('soNgayDocSoDht', e.target.value)}
-              size="small"
-              type="number"
-            />
-          </Grid>
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Số ngày đọc số billing:</Typography>
-            <TextField
-              fullWidth
-              value={formData.soNgayDocSoBilling ?? ''}
-              onChange={(e) => handleNumberChange('soNgayDocSoBilling', e.target.value)}
+              value={formData.thuTuHienThi ?? ''}
+              onChange={(e) => handleNumberChange('thuTuHienThi', e.target.value)}
               size="small"
               type="number"
             />
           </Grid>
 
           {/* Nguyên nhân, Ghi chú */}
-          <Grid size={{ xs: 6 }}>
-            <Typography fontWeight="bold">Nguyên nhân:</Typography>
-            <TextField
-              fullWidth
-              value={formData.nguyenNhan ?? ''}
-              onChange={(e) => handleChange('nguyenNhan', e.target.value)}
-              size="small"
-            />
-          </Grid>
-          <Grid size={{ xs: 6 }}>
+          <Grid size={{ xs: 12 }}>
             <Typography fontWeight="bold">Ghi chú:</Typography>
             <TextField
               fullWidth
@@ -279,10 +260,10 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
             <Typography>
               {formData.ngayTao
                 ? new Date(formData.ngayTao).toLocaleDateString('vi-VN', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                })
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })
                 : '-'}
             </Typography>
           </Grid>
@@ -295,10 +276,10 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
             <Typography>
               {formData.ngayCapNhat
                 ? new Date(formData.ngayCapNhat).toLocaleDateString('vi-VN', {
-                  year: 'numeric',
-                  month: '2-digit',
-                  day: '2-digit',
-                })
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })
                 : '-'}
             </Typography>
           </Grid>
@@ -316,4 +297,4 @@ const NrwDetailDialog: React.FC<NrwDetailDialogProps> = ({ row, onSave, onClose 
   );
 };
 
-export default NrwDetailDialog;
+export default SysInputDetailDialog;

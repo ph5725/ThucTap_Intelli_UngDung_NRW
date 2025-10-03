@@ -20,6 +20,24 @@ export const getById = async <TResponse>(
   return response.data;
 };
 
+// Lấy danh sách theo mã (khác id)
+export const getMa = async <TResponse>(
+  url: string,
+  // id: number | string
+): Promise<TResponse[]> => {
+  const response = await api.get<TResponse[]>(`${url}`);
+  return response.data;
+};
+
+// Lấy dữ liệu không theo id
+export const getData = async <TRequest, TResponse>(
+  url: string,
+  payload: TRequest
+): Promise<TResponse> => {
+  const response = await api.post<TResponse>(url, payload);
+  return response.data;
+};
+
 // Thêm mới
 export const createData = async <TRequest, TResponse>(
   url: string,
