@@ -2,7 +2,7 @@
 // import { billingService, type Billing } from "../../../services/he-thong-billing/billingService";
 //import { mockBillings } from "../../../config/mockData";
 import React, { useState, useEffect, useMemo } from "react";
-import { FaMoneyBill, FaEdit, FaTrash, FaEye, FaPlus, FaFilter } from "react-icons/fa";
+import { FaMoneyBill, FaEdit, FaTrash, FaEye, FaPlus, FaFilter, FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Tabs from "src/components/tabBilling/Tabs";
 import "src/styles/global.css";
@@ -82,6 +82,65 @@ const BillingPage: React.FC = () => {
   const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 
+  // 👉 Hàm export CSV toàn bộ (KPI + chart + table)
+  const handleExportAll = () => {
+    if (billings.length === 0) {
+      alert("Không có dữ liệu để xuất");
+      return;
+    }
+
+    let csvContent = "";
+
+    // 1. KPI
+    const totalRecords = billings.length;
+    const currentConsumption = billings[totalRecords - 1]?.sanLuongTieuThu || 0;
+    const avgConsumption =
+      totalRecords > 0
+        ? billings.reduce((sum, row) => sum + row.sanLuongTieuThu, 0) / totalRecords
+        : 0;
+    const abnormalCount = billings.filter(
+      (row) => row.sanLuongTieuThu === 0 || row.sanLuongTieuThu < 500
+    ).length;
+
+    csvContent += "=== KPI TỔNG HỢP ===\n";
+    csvContent += "Tổng kỳ,Kỳ hiện tại,Trung bình,Bất thường\n";
+    csvContent += `${totalRecords},${currentConsumption},${avgConsumption.toFixed(
+      2
+    )},${abnormalCount}\n\n`;
+
+    // 2. Biểu đồ Line (theo kỳ)
+    csvContent += "=== BIỂU ĐỒ SẢN LƯỢNG THEO KỲ ===\n";
+    csvContent += "Kỳ/Năm,Sản lượng\n";
+    billings.forEach((b) => {
+      csvContent += `${b.ky}/${b.nam},${b.sanLuongTieuThu}\n`;
+    });
+    csvContent += "\n";
+
+    // 3. Biểu đồ Pie (bình thường/bất thường)
+    csvContent += "=== BIỂU ĐỒ TRẠNG THÁI ===\n";
+    csvContent += "Loại,Số kỳ\n";
+    csvContent += `Bình thường,${totalRecords - abnormalCount}\n`;
+    csvContent += `Bất thường,${abnormalCount}\n\n`;
+
+    // 4. Dữ liệu chi tiết (table)
+    csvContent += "=== DANH SÁCH BILLING CHI TIẾT ===\n";
+    csvContent += "ID,Sản lượng,Mã đối tượng,Kỳ,Năm,Ghi chú,Ngày tạo,Ngày cập nhật,Người tạo,Người cập nhật\n";
+    billings.forEach((b) => {
+      csvContent += `${b.id},${b.sanLuongTieuThu},${b.maDoiTuong},${b.ky},${b.nam},"${b.ghiChu ?? ""}",${b.ngayTao},${b.ngayCapNhat ?? ""},${b.nguoiTao ?? ""},${b.nguoiCapNhat ?? ""}\n`;
+    });
+
+    // Xuất file CSV
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "billing_full_export.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
   return (
     <div className="billing-page">
       {/* Header */}
@@ -97,6 +156,9 @@ const BillingPage: React.FC = () => {
       <div className="page-header">
         <FaMoneyBill className="page-icon" />
         <h2 className="page-title">DANH SÁCH BILLING</h2>
+         <button className="btn export" onClick={handleExportAll}>
+          <FaDownload style={{ marginRight: 6 }} /> Xuất CSV
+        </button>
       </div>
 
       <Tabs />

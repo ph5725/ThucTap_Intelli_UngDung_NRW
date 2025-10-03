@@ -13,27 +13,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { FaDownload } from "react-icons/fa";
-import Papa from "papaparse"; // 👉 thêm thư viện để export CSV
 import "../styles/BillingDashboard.css";
-
-// service
-// import { createData, updateData, deleteData, getList } from "src/services/crudService";
-// import { apiUrls } from "src/services/apiUrls";
-
-// interface
-import {  BillingResponse,  } from "src/types/he-thong-billing/billing";
-
-// text
-import { TextForms } from "src/constants/text";
-
-// interface BillingRecord {
-//   id: number;
-//   consumption: number; // sản lượng tiêu thụ (số ngày / m³)
-//   period: string;      // kỳ (ví dụ: T1, T2, ...)
-//   year: number;        // năm
-//   objectCode: string;  // mã đối tượng
-// }
+import { BillingResponse } from "src/types/he-thong-billing/billing";
 
 interface BillingDashboardProps {
   data: BillingResponse[];
@@ -55,7 +36,7 @@ const BillingDashboard: React.FC<BillingDashboardProps> = ({ data }) => {
 
   // ----- Chart Line -----
   const lineData = data.map((row) => ({
-    name: row.ky,
+    name: `${row.ky}/${row.nam}`,
     value: row.sanLuongTieuThu,
   }));
 
@@ -65,46 +46,13 @@ const BillingDashboard: React.FC<BillingDashboardProps> = ({ data }) => {
     { name: "Bất thường", value: abnormalCount, color: "#dc3545" },
   ];
 
-  // 👉 Hàm xuất CSV
-  const handleExport = () => {
-    if (data.length === 0) {
-      alert(TextForms.thongBao.khongCoDuLieu);
-      return;
-    }
-
-    // Dùng papaparse để convert JSON -> CSV
-    const csv = Papa.unparse(data);
-
-    // Tạo file blob
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-
-    // Tạo link tải về
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "billing-data.csv");
-    document.body.appendChild(link);
-    link.click();
-
-    // Dọn dẹp
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
   return (
     <div className="billing-dashboard">
-      {/* Header */}
-      <div className="dashboard-header">
-        <button className="btn-export" onClick={handleExport}>
-          <FaDownload style={{ marginRight: 6 }} /> Xuất CSV
-        </button>
-      </div>
-
       <div className="dashboard-grid">
         {/* Left side */}
         <div className="left-panel">
           <div className="chart-box">
-            <h4>Số ngày đọc theo tháng</h4>
+            <h4>Sản lượng theo kỳ</h4>
             <ResponsiveContainer width="100%" height={220}>
               <LineChart data={lineData}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -120,10 +68,10 @@ const BillingDashboard: React.FC<BillingDashboardProps> = ({ data }) => {
           {/* KPI */}
           <div className="kpi-row">
             <div className="kpi-card orange">
-              Kỳ Hiện Tại: <b>{currentConsumption}</b> ngày
+              Kỳ Hiện Tại: <b>{currentConsumption}</b> m³
             </div>
             <div className="kpi-card brown">
-              Trung Bình / kỳ: <b>{avgConsumption.toFixed(2)}</b> ngày
+              Trung Bình / kỳ: <b>{avgConsumption.toFixed(2)}</b> m³
             </div>
             <div className="kpi-card red">
               Kỳ Bất Thường: <b>{abnormalCount}</b> kỳ
