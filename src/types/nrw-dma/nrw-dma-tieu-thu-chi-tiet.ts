@@ -32,18 +32,18 @@ export interface UpdateNrwDmaTieuThuChiTietRequest {
 /* ========== RESPONE (API --> CLIENT) ========== */
 // Dữ liệu trả về
 export interface NrwDmaTieuThuChiTietResponse {
-  Id: number;
-  MaTieuThu?: number;
-  MaDma?: number;
-  Ky: number;
-  Nam: number;
-  Nguon: string;
-  ToanTu: string;
-  GiaTri: number;
-  ThuTuHienThi?: number;
-  GhiChu?: string;
-  NgayTao?: string;
-  NgayCapNhat?: string;
-  NguoiTao?: string;
-  NguoiCapNhat?: string;
+  id: number;
+  maTieuThu?: number;
+  maDma?: number;
+  ky: number;
+  nam: number;
+  nguon: string;
+  toanTu: string;
+  giaTri: number;
+  thuTuHienThi?: number;
+  ghiChu?: string;
+  ngayTao?: string;
+  ngayCapNhat?: string;
+  nguoiTao?: string;
+  nguoiCapNhat?: string;
 }

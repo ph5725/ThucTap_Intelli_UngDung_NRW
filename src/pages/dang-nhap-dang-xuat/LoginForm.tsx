@@ -139,7 +139,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
         MatKhau: password
       };
       const response = await login(payload);
-      console.log("Đăng nhập thành công:", response);
+      console.log("Đăng nhập thành công");
 
       navigate("/accounts");
     } catch (error: any) {

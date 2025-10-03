@@ -40,30 +40,30 @@ export const appTheme = createTheme({
     
     // ===== TAB =====
     // 🔹 Tab (thẻ điều hướng)
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          fontWeight: 500,
-          border: `1px solid transparent`,
-          borderRadius: "8px 8px 0 0",
-          marginRight: 8,
-          padding: "8px 16px",
-          "&.Mui-selected": {
-            color: THEME_COLORS.primary,
-            backgroundColor: THEME_COLORS.tableHeader,
-            // border: `1px solid ${THEME_COLORS.primary}`,
-            // borderBottom: "none",
-          },
-          "&:hover": {
-            backgroundColor: alpha(THEME_COLORS.primaryLight, 0.1),
-            borderBottomColor: `1px solid ${THEME_COLORS.primary}`,
-            borderBottom: `1px solid ${THEME_COLORS.primary}`,
-            border: 'none'
-          },
-        },
-      },
-    },
+    // MuiTab: {
+    //   styleOverrides: {
+    //     root: {
+    //       textTransform: "none",
+    //       fontWeight: 500,
+    //       border: `1px solid transparent`,
+    //       borderRadius: "8px 8px 0 0",
+    //       marginRight: 8,
+    //       padding: "8px 16px",
+    //       "&.Mui-selected": {
+    //         color: THEME_COLORS.primary,
+    //         backgroundColor: THEME_COLORS.tableHeader,
+    //         // border: `1px solid ${THEME_COLORS.primary}`,
+    //         // borderBottom: "none",
+    //       },
+    //       "&:hover": {
+    //         backgroundColor: alpha(THEME_COLORS.primaryLight, 0.1),
+    //         borderBottomColor: `1px solid ${THEME_COLORS.primary}`,
+    //         borderBottom: `1px solid ${THEME_COLORS.primary}`,
+    //         border: 'none'
+    //       },
+    //     },
+    //   },
+    // },
 
     // 🔹 Tabs container
     MuiTabs: {

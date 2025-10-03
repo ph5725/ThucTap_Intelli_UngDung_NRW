@@ -12,7 +12,7 @@ export const TextForms = {
         billing: "Sản lượng tiêu thụ hệ thống Billing",
         dsNgayDocSoBilling: "Danh sách ngày đọc số Billing",
         dsNgayDocSoBillingChiTiet: "Danh sách ngày đọc số Billing chi tiết",
-        
+
         nrwCongTy: "Tính toán thất thoát nước cấp công ty",
         nrwCongTyDauVaoChiTiet: "NRW công ty đầu vào chi tiết",
         nrwCongTyTieuThuChiTiet: "NRW công ty tiêu thụ chi tiết",
@@ -40,12 +40,12 @@ export const TextForms = {
         nhatKy: "Nhật ký",
     },
     thongBao: {
-       // Xác nhận
+        // Xác nhận
         xacNhanXoa: "Bạn có chắc chắn muốn xóa mục này không?",
         xacNhanLuu: "Bạn có chắc chắn muốn lưu thay đổi không?",
         xacNhanDangXuat: "Bạn có chắc chắn muốn đăng xuất không?",
         xacNhanCapNhat: "Bạn có chắc chắn muốn cập nhật không?",
-        
+
         // Dữ liệu
         taiDuLieuThanhCong: "Tải dữ liệu thành công",
         themMoiThanhCong: "Thêm mới thành công",
@@ -60,6 +60,7 @@ export const TextForms = {
         loiThem: "Thêm dữ liệu thất bại",
         loiCapNhat: "Cập nhật dữ liệu thất bại",
         loiXoa: "Xóa dữ liệu thất bại",
+        khongDuDuLieu: "Vui lòng nhập đủ các thông tin bắt buộc",
 
         // Tài khoản
         dangNhapThanhCong: "Đăng nhập thành công",
@@ -78,6 +79,7 @@ export const TextForms = {
         dong: "Đóng",
         loc: "Lọc",
         capNhat: "Cập nhật",
+        chiTiet: "Xem chi tiết",
 
         themKyMoi: "Thêm kỳ mới",
 
@@ -90,7 +92,7 @@ export const TextForms = {
     tab: {
         tinhNrwCapCongTy: "Tính NRW cấp công ty",
         tinhNrwCapDma: "Tính NRW cấp DMA",
-        
+
         thongTinTaiKhoan: "Thông tin tài khoản",
         thongTinNguoiDung: "Thông tin người dùng",
         nhomNguoiDung: "Nhóm người dùng",
@@ -104,15 +106,36 @@ export const TextForms = {
         quyen: "Quyền",
     },
     nrw: {
+        ma: "Mã",
+        maDma: "Mã DMA",
+        ky: "Kỳ",
+        nam: "Năm",
+
         sanLuongMuaVao: "Sản lượng mua vào (m³)",
         sanLuongBanRa: "Sản lượng bán ra (m³)",
         luongNuocThatThoat: "Lượng nước thất thoát (m³)",
         tyLeThatThoat: "Tỷ lệ thất thoát (%)",
-        ky: "Kỳ",
-        nam: "Năm",
+
+        luongNuocVao: "Lượng nước vào (m³)",
+        luongNuocTieuThu: "Lượng nước tiêu thụ (m³)",
+        tyLeThatThoatKyTruoc: "Tỷ lệ thất thoát trước",
+        luongNuocSucXa: "Lượng nước súc xả",
+
         tuNgay: "Từ ngày",
         denNgay: "Đến ngày",
         soNgayDocSoDht: "Số ngày đọc số đồng hồ tổng",
-        soNgayDocSoBilling: "Số ngày đọc số billing"
-    }
+        soNgayDocSoBilling: "Số ngày đọc số billing",
+
+        nguyenNhan: "Nguyên nhân",
+        ghiChu: "Ghi chú",
+
+        ngayTao: "Ngày tạo",
+        nguoiTao: "Người tạo",
+        ngayCapNhat: "Ngày cập nhật",
+        nguoiCapNhat: "Người cập nhật",
+
+        ketQua: "Kết quả tính",
+        tongDauVao: "Tổng sản lượng mua vào (m³)",
+        tongTieuThu: "Tổng bán ra mua vào (m³)",
+    },
 };

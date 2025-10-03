@@ -1,16 +1,20 @@
-// Hàm tính số ngày giữa 2 ngày
-export function calculateDays(from: string, to: string): number {
-  const start = new Date(from);
-  const end = new Date(to);
+import { differenceInDays } from 'date-fns';
 
-  // Kiểm tra nếu người dùng nhập sai (từ ngày > đến ngày)
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-    throw new Error("Ngày không hợp lệ");
+/**
+ * Hàm tính số ngày đọc số đồng hồ tổng từ TuNgay đến DenNgay
+ * Bao gồm cả ngày bắt đầu và kết thúc
+ * @param tuNgay - ngày bắt đầu (chuỗi 'yyyy-MM-dd')
+ * @param denNgay - ngày kết thúc (chuỗi 'yyyy-MM-dd')
+ * @returns số ngày giữa 2 ngày + 1 hoặc undefined nếu lỗi
+ */
+export const calculateSoNgayDocSoDht = (tuNgay: string, denNgay: string): number | undefined => {
+  if (!tuNgay || !denNgay) return undefined;
+  try {
+    const tuNgayDate = new Date(tuNgay);
+    const denNgayDate = new Date(denNgay);
+    return differenceInDays(denNgayDate, tuNgayDate) + 1; // cộng thêm 1 ngày
+  } catch (error) {
+    console.error('Lỗi khi tính số ngày đọc số đồng hồ tổng:', error);
+    return undefined;
   }
-  if (end < start) {
-    throw new Error("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu");
-  }
-
-  const diffTime = end.getTime() - start.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-}
+};

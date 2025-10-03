@@ -1,13 +1,14 @@
 import { MRT_Localization_VI } from 'material-react-table/locales/vi';
 import { THEME_COLORS } from "./theme_color";
 import 'src/styles/global.css'
+import { alpha } from "@mui/material/styles";
+import { border, borderColor } from '@mui/system';
 
 export const MaterialReactTableConfig = (containerWidth: number | undefined) => ({
     localization: MRT_Localization_VI,
 
     // ==== Cấu hình tính năng ====
     enableColumnFilters: true,   // Lọc dữ liệu theo từng cột
-    enableGlobalFilter: true,    // Ô tìm kiếm toàn cục (search box ở toolbar)
     enableFilters: true,         // Kết hợp cả column filter + global filter
     enableHiding: true,          // Cho phép ẩn/hiện cột
     enableTopToolbar: true,       // Hiển thị thanh công cụ phía trên (search, export…)
@@ -15,9 +16,10 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
     enablePagination: true,       // Bật phân trang (kết hợp với muiPaginationProps)
     enableSorting: true,          // Cho phép sắp xếp dữ liệu theo cột (click header để sort ASC/DESC)
     enableRowActions: true,       // Hiển thị cột hành động (edit/delete/...)
-    positionActionsColumn: "first" as const,
+    positionActionsColumn: "last" as const,
     // editDisplayMode: 'row',
 
+    enableGlobalFilter: false,    // Ô tìm kiếm toàn cục (search box ở toolbar)
     enableColumnActions: false,   // Menu 3 chấm trên cột (ẩn/hiện filter, sort…)
     enableMultiSort: false,        // Cho phép sắp xếp nhiều cột cùng lúc (giữ Shift + click)
     enableColumnDragging: false,   // Cho phép kéo thả thay đổi vị trí cột
@@ -66,8 +68,8 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
             minHeight: '100%',
 
             width: '100%',
-            minWidth: '100%',
-            maxWidth: '100%',
+            minWidth: '150px',
+            maxWidth: '100vww',
 
             border: 'none',
             borderRadius: 0,
@@ -91,23 +93,23 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
         align: "center" as const,
         sx: {
             backgroundColor: THEME_COLORS.tableHeader,
-            border: `1px solid ${THEME_COLORS.border}`,
-            // fontWeight: 400,
-            fontSize: '12px',
-            color: THEME_COLORS.text.secondary,
+            border: `1px solid ${THEME_COLORS.borderHeader}`,
+            fontWeight: 500,
+            fontSize: '14px',
+            color: THEME_COLORS.text.hearder,
             verticalAlign: 'middle',
             py: 1,
-            minHeight: '40px',
+            minHeight: '10px',
 
             // Sort label (sắp xếp)
             '& .MuiTableSortLabel-root': {
                 color: THEME_COLORS.text.primary,
                 '&.Mui-active': {
-                    color: THEME_COLORS.text.secondary, // màu khi đang sort
+                    color: THEME_COLORS.text.hearder, // màu khi đang sort
                 },
             },
             '& .MuiTableSortLabel-icon': {
-                color: THEME_COLORS.text.secondary,
+                color: THEME_COLORS.text.hearder,
                 fontSize: '16px',
             },
 
@@ -116,6 +118,17 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
                 color: THEME_COLORS.text.secondary,
                 padding: '4px',
             },
+
+            // Thay đổi khi nhập
+            '& .MuiInputBase-input': {
+                color: alpha(THEME_COLORS.text.hearder, 0.8),
+                fontSize: '13px',
+            },
+
+            // Label placeholder
+            '& .MuiInputLabel-root': {
+                color: THEME_COLORS.text.secondary,
+            },
         },
     },
 
@@ -123,18 +136,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
     muiFilterTextFieldProps: {
         placeholder: 'Nhập từ khóa...',
         size: "small" as const,
-        sx: { fontSize: '13px', minWidth: '150px' },
-    },
-
-    // ==== Global Search Box ====
-    muiSearchTextFieldProps: {
-        sx: {
-            minWidth: '200px',
-            '& .MuiOutlinedInput-root': {
-                fontSize: '14px',
-                height: '38px',
-            },
-        },
+        sx: { fontSize: '11px', minWidth: '150px' },
     },
 
     // ==== Body Cells ====
@@ -144,6 +146,7 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
             with: '100%',
             height: '40px',
             minHeight: '40px',
+            minWidth: '10px',
             border: `1px solid ${THEME_COLORS.border}`,
             fontSize: '13px',
             fontWeight: 'normal',
@@ -154,11 +157,21 @@ export const MaterialReactTableConfig = (containerWidth: number | undefined) => 
     // ==== Bottom Toolbar (Pagination, Info) ====
     muiBottomToolbarProps: {
         sx: {
-            borderRadius: '0px',
             flexShrink: 0,
-            backgroundColor: THEME_COLORS.tableFooter,
+            backgroundColor: "#fff",
+            color: THEME_COLORS.text.primary,
             py: 1,
             px: 2,
+            '& .MuiTablePagination-root': {
+                fontSize: '12px',
+            },
+            height: '40px'
+        },
+    },
+
+    muiTopToolbarProps: {
+        sx: {
+            backgroundColor: "#fff",
             '& .MuiTablePagination-root': {
                 fontSize: '12px',
             },
