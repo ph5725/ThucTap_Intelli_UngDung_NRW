@@ -180,6 +180,28 @@ namespace WebAPI_NRW.Controllers
             return Ok(entity.MapToResponse());
         }
 
+        /// API Delete all by maDauVao
+        [HttpDelete("by-maDauVao/{maDauVao}")]
+        public ActionResult<NrwCongTyDauVaoChiTiet_ResponeModel> DeleteByMaDauVao(int maDauVao)
+        {
+            // Lấy tất cả record có cùng maDauVao
+            var entities = _context.NrwcongTyDauVaoChiTiets
+                .Where(e => e.MaDauVao == maDauVao)
+                .ToList();
+
+            if (entities == null || entities.Count == 0)
+                return NotFound($"Không tìm thấy dữ liệu với maDauVao = {maDauVao}");
+
+            // Xóa tất cả
+            _context.NrwcongTyDauVaoChiTiets.RemoveRange(entities);
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                message = $"Đã xóa {entities.Count} bản ghi với maDauVao = {maDauVao}"
+            });
+        }
+
         ///// API Add
         //[HttpPost]
         //public NrwCongTyDauVaoChiTiet_ResponeModel Post(Add_NrwCongTyDauVaoChiTiet_Model addNrwCongTyDauVaoChiTiet)

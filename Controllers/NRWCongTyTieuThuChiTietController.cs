@@ -155,6 +155,28 @@ namespace WebAPI_NRW.Controllers
             return Ok(entity.MapToResponse());
         }
 
+        /// API Delete all by maTieuThu
+        [HttpDelete("by-maTieuThu/{maTieuThu}")]
+        public ActionResult<NrwCongTyTieuThuChiTiet_ResponeModel> DeleteByMaTieuThu(int maTieuThu)
+        {
+            // Lấy tất cả record có cùng maDauVao
+            var entities = _context.NrwcongTyTieuThuChiTiets
+                .Where(e => e.MaTieuThu == maTieuThu)
+                .ToList();
+
+            if (entities == null || entities.Count == 0)
+                return NotFound($"Không tìm thấy dữ liệu với maTieuThu = {maTieuThu}");
+
+            // Xóa tất cả
+            _context.NrwcongTyTieuThuChiTiets.RemoveRange(entities);
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                message = $"Đã xóa {entities.Count} bản ghi với maTieuThu = {maTieuThu}"
+            });
+        }
+
         ///// API Add
         //[HttpPost]
         //public NrwCongTyTieuThuChiTiet_ResponeModel Post(Add_NrwCongTyTieuThuChiTiet_Model addNrwCongTyTieuThuChiTiet)

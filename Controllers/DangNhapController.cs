@@ -76,7 +76,7 @@ namespace WebAPI_NRW.Controllers
 
             // 7. Tạo token (truyền tên người dùng, vai trò, id)
             var token = _jwtHelper.GenerateToken(nguoiDung.TenNguoiDung, vaiTro, nguoiDung.Id, nhomNguoiDung.Id);
-            var expiresIn = 3600; // ví dụ 1h
+            var expiresIn = 86400; // 1 ngày
 
             // 8. Map sang DTO
             var response = nguoiDung.MapToLoginResponse(
