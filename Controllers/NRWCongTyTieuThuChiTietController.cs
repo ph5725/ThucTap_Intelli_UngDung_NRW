@@ -55,6 +55,26 @@ namespace WebAPI_NRW.Controllers
             return Ok(entity.MapToResponse());
         }
 
+        /// API Get by maTieuThu
+        [HttpGet("by-ma/{maTieuThu}")]
+        public ActionResult<IEnumerable<NrwCongTyTieuThuChiTiet_ResponeModel>> GetByMaTieuThu(int maTieuThu)
+        {
+            var entities = _context.NrwcongTyTieuThuChiTiets
+                .Include(e => e.MaTieuThuNavigation)
+                .Include(e => e.NguoiTaoNavigation)
+                .Include(e => e.NguoiCapNhatNavigation)
+                .Where(e => e.MaTieuThu == maTieuThu)
+                .AsNoTracking()
+                .Select(e => e.MapToResponse())
+                .ToList();
+
+            if (entities == null || entities.Count == 0)
+                return NotFound();
+
+            //return Ok(entities.Select(e => e.MapToResponse()));
+            return Ok(entities);
+        }
+
         /// API Add
         [HttpPost]
         public ActionResult<NrwCongTyTieuThuChiTiet_ResponeModel> Post(Add_NrwCongTyTieuThuChiTiet_Model addNrwCongTyTieuThuChiTiet)

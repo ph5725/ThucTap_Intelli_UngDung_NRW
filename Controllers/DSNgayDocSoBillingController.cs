@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models;
 using WebAPI_NRW.Models.Database;
@@ -9,6 +11,7 @@ using WebAPI_NRW.RequestModel.HeThongBilling;
 using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.HeThongBilling;
 using WebAPI_NRW.Services;
+using Dapper;
 
 namespace WebAPI_NRW.Controllers
 {
@@ -21,12 +24,14 @@ namespace WebAPI_NRW.Controllers
         private readonly DbNrwContext _context;
         private readonly IPermissionService _permissionService;
         private readonly string _feature;
+        private readonly string _connectionString;
 
-        public DsNgayDocSoBillingController(DbNrwContext dbcontext, IPermissionService permissionService)
+        public DsNgayDocSoBillingController(DbNrwContext dbcontext, IPermissionService permissionService, IConfiguration configuration)
         {
             _context = dbcontext;
             _permissionService = permissionService;
             _feature = "dsngaydocsobilling";
+            _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         /// API Get all
@@ -64,6 +69,31 @@ namespace WebAPI_NRW.Controllers
             if (entity == null) return NotFound();
 
             return Ok(entity.MapToResponse());
+        }
+
+        /// API Get by ky, nam, maDoiTuong
+        [HttpPost("GetSoNgayDocSo")]
+        public async Task<IActionResult> GetSanLuong([FromBody] SoNgayDocSoBilling_Model request)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+
+            string sql = @"
+            SELECT SoNgayDocSoBilling
+            FROM DSNgayDocSoBilling
+            WHERE Ky = @Ky
+              AND Nam = @Nam;
+        ";
+
+            var soNgay = await db.QueryFirstOrDefaultAsync<decimal?>(sql, new
+            {
+                Ky = request.Ky,
+                Nam = request.Nam,
+            });
+
+            return Ok(new
+            {
+                SoNgayDocSoBilling = soNgay ?? 0
+            });
         }
 
         /// API Add

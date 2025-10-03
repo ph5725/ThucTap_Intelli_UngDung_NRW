@@ -243,6 +243,7 @@ namespace WebAPI_NRW.MapToResponse
 
                 Nguon = nrwCongTyDauVaoChiTiet.Nguon,
                 ToanTu = nrwCongTyDauVaoChiTiet.ToanTu,
+                GiaTri = nrwCongTyDauVaoChiTiet.GiaTri,
                 ThuTuHienThi = nrwCongTyDauVaoChiTiet.ThuTuHienThi,
 
                 GhiChu = nrwCongTyDauVaoChiTiet.GhiChu ?? "N/A",
@@ -264,6 +265,7 @@ namespace WebAPI_NRW.MapToResponse
 
                 Nguon = nrwCongTyTieuThuChiTiet.Nguon,
                 ToanTu = nrwCongTyTieuThuChiTiet.ToanTu,
+                GiaTri = nrwCongTyTieuThuChiTiet.GiaTri,
                 ThuTuHienThi = nrwCongTyTieuThuChiTiet.ThuTuHienThi,
 
                 GhiChu = nrwCongTyTieuThuChiTiet.GhiChu ?? "N/A",
@@ -316,6 +318,7 @@ namespace WebAPI_NRW.MapToResponse
 
                 Nguon = nrwDmaDauVaoChiTiet.Nguon,
                 ToanTu = nrwDmaDauVaoChiTiet.ToanTu,
+                GiaTri = nrwDmaDauVaoChiTiet.GiaTri,
                 ThuTuHienThi = nrwDmaDauVaoChiTiet.ThuTuHienThi,
 
                 GhiChu = nrwDmaDauVaoChiTiet.GhiChu ?? "N/A",
@@ -338,6 +341,7 @@ namespace WebAPI_NRW.MapToResponse
 
                 Nguon = nrwDmaTieuThuChiTiet.Nguon,
                 ToanTu = nrwDmaTieuThuChiTiet.ToanTu,
+                GiaTri = nrwDmaTieuThuChiTiet.GiaTri,
                 ThuTuHienThi = nrwDmaTieuThuChiTiet.ThuTuHienThi,
 
                 GhiChu = nrwDmaTieuThuChiTiet.GhiChu ?? "N/A",

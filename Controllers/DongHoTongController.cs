@@ -110,6 +110,7 @@ namespace WebAPI_NRW.Controllers
                 TongSanLuong = result ?? 0
             });
         }
+
         //    [HttpGet("TongSanLuong")]
         //    public async Task<IActionResult> TongSanLuong(
         //   [FromQuery] DateTime tuNgay,

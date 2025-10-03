@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +8,11 @@ using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models;
 using WebAPI_NRW.Models.Database;
 using WebAPI_NRW.RequestModel.DanhSach;
+using WebAPI_NRW.RequestModel.DongHoTong;
 using WebAPI_NRW.RequestModel.HeThongBilling;
 using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.HeThongBilling;
 using WebAPI_NRW.ResponeModel.PhanQuyen;
-using Dapper;
 
 namespace WebAPI_NRW.Controllers
 {
@@ -59,6 +60,32 @@ namespace WebAPI_NRW.Controllers
             return Ok(entity.MapToResponse());
         }
 
+        [HttpPost("getSanLuongTieuThu")]
+        public async Task<IActionResult> GetSanLuongTieuThu([FromBody] Billing_Model request)
+        {
+            using IDbConnection db = new SqlConnection(_connectionString);
+
+            string sql = @"
+            SELECT [SanLuongTieuThu]
+            FROM [DB_NRW].[dbo].[Billing]
+            WHERE Nam = @Nam 
+              AND Ky = @Ky 
+              AND MaDoiTuong = @MaDoiTuong
+            ORDER BY Nam, Ky;";
+
+            var result = await db.QueryFirstOrDefaultAsync<decimal?>(sql, new
+            {
+                Nam = request.Nam,
+                Ky = request.Ky,
+                MaDoiTuong = request.MaDoiTuong
+            });
+
+            return Ok(new
+            {
+                SanLuongTieuThu = result ?? 0
+            });
+        }
+
         /// API Get by ky, nam, maDoiTuong
         [HttpPost("GetSanLuong")]
         public async Task<IActionResult> GetSanLuong([FromBody] Billing_Model request)
@@ -85,7 +112,6 @@ namespace WebAPI_NRW.Controllers
                 SanLuong = sanLuong ?? 0
             });
         }
-
 
         /// API Add
         [HttpPost]

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using WebAPI_NRW.MapToResponse;
 using WebAPI_NRW.Models;
 using WebAPI_NRW.Models.Database;
@@ -8,6 +9,7 @@ using WebAPI_NRW.RequestModel.DanhSach;
 using WebAPI_NRW.RequestModel.NrwCongTy;
 using WebAPI_NRW.ResponeModel.DanhSach;
 using WebAPI_NRW.ResponeModel.NrwCongTy;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebAPI_NRW.Controllers
 {
@@ -28,10 +30,33 @@ namespace WebAPI_NRW.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<NrwCongTyDauVaoChiTiet_ResponeModel>> Get()
         {
+            //var list = _context.NrwcongTyDauVaoChiTiets
+            //    .Include(nrwCongTyDauVaoChiTiet => nrwCongTyDauVaoChiTiet.MaDauVaoNavigation)
+            //    .Include(nrwCongTyDauVaoChiTiet => nrwCongTyDauVaoChiTiet.NguoiTaoNavigation)
+            //    .Include(nrwCongTyDauVaoChiTiet => nrwCongTyDauVaoChiTiet.NguoiCapNhatNavigation)
+            //    .AsNoTracking()
+            //    .Select(e => e.MapToResponse())
+            //    .ToList();
+
+            //Console.WriteLine(_context.NrwcongTyTieuThuChiTiets.);
+
+            //return Ok(list);
+
+            // Lấy thử 1 record để debug
+            var first = _context.NrwcongTyDauVaoChiTiets
+                .AsNoTracking()
+                .FirstOrDefault();
+
+            if (first != null)
+            {
+                Console.WriteLine($"GiaTri = {first.GiaTri}, Kiểu = {first.GiaTri.GetType()}");
+            }
+
+            // Sau đó lấy toàn bộ danh sách
             var list = _context.NrwcongTyDauVaoChiTiets
-                .Include(nrwCongTyDauVaoChiTiet => nrwCongTyDauVaoChiTiet.MaDauVaoNavigation)
-                .Include(nrwCongTyDauVaoChiTiet => nrwCongTyDauVaoChiTiet.NguoiTaoNavigation)
-                .Include(nrwCongTyDauVaoChiTiet => nrwCongTyDauVaoChiTiet.NguoiCapNhatNavigation)
+                .Include(x => x.MaDauVaoNavigation)
+                .Include(x => x.NguoiTaoNavigation)
+                .Include(x => x.NguoiCapNhatNavigation)
                 .AsNoTracking()
                 .Select(e => e.MapToResponse())
                 .ToList();
@@ -40,7 +65,7 @@ namespace WebAPI_NRW.Controllers
         }
 
         /// API Get by id
-        [HttpGet("{id}")]
+        [HttpGet("by-id/{id}")]
         public ActionResult<NrwCongTyDauVaoChiTiet_ResponeModel> GetById(int id)
         {
             var entity = _context.NrwcongTyDauVaoChiTiets
@@ -53,6 +78,26 @@ namespace WebAPI_NRW.Controllers
             if (entity == null) return NotFound();
 
             return Ok(entity.MapToResponse());
+        }
+
+        /// API Get by maDauVao
+        [HttpGet("by-ma/{maDauVao}")]
+        public ActionResult<IEnumerable<NrwCongTyDauVaoChiTiet_ResponeModel>> GetByMaDauVao(int maDauVao)
+        {
+            var entities = _context.NrwcongTyDauVaoChiTiets
+                .Include(e => e.MaDauVaoNavigation)
+                .Include(e => e.NguoiTaoNavigation)
+                .Include(e => e.NguoiCapNhatNavigation)
+                .Where(e => e.MaDauVao == maDauVao)
+                .AsNoTracking()
+                .Select(e => e.MapToResponse())
+                .ToList();
+
+            if (entities == null || entities.Count == 0)
+                return NotFound();
+
+            //return Ok(entities.Select(e => e.MapToResponse()));
+            return Ok(entities);
         }
 
         /// API Add
