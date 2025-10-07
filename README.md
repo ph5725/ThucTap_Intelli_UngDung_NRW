@@ -30,14 +30,6 @@
 | Tính toán thất thoát nước cấp DMA                   | Tính toán và lưu trữ kết quả tính thất thoát nước ở cấp DMA. Dữ liệu tính toán được lấy tự động từ hệ thống liên quan hoặc nhập tay.     |
 | Quản lý dữ liệu sản lượng ngày của các đồng hồ tổng | - Hiển thị danh sách đồng hồ tổng và sản lượng theo ngày (ngày do người dùng chọn)                                                       |
 
-* Cho phép chỉnh sửa dữ liệu sản lượng
-* Đánh dấu các dữ liệu sản lượng ngày khi dữ liệu đó bị lỗi | | Dashboard giám sát tỷ lệ thất thoát nước cấp công ty | - Giám sát lượng nước vào, lượng nước tiêu thụ, lượng nước thất thoát, tỷ lệ thất thoát theo kỳ người dùng chọn
-* So sánh sản lượng cùng kỳ, tỷ lệ thất thoát cùng kỳ (kỳ do người dùng chọn) | | Dashboard giám sát tỷ lệ thất thoát nước cấp quận | - Giám sát lượng nước vào, lượng nước tiêu thụ, lượng nước thất thoát, tỷ lệ thất thoát theo kỳ và quận do người dùng chọn
-* So sánh sản lượng cùng kỳ, tỷ lệ thất thoát cùng kỳ (kỳ do người dùng chọn) theo quận
-* So sánh sản lượng, tỷ lệ thất thoát giữa các quận theo kỳ | | Quản lý số ngày đọc số hệ thống Billing | Cho phép người dùng tạo, chỉnh sửa số ngày đọc số Billing cho các kỳ | | Báo cáo | - Báo cáo tình hình thất thoát nước cấp công ty (theo mẫu)
-* Báo cáo tình hình thất thoát nước cấp quận (theo mẫu) | | Nhật ký người dùng | - Ghi nhận thời gian và các hoạt động mà người dùng thực hiện trong hệ thống
-* Quản trị viên có thể tra cứu dữ liệu hoạt động của người dùng |
-
 ---
 
 ### Nhóm thực hiện
